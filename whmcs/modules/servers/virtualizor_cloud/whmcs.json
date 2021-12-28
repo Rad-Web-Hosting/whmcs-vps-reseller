@@ -6,13 +6,16 @@
     "category": "provisioning",
     "description": {
         "name": "VPS Reseller Module",
-        "tagline": "Provisioning Modules allow for the provisioning and management of products & services in WHMCS.",
-        "long": "The sample files here demonstrates how a provisioning module for WHMCS should be structured and exercises all supported functionality.",
+        "tagline": "Industry-leading Cloud Provider with multiple data center locations",
+        "long": "Integrate with ready-made WHMCS module to leverage auto-provision of Cloud VPS servers from your private-label cloud controller. By integrating with Rad Web Hosting VPS Reseller module, your VPS procurement headaches are over.",
         "features": [
             "Provide both client and admin facing user interfaces",
             "Utilize hook functionality within WHMCS",
             "Provide structure for module commands"
         ]
+    },
+    "marketplace": {
+        "url": "https:\/\/marketplace.whmcs.com\/product\/6108"
     },
     "logo": {
         "filename": "logo.png"
