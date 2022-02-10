@@ -40,8 +40,8 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 
 1.  First, [login to the VPS panel](https://radwebhosting.com/client_area/knowledgebase/250/Video-How-to-Login-to-Virtualizor-Control-Panel.html) with your reseller account details.
 2.  Access the side menu and navigate to "API Credentials".
-3.  Create a API Key Pair by clicking the button. ![create api key pair](//new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-create-api-key-pair.png "create api key pair")
-4.  API Key Pair success message will display upon successful creation.![API Key Pair created](//new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-api-key-pair-created.png "API Key Pair created")
+3.  Create a API Key Pair by clicking the button. ![create api key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-create-api-key-pair.png "create api key pair")
+4.  API Key Pair success message will display upon successful creation.![API Key Pair created](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-api-key-pair-created.png "API Key Pair created")
 5.  Copy the API key pair credentials (these will be needed to configure WHMCS server connection).![Copy API key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-panel-api-credentials.png)
 
 ### Create Server in WHMCS Admin
@@ -86,7 +86,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 *   Create new VPS welcome email template. We have provided a custom email template to use for sending VPS server credentials to enduser when VPS is provisioned (created). This template will utilize merge fields and organize important server details better than the default "VPS/Dedicated Server Welcome Email" template  that is provided with WHMCS.
     *   You can add the template from your WHMCS Admin area by navigating to "Setup->Email Templates"
     *   Choose to "Create New Email Template"
-    *   Choose "Product/Service" from the "Email Type" drop-down menu and give the template a unique name ![create custom VPS welcome email template](//new.radwebhosting.com//client_area/images/knowledgebase/create-vps-welcome-email-template.gif "create custom VPS welcome email template")
+    *   Choose "Product/Service" from the "Email Type" drop-down menu and give the template a unique name ![create custom VPS welcome email template](https://new.radwebhosting.com//client_area/images/knowledgebase/create-vps-welcome-email-template.gif "create custom VPS welcome email template")
     *   Configure the email sending settings
     *   Add a subject for your email (i.e. "New VPS Server Details")
     *   To import  our pre-made template, click "Enable/Disable Rich-Text Editor" button
@@ -124,7 +124,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     *   In the event of new OS template available for VPS, you can simply modify this single Configurable Option (assuming the group is assigned to multiple VPS products for same Virtualization), as opposed to editing the custom fields drop-down values for every related VPS product individually.
     *   Where to get the values for available OS templates (for KVM virtualization VPS)?
         *   Rad Web Hosting keeps a public list of available KVM OS templates in the Knowledgebase, at: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html)
-        *   Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "OS|Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](//new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
+        *   Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "OS|Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](https://new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
 
 ### Client Area Features
 
