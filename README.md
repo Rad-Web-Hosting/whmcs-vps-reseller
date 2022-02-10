@@ -91,40 +91,43 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     *   Add a subject for your email (i.e. "New VPS Server Details")
     *   To import  our pre-made template, click "Enable/Disable Rich-Text Editor" button
     *   Copy and paste the email template from below:
+```
+Dear {$client_name},
+
+We are glad to inform you that the virtual machine you ordered has been set up.
+
+Manager Details
+=============================
+URL: https://your.master.domain.com:4083
+Username: {$service_username}
+Password: {$service_password}
+
+Server Details
+=============================
+Hostname: {$service_domain}
+Main IP: {$service_dedicated_ip} 
+Root Password: {$service_password}
+{if $service_assigned_ips}
+IP Address Allotted:
+{$service_assigned_ips}
+{/if}
+
+You can access your server over SSH. 
+If you are a Windows user, you can use a free SSH client called Putty which can be downloaded from :
+http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
+
+{$signature}
+```
         
-        Dear {$client\_name},
-        
-        We are glad to inform you that the virtual machine you ordered has been set up.
-        
-        Manager Details
-        =============================
-        URL: https://your.master.domain.com:4083
-        Username: {$service\_username}
-        Password: {$service\_password}
-        
-        Server Details
-        =============================
-        Hostname: {$service\_domain}
-        Main IP: {$service\_dedicated\_ip} 
-        Root Password: {$service\_password}
-        {if $service\_assigned\_ips}
-        IP Address Allotted:
-        {$service\_assigned\_ips}
-        {/if}
-        
-        You can access your server over SSH. 
-        If you are a Windows user, you can use a free SSH client called Putty which can be downloaded from :
-        http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
-        
-        {$signature}
-        
-    *   This is a basic template and you can easily customize or add additional details
-*   Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the  "OS|Operating System" configurable option. Please also refer to [this article](https://docs.whmcs.com/Addons_and_Configurable_Options#Configurable_Options) to find more information about using configurable options in WHMCS.
-    *   Configurable Options group can be assigned to all VPS products (of the same Virtualization)-this will be much more desirable from an administrative perspective, should the available OS templates options ever change.
-    *   In the event of new OS template available for VPS, you can simply modify this single Configurable Option (assuming the group is assigned to multiple VPS products for same Virtualization), as opposed to editing the custom fields drop-down values for every related VPS product individually.
-    *   Where to get the values for available OS templates (for KVM virtualization VPS)?
-        *   Rad Web Hosting keeps a public list of available KVM OS templates in the Knowledgebase, at: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html)
-        *   Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "OS|Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](https://new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
+### Configuration Tips to Simplify Administration
+
+* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the  "OS|Operating System" configurable option.
+* Please also refer to [this article](https://docs.whmcs.com/Addons_and_Configurable_Options#Configurable_Options) to find more information about using configurable options in WHMCS.
+    * Configurable Options group can be assigned to all VPS products (of the same Virtualization)-this will be much more desirable from an administrative perspective, should the available OS templates options ever change.
+    * In the event of new OS template available for VPS, you can simply modify this single Configurable Option (assuming the group is assigned to multiple VPS products for same Virtualization), as opposed to editing the custom fields drop-down values for every related VPS product individually.
+* Where to get the values for available OS templates (for KVM virtualization VPS)?
+* Rad Web Hosting keeps a public list of available KVM OS templates in the Knowledgebase, at: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html)
+* Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "OS|Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](https://new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
 
 ### Client Area Features
 
