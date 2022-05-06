@@ -1,4 +1,4 @@
-# whmcs-vps-reseller
+# WHMCS VPS Reseller
 WHMCS server module for provisioning and management of VPS servers from reseller's remote WHMCS installation. Enables reseller to deploy live cloud VMs from custom VPS package configurations. Features robust end-user management interface for reseller's client to manage server from within client area of WHMCS.
 
 <p align="center"><a href="https://radwebhosting.com" target="_blank"><img width="350" src="https://avatars0.githubusercontent.com/u/16030710?s=460&v=4" alt="Rad Web Hosting"></a></p>
@@ -73,11 +73,17 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     1.  Module: **Virtualizor\_cloud**
     2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-configure-module-settings.png)
 4.  Go to "Custom Fields" and create new Custom Field with the following details:
-    1.  Field Name: vpsid (exactly as written)
+    1.  Field Name: "vpsid" (without quotes)
     2.  Field Type: **Text Box**
     3.  Description: **The ID of the server from VPS Panel.** 
     4.  Validation: Leave blank
     5.  Check **Admin Only** tick box.
+5.  Create "Custom Fields" entry to satisfy **VPS operating system** requirements:
+    1.  Field Name: **"OS"** (without quotes) or **"OS|Operating System"**
+    2.  Field Type: **Dropdown**
+    3.  Description: **Choose OS to install on server** 
+    4.  Validation: Leave blank
+    5.  Select Options field: enter OS template file names (without .img extensions) like "centos-7.1-x86_64". Retrieve possible values from: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html).
 
 ![Product Custom Fields](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-configure-product-custom-fields.png)
 
