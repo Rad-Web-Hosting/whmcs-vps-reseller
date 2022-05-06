@@ -6,7 +6,7 @@ import DOMKeyTable from "./domkeytable.js";
 import * as browser from "../util/browser.js";
 
 // Get 'KeyboardEvent.code', handling legacy browsers
-export function getKeycode(evt){
+export function getKeycode(evt) {
     // Are we getting proper key identifiers?
     // (unfortunately Firefox and Chrome are crappy here and gives
     // us an empty string on some platforms, rather than leaving it
@@ -25,7 +25,7 @@ export function getKeycode(evt){
     // in the 'keyCode' field for non-printable characters. However
     // Webkit sets it to the same as charCode in 'keypress' events.
     if ((evt.type !== 'keypress') && (evt.keyCode in vkeys)) {
-        var code = vkeys[evt.keyCode];
+        let code = vkeys[evt.keyCode];
 
         // macOS has messed up this code for some reason
         if (browser.isMac() && (code === 'ContextMenu')) {
@@ -92,6 +92,8 @@ export function getKey(evt) {
         // Mozilla isn't fully in sync with the spec yet
         switch (evt.key) {
             case 'OS': return 'Meta';
+            case 'LaunchMyComputer': return 'LaunchApplication1';
+            case 'LaunchCalculator': return 'LaunchApplication2';
         }
 
         // iOS leaks some OS names
@@ -103,15 +105,27 @@ export function getKey(evt) {
             case 'UIKeyInputEscape': return 'Escape';
         }
 
-        // IE and Edge have broken handling of AltGraph so we cannot
-        // trust them for printable characters
-        if ((evt.key.length !== 1) || (!browser.isIE() && !browser.isEdge())) {
+        // Broken behaviour in Chrome
+        if ((evt.key === '\x00') && (evt.code === 'NumpadDecimal')) {
+            return 'Delete';
+        }
+
+        // IE and Edge need special handling, but for everyone else we
+        // can trust the value provided
+        if (!browser.isIE() && !browser.isEdge()) {
+            return evt.key;
+        }
+
+        // IE and Edge have broken handling of AltGraph so we can only
+        // trust them for non-printable characters (and unfortunately
+        // they also specify 'Unidentified' for some problem keys)
+        if ((evt.key.length !== 1) && (evt.key !== 'Unidentified')) {
             return evt.key;
         }
     }
 
     // Try to deduce it based on the physical key
-    var code = getKeycode(evt);
+    const code = getKeycode(evt);
     if (code in fixedkeys) {
         return fixedkeys[code];
     }
@@ -126,8 +140,8 @@ export function getKey(evt) {
 }
 
 // Get the most reliable keysym value we can get from a key event
-export function getKeysym(evt){
-    var key = getKey(evt);
+export function getKeysym(evt) {
+    const key = getKey(evt);
 
     if (key === 'Unidentified') {
         return null;
@@ -135,15 +149,44 @@ export function getKeysym(evt){
 
     // First look up special keys
     if (key in DOMKeyTable) {
-        var location = evt.location;
+        let location = evt.location;
 
         // Safari screws up location for the right cmd key
         if ((key === 'Meta') && (location === 0)) {
             location = 2;
         }
 
+        // And for Clear
+        if ((key === 'Clear') && (location === 3)) {
+            let code = getKeycode(evt);
+            if (code === 'NumLock') {
+                location = 0;
+            }
+        }
+
         if ((location === undefined) || (location > 3)) {
             location = 0;
+        }
+
+        // The original Meta key now gets confused with the Windows key
+        // https://bugs.chromium.org/p/chromium/issues/detail?id=1020141
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1232918
+        if (key === 'Meta') {
+            let code = getKeycode(evt);
+            if (code === 'AltLeft') {
+                return KeyTable.XK_Meta_L;
+            } else if (code === 'AltRight') {
+                return KeyTable.XK_Meta_R;
+            }
+        }
+
+        // macOS has Clear instead of NumLock, but the remote system is
+        // probably not macOS, so lying here is probably best...
+        if (key === 'Clear') {
+            let code = getKeycode(evt);
+            if (code === 'NumLock') {
+                return KeyTable.XK_Num_Lock;
+            }
         }
 
         return DOMKeyTable[key][location];
@@ -151,14 +194,12 @@ export function getKeysym(evt){
 
     // Now we need to look at the Unicode symbol instead
 
-    var codepoint;
-
     // Special key? (FIXME: Should have been caught earlier)
     if (key.length !== 1) {
         return null;
     }
 
-    codepoint = key.charCodeAt();
+    const codepoint = key.charCodeAt();
     if (codepoint) {
         return keysyms.lookup(codepoint);
     }

@@ -1,7 +1,7 @@
 all:
 .PHONY: update-po update-js update-pot
 
-LINGUAS := de el es nl pl sv tr zh
+LINGUAS := cs de el es ja ko nl pl ru sv tr zh_CN zh_TW
 
 VERSION := $(shell grep '"version"' ../package.json | cut -d '"' -f 4)
 
@@ -18,7 +18,7 @@ update-js: $(JSONFILES)
 
 update-pot:
 	xgettext --output=noVNC.js.pot \
-		--copyright-holder="Various Authors" \
+		--copyright-holder="The noVNC Authors" \
 		--package-name="noVNC" \
 		--package-version="$(VERSION)" \
 		--msgid-bugs-address="novnc@googlegroups.com" \
