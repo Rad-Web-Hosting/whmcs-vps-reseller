@@ -1,7 +1,8 @@
 <?php
-// Last updated : 10/09/2019
-// Version : 2.0.9
+// Last updated : 31/03/2022
+// Version : 2.2.0
 use WHMCS\Database\Capsule;
+use WHMCS\Auth;
 
 include_once('virtualizor_conf.php');
 include_once('functions.php');
@@ -12,10 +13,24 @@ function virtualizor_cloud_ConfigOptions() {
 	
 	global $virtualizor_conf, $whmcsmysql;	
 	
+	// Get the Servers
+	$res = Capsule::table('tblservers')->where('type','virtualizor_cloud')->get();
+	
+	if(empty($res)){
+		echo '<font color="#FF0000">The virtualizor Cloud servers could not be found. Please add the Virtualizor Server and Server group to proceed</font>';
+		return;
+	}
+	$server_list = array();
+	
+	 foreach($res as $re){
+		$server_list[$re->id] = $re->id.' - '.trim($re->name);
+		$server_data[$re->id] = (array) $re;
+	}
+	
 	# Should return an array of the module options for each product - Minimum of 24
-    $configarray = array(
+    $config_array = array(
 	 "Type" => array( "Type" => "dropdown", "Options" => "OpenVZ,Xen PV,Xen HVM,KVM,XCP HVM,XCP PV,LXC,Virtuozzo OpenVZ,Virtuozzo KVM,Proxmox KVM,Proxmox OpenVZ,Proxmox LXC"),
-	 "DiskSpace" => array( "Type" => "text", "Size" => "25", "Description" => "GB"),
+	 "Disk Space" => array( "Type" => "text", "Size" => "25", "Description" => "GB"),
 	 "Guaranteed RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB"),
 	 "Burstable RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (OpenVZ)"), 
 	 "SWAP RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (Xen, XCP and KVM)"), 
@@ -26,7 +41,98 @@ function virtualizor_cloud_ConfigOptions() {
 	 "IPv6" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Address"),
 	 "Region" => array( "Type" => "text", "Size" => "25", "Description" => "The region to create the VPS in"),
 	 "IPv6 Subnets" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Subnets"),
+	 "Network Speed (KB)" => array( "Type" => "text", "Size" => "25"),
+	 "Upload Speed (KB)" => array( "Type" => "text", "Size" => "25"),
 	);
+	
+	// Get the product ID
+	$pid = (int) $_REQUEST['id'];
+	
+	// First get the configoption1 to check if the user is on OLD method or New method.
+	$res = Capsule::table('tblproducts')->where('id',$pid)->get();
+	
+	$row = (array) $res[0];
+	//rprint($row);
+	
+	$configarray = array(
+		'Virtualizor Servers' => array("Type" => "dropdown", "Options" => implode(',', array_values($server_list)))
+	);
+	
+	// If this is filled up then user is using the OLD method
+	if((!empty($row['configoption1']) && in_array($row['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))) || !empty($virtualizor_conf['no_virt_plans'])){
+		
+		//array_values($server_list)
+		$tmp_type = array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC');
+		array_push($tmp_type, implode(',', array_values($server_list)));
+		
+		$config_array['Type']['Options'] = implode(',', $tmp_type);
+		$configarray = $config_array;
+	
+	// If we get the Virtualizor server in configoption1, we will make an API call and load other fields
+	}elseif(!empty($row['configoption1']) && in_array($row['configoption1'], array_values($server_list))){
+		
+		// Get the server ID
+		$ser_id = array_search($row['configoption1'], $server_list);
+		$ser_data = $server_data[$ser_id];
+		
+		$tmp_hostname = $ser_data['hostname'];
+		if(empty($tmp_hostname)){
+			$tmp_hostname = $ser_data['ipaddress'];
+		}
+		
+		// Get the data from virtualizor
+		$data = VirtCloud_Curl::e_make_api_call($tmp_hostname, $ser_data['username'], get_server_pass_from_whmcs($ser_data['password']), 0, 'index.php?act=create');
+		//logActivity('data--: '.var_export($data, 1));
+		if(empty($data)){
+			return $configarray;
+		}
+		
+		// If this user has billing enabled then only we will provide plan selection
+		if(!empty($data['inhouse_billing'])){
+			
+			$available_resource = $data['resources'];
+			$pricing = $data['pricing'];
+			$plan_list = $data['plans'];
+			//logActivity('plan_list: '.var_export($plan_list, 1));
+			$tmp = $row['configoption3'];
+			$tmp_selected_plan = explode('-',$tmp);
+			$selected_plan = trim($tmp_selected_plan[0]);
+
+			$tmp = $row['configoption2'];
+			$tmp_selected_region = explode('-',$tmp);
+			$selected_region = trim($tmp_selected_region[0]);
+
+			$used_core = $data['usage'];
+
+			if($pricing[$selected_region]['x'.$selected_plan]['plid'] != $selected_plan){
+			   /// throw new Exception('Plan is not available for selected Region. Please choose another plan.');
+			}
+
+			foreach($data['servergroups'] as $k => $v){
+			
+				$tmp_default_node_grp[$k] = $k.' - '.$v['sg_name'];
+				
+				foreach ($data['servers'] as $m => $n){
+					if($n['sgid'] == $k){
+						$tmp_default_node_grp[$n['server_name']] = $m." - ".$n['server_name'];
+					}
+				}
+			}
+			
+			$configarray['Region'] = array("Type" => "dropdown", "Options" => implode(',', array_values($tmp_default_node_grp)), "Description" => 'Regions available');
+			
+			// Build the options list to show Plans
+			foreach($plan_list as $k => $v){
+					$tmp_plans[$v['plid']] = $v['plid'].' - '.$v['plan_name'];
+				}
+			
+			$configarray['Select Plan'] = array("Type" => "dropdown", "Options" => implode(',', $tmp_plans));
+			
+		}else{
+			return $config_array;
+		}
+		
+	}
 	
 	return $configarray;
 }
@@ -92,11 +198,9 @@ function virtualizor_cloud_CreateAccount($params) {
 		}
 	}
 	
-	$hvm = (preg_match('/hvm/is', $params['configoption1']) ? 1 : 0);
-	$Nvirt = $virttype.(empty($hvm) ? '' : 'hvm');
-	$numips = (empty($params['configoptions'][v_fn('ips')]) || $params['configoptions'][v_fn('ips')] == 0 ? $params['configoption9'] : $params['configoptions'][v_fn('ips')]);
-	$numips6 = (empty($params['configoptions'][v_fn('ips6')]) || $params['configoptions'][v_fn('ips6')] == 0 ? $params['configoption10'] : $params['configoptions'][v_fn('ips6')]);
-	$numips6_subnet = (empty($params['configoptions'][v_fn('ips6_subnet')]) || $params['configoptions'][v_fn('ips6_subnet')] == 0 ? $params['configoption12'] : $params['configoptions'][v_fn('ips6_subnet')]);
+	//$hvm = (preg_match('/hvm/is', $params['configoption1']) ? 1 : 0);
+	//$Nvirt = $virttype.(empty($hvm) ? '' : 'hvm');
+	
 	$ctrlpanel = (empty($params['configoptions'][v_fn('ctrlpanel')]) ? -1 : strtolower(trim($params['configoptions'][v_fn('ctrlpanel')])));
 	if($loglevel > 0) logActivity('VIRT : '.$virttype.' - '.$hvm.' | '.$Nvirt);
 	if($loglevel > 0) logActivity(var_export($params, 1));
@@ -112,9 +216,9 @@ function virtualizor_cloud_CreateAccount($params) {
 	
 	$sgid = -1;
 	
-	// Server gropu selection
-	$region = $params['configoption11'];
-	
+	// Server group selection
+	//$region = $params['configoption11'];
+	$region = $params['configoption2'];
 	if(!empty($params['configoptions']['Region'])){
 		$region = $params['configoptions']['Region'];
 	}
@@ -171,67 +275,331 @@ function virtualizor_cloud_CreateAccount($params) {
 		$post['user_pass'] = $params["password"];
 	}
 	
-	// Get the OS from the fields set
-	$OS = strtolower(trim($params['configoptions'][v_fn('OS')]));
-	if(empty($OS)){
-		$OS = strtolower(trim($params["customfields"]['OS']));		
-	}
+	$new_module = false;
 	
-	// Search the OS ID
-	if($OS != 'none'){
-		
-		foreach($data['ostemplates'] as $k => $v){
-			// Does the String match ?
-			if(strtolower($v['name']) == $OS && $v['Nvirt'] == $Nvirt){
-				$post['osid'] = $k;
+	// Are you using NEW Method
+	if(!in_array($params['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC',  'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))){
+
+		$new_module = true;
+		//Post values : Array ( [sgid] => -1 [node_select] => 1 [server_group] => -1 [control_panel] => -1 [user_email] => chirag@chirag.com [user_pass] => 7ZOg5.aHz(Wi72 )
+		$OS = strtolower(trim($params['configoptions'][v_fn('OS')]));
+		if(empty($OS)){
+			$OS = strtolower(trim($params["customfields"]['OS']));
+		}
+
+		// Search the OS ID
+		if($OS != 'none'){
+			
+			foreach($data['ostemplates'] as $k => $v){
+				// Does the String match ?
+				if(strtolower($v['name']) == $OS){
+					$post['osid'] = $k;
+				}
+			
 			}
 		
 		}
 	
-	}
-	
-	// Is the OS template there
-	if(empty($post['osid']) && $OS != 'none'){
-		return 'Could not find the OS Template '.$OS;
-	}
-	
-	// Search the ISO
-	if(!empty($params["customfields"]['iso']) && strtolower($params["customfields"]['iso']) != 'none'){
-		
-		// ISO restricted in OVZ and XEN-PV
-		if(in_array($virttype, array('openvz', 'vzo', 'proxo', 'lxc')) || (($virttype == 'xen' || $virttype == 'xcp') && empty($hvm))){
-			return 'You can not select ISO for OpenVZ, LXC, Virtuozzo OpenVZ, Proxmox OpenVZ, XEN-PV and XCP-PV VPS';
+		// Is the OS template there
+		if(empty($post['osid']) && $OS != 'none'){
+			return 'Could not find the OS Template '.$OS;
 		}
 	
-		foreach($data['isos'] as $k => $v){
+		// Search the ISO
+		if(!empty($params["customfields"]['iso']) && strtolower($params["customfields"]['iso']) != 'none'){
+			
+			// ISO restricted in OVZ and XEN-PV
+			if(in_array($virttype, array('openvz', 'vzo', 'proxo', 'lxc')) || (($virttype == 'xen' || $virttype == 'xcp') && empty($hvm))){
+				return 'You can not select ISO for OpenVZ, LXC, Virtuozzo OpenVZ, Proxmox OpenVZ, XEN-PV and XCP-PV VPS';
+			}
 		
-			foreach($v as $kk => $vv){
-				
-				//echo $vv['name'].' - '.$params["customfields"]['iso'].'<br>';
-				
-				// Does the String match ?
-				if(strtolower($vv) == strtolower(trim($params["customfields"]['iso']))){
-					$post['iso'] = $vv;
+			foreach($data['isos'] as $k => $v){
+			
+				foreach($v as $kk => $vv){
+					
+					//echo $vv['name'].' - '.$params["customfields"]['iso'].'<br>';
+					
+					// Does the String match ?
+					if(strtolower($vv) == strtolower(trim($params["customfields"]['iso']))){
+						$post['iso'] = $vv;
+					}
+				}
+			}
+			
+			// Is the ISO there
+			if(empty($post['iso'])){
+				return 'Could not find the ISO '.$params["customfields"]['iso'];
+			}
+		}
+	
+		// If ISO and OS both not selected ?
+		if(empty($post['iso']) && empty($post['osid']) && strtolower($params["customfields"]['iso']) == 'none' && $OS == 'none'){
+			return 'ISO or OS is not selected';
+		}
+		
+		// No emails
+		if(!empty($params["customfields"]['noemail'])){
+			$post['noemail'] = 1;
+		}
+	
+		$post_osid = $post['osid'];
+
+		$Nvirt = $data['ostemplates'][$post_osid]['Nvirt'];
+		$post['virt'] = $Nvirt;
+		
+		if(empty($virtualizor_conf['vps_control']['custom_hname'])){
+			$post['hostname'] = $params['domain'];
+		}else{
+			// Select the Order ID
+			$res = Capsule::table('tblhosting')->where('id',$params['serviceid'])->get();
+			
+			$hosting_details = (array) $res[0];
+			
+			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $virtualizor_conf['vps_control']['custom_hname']);
+			if(preg_match('/(\{RAND(\d{1,3})\})/is', $post['hostname'], $matches)){
+				$post['hostname'] = str_replace($matches[1], generateRandStr($matches[2]), $post['hostname']);
+			}
+			
+			// Change the Hostname to the email
+			Capsule::table('tblhosting')->where('id',$params['serviceid'])->update(array('domain'=>$post['hostname']));
+			
+		}
+		$post['rootpass'] = $params['password'];
+		$post['addvs'] = 1;
+		
+		// Is is OpenVZ
+		if($virttype == 'openvz' || $virttype == 'vzo'){
+		
+			$post['burst'] = $params['configoption4'];
+			
+		// Is it Xen PV?
+		}elseif(in_array($virttype, array('xen', 'xcp', 'kvm', 'vzk', 'proxk'))){
+		
+			$post['swap'] = $params['configoption5'];
+			
+		}
+		
+		// VNC
+		if($params['configoption8'] == 'yes' || $params['configoption8'] == 'on'){
+			$post['vnc'] = 1;
+			$post['vncpass'] = generateRandStr(8);
+		}
+		
+		// Are there any configurable options
+		if(!empty($params['configoptions'])){
+			foreach($params['configoptions'] as $k => $v){
+				if(!isset($post[$k])){
+					$post[$k] = $v;
 				}
 			}
 		}
 		
-		// Is the ISO there
-		if(empty($post['iso'])){
-			return 'Could not find the ISO '.$params["customfields"]['iso'];
+		if($loglevel > 0) logActivity('POST : '.var_export($post, 1));
+		
+		// Setup cPanel licenses if cPanel configurable option is set
+		if($ctrlpanel != -1 && $ctrlpanel != 'none'){
+		
+			if($ctrlpanel == 'cpanel' && !empty($virtualizor_conf['cp']['buy_cpanel_login']) && !empty($virtualizor_conf['cp']['buy_cpanel_apikey'])){
+				logActivity("CPANEL : cPanel issued for ip $_ips[0] of ordertype $cpanel");
+				
+				$url = 'https://www.buycpanel.com/api/order.php?';
+				$login = 'login='.$virtualizor_conf['cp']['buy_cpanel_login'].'&';
+				$key = 'key='.$virtualizor_conf['cp']['buy_cpanel_apikey'].'&';
+				$domain = 'domain='.$params['domain'].'&';
+				$serverip = 'serverip='.$_ips[0].'&';
+				$ordertype = 'ordertype=10';
+				
+				$url .= $login.$key.$domain.$serverip.$ordertype;
+				
+				$ret = file_get_contents($url);
+				
+				$ret = json_decode($ret);
+					
+				if($ret->success == 0){
+					return 'Errors : cPanel Licensing : '.$ret->faultstring;
+				}
+			}
+		}
+
+		if(!empty($params['configoptions'][v_fn('ips')])){
+			$post['num_ips'] = $params['configoptions'][v_fn('ips')];
+		}
+		
+		if(!empty($params['configoptions'][v_fn('ips_int')])){
+			$post['num_ips_int'] = $params['configoptions'][v_fn('ips_int')];
+		}
+		
+		if(!empty($params['configoptions'][v_fn('ips6')])){
+			$post['num_ips6'] = $params['configoptions'][v_fn('ips6')];
+		}
+		
+		if(!empty($params['configoptions'][v_fn('ips6_subnet')])){
+			$post['num_ips6_subnet'] = $params['configoptions'][v_fn('ips6_subnet')];
+		}
+        
+        	if(!empty($params['configoptions']['ippoolid'])){
+			$post['ippoolid'] = $params['configoptions']['ippoolid'];
+		}
+		
+		if(!empty($params['configoptions'][v_fn('space')])){
+			$post['space'] = $params['configoptions'][v_fn('space')];
+		}
+		
+		if(!empty($params['configoptions'][v_fn('ram')])){
+			$post['ram'] = $params['configoptions'][v_fn('ram')];
+		}
+		
+		if(!empty($params['configoptions'][v_fn('cores')])){
+			$post['cores'] = $params['configoptions'][v_fn('cores')];
+		}
+			
+		if(!empty($params['configoptions'][v_fn('ctrlpanel')])){
+			$post['control_panel'] = $params['configoptions'][v_fn('ctrlpanel')];
+		}
+
+		if(!empty($params['configoptions'][v_fn('network_speed')])){
+			$post['control_panel'] = $params['configoptions'][v_fn('network_speed')];
+		}
+
+		if(!empty($params['configoptions'][v_fn('upload_speed')])){
+			$post['control_panel'] = $params['configoptions'][v_fn('upload_speed')];
+		}
+
+		$tmp_pid = explode('-', $params['configoption3']);
+		$post['plid'] = trim($tmp_pid[0]);
+
+	// OLD METHOD
+	}else{
+		$hvm = (preg_match('/hvm/is', $params['configoption1']) ? 1 : 0);
+		$Nvirt = $virttype.(empty($hvm) ? '' : 'hvm');
+		// Get the OS from the fields set
+		$OS = strtolower(trim($params['configoptions'][v_fn('OS')]));
+		if(empty($OS)){
+			$OS = strtolower(trim($params["customfields"]['OS']));
+		}
+		// Search the OS ID
+		if($OS != 'none'){
+			foreach($data['ostemplates'] as $k => $v){
+			// Does the String match ?
+				if(strtolower($v['name']) == $OS && $v['Nvirt'] == $Nvirt){
+				$post['osid'] = $k;
+				}
+			}
+		}
+		// Is the OS template there
+		if(empty($post['osid']) && $OS != 'none'){
+			return 'Could not find the OS Template '.$OS;
+		}
+		// Search the ISO
+		if(!empty($params["customfields"]['iso']) && strtolower($params["customfields"]['iso']) != 'none'){
+			// ISO restricted in OVZ and XEN-PV
+			if(in_array($virttype, array('openvz', 'vzo', 'proxo', 'lxc')) || (($virttype == 'xen' || $virttype == 'xcp') && empty($hvm))){
+				return 'You can not select ISO for OpenVZ, LXC, Virtuozzo OpenVZ, Proxmox OpenVZ, XEN-PV and XCP-PV VPS';
+			}
+			foreach($data['isos'] as $k => $v){
+				foreach($v as $kk => $vv){
+					// Does the String match ?
+					if(strtolower($vv) == strtolower(trim($params["customfields"]['iso']))){
+						$post['iso'] = $vv;
+					}
+				}
+			}
+			// Is the ISO there
+			if(empty($post['iso'])){
+				return 'Could not find the ISO '.$params["customfields"]['iso'];
+			}
+		}
+		// If ISO and OS both not selected ?
+		if(empty($post['iso']) && empty($post['osid']) && strtolower($params["customfields"]['iso']) == 'none' && $OS == 'none'){
+			return 'ISO or OS is not selected';
+		}
+		// No emails
+		if(!empty($params["customfields"]['noemail'])){
+			$post['noemail'] = 1;
+		}
+		
+		$post['virt'] = $Nvirt;
+		if(empty($virtualizor_conf['vps_control']['custom_hname'])){
+			$post['hostname'] = $params['domain'];
+		}else{
+			// Select the Order ID
+			$res = Capsule::table('tblhosting')->where('id',$params['serviceid'])->get();
+			
+			$hosting_details = (array) $res[0];
+			
+			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $virtualizor_conf['vps_control']['custom_hname']);
+			if(preg_match('/(\{RAND(\d{1,3})\})/is', $post['hostname'], $matches)){
+				$post['hostname'] = str_replace($matches[1], generateRandStr($matches[2]), $post['hostname']);
+			}
+			
+			// Change the Hostname to the email
+			Capsule::table('tblhosting')->where('id',$params['serviceid'])->update(array('domain'=>$post['hostname']));
+			
+		}
+		$post['rootpass'] = $params['password'];
+		$post['space'] = (empty($params['configoptions'][v_fn('space')]) || $params['configoptions'][v_fn('space')] == 0 ? $params['configoption2'] : $params['configoptions'][v_fn('space')]);
+		$post['ram'] = (empty($params['configoptions'][v_fn('ram')]) || $params['configoptions'][v_fn('ram')] == 0 ? $params['configoption3'] : $params['configoptions'][v_fn('ram')]);
+		$post['bandwidth'] = (empty($params['configoptions'][v_fn('bandwidth')]) || $params['configoptions'][v_fn('bandwidth')] == 0 ? (empty($params['configoption6']) ? '0' : $params['configoption6']) : $params['configoptions'][v_fn('bandwidth')]);
+		$post['cores'] = (empty($params['configoptions'][v_fn('cores')]) || $params['configoptions'][v_fn('cores')] == 0 ? $params['configoption7'] : $params['configoptions'][v_fn('cores')]);
+		$post['network_speed'] = (empty($params['configoptions'][v_fn('network_speed')]) || $params['configoptions'][v_fn('network_speed')] == 0 ? $params['configoption13'] : $params['configoptions'][v_fn('network_speed')]);
+		$post['upload_speed'] = (empty($params['configoptions'][v_fn('upload_speed')]) || $params['configoptions'][v_fn('upload_speed')] == 0 ? $params['configoption14'] : $params['configoptions'][v_fn('upload_speed')]);
+		$post['addvs'] = 1;
+		// Is is OpenVZ
+		if($virttype == 'openvz' || $virttype == 'vzo'){
+		
+			$post['burst'] = $params['configoption4'];
+			
+		// Is it Xen PV?
+		}elseif(in_array($virttype, array('xen', 'xcp', 'kvm', 'vzk', 'proxk'))){
+		
+			$post['swap'] = $params['configoption5'];
+			
+		}
+		
+		// VNC
+		if($params['configoption8'] == 'yes' || $params['configoption8'] == 'on'){
+			$post['vnc'] = 1;
+			$post['vncpass'] = generateRandStr(8);
+		}
+		
+		// Are there any configurable options
+		if(!empty($params['configoptions'])){
+			foreach($params['configoptions'] as $k => $v){
+				if(!isset($post[$k])){
+					$post[$k] = $v;
+				}
+			}
+		}
+		// Setup cPanel licenses if cPanel configurable option is set
+		if($ctrlpanel != -1 && $ctrlpanel != 'none'){
+		
+			if($ctrlpanel == 'cpanel' && !empty($virtualizor_conf['cp']['buy_cpanel_login']) && !empty($virtualizor_conf['cp']['buy_cpanel_apikey'])){
+				//logActivity("CPANEL : cPanel issued for ip $_ips[0] of ordertype $cpanel");
+				
+				$url = 'https://www.buycpanel.com/api/order.php?';
+				$login = 'login='.$virtualizor_conf['cp']['buy_cpanel_login'].'&';
+				$key = 'key='.$virtualizor_conf['cp']['buy_cpanel_apikey'].'&';
+				$domain = 'domain='.$params['domain'].'&';
+				$serverip = 'serverip='.$_ips[0].'&';
+				$ordertype = 'ordertype=10';
+				
+				$url .= $login.$key.$domain.$serverip.$ordertype;
+				
+				$ret = file_get_contents($url);
+				
+				$ret = json_decode($ret);
+				
+				if($ret->success == 0){
+					return 'Errors : cPanel Licensing : '.$ret->faultstring;
+				}
+			}
 		}
 	}
-	
-	// If ISO and OS both not selected ?
-	if(empty($post['iso']) && empty($post['osid']) && strtolower($params["customfields"]['iso']) == 'none' && $OS == 'none'){
-		return 'ISO or OS is not selected';
-	}
-	
-	// No emails
-	if(!empty($params["customfields"]['noemail'])){
-		$post['noemail'] = 1;
-	}
-	
+
+	$numips = (empty($params['configoptions'][v_fn('ips')]) || $params['configoptions'][v_fn('ips')] == 0 ? ( empty($new_module) ? $params['configoption9'] : 0 )  : $params['configoptions'][v_fn('ips')]);
+	$numips6 = (empty($params['configoptions'][v_fn('ips6')]) || $params['configoptions'][v_fn('ips6')] == 0 ? ( empty($new_module) ? $params['configoption10'] : 0 ) : $params['configoptions'][v_fn('ips6')]);
+	$numips6_subnet = (empty($params['configoptions'][v_fn('ips6_subnet')]) || $params['configoptions'][v_fn('ips6_subnet')] == 0 ? ( empty($new_module) ? $params['configoption12'] : 0 ) : $params['configoptions'][v_fn('ips6_subnet')]);
+
 	// Are there any IPv4 to assign ?
 	if($numips > 0){
 		$post['ips'] = $numips;
@@ -245,86 +613,6 @@ function virtualizor_cloud_CreateAccount($params) {
 	// Are there any IPv6 Subnets to assign ?
 	if($numips6_subnet > 0){
 		$post['ipv6_subnet'] = $numips6_subnet;	
-	}
-	
-	$post['virt'] = $Nvirt;
-	
-	if(empty($virtualizor_conf['vps_control']['custom_hname'])){
-		$post['hostname'] = $params['domain'];
-	}else{
-		// Select the Order ID
-		$res = Capsule::table('tblhosting')->where('id',$params['serviceid'])->get();
-		
-		$hosting_details = (array) $res[0];
-		
-		$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $virtualizor_conf['vps_control']['custom_hname']);
-		if(preg_match('/(\{RAND(\d{1,3})\})/is', $post['hostname'], $matches)){
-			$post['hostname'] = str_replace($matches[1], generateRandStr($matches[2]), $post['hostname']);
-		}
-		
-		// Change the Hostname to the email
-		Capsule::table('tblhosting')->where('id',$params['serviceid'])->update(array('domain'=>$post['hostname']));
-		
-	}
-	$post['rootpass'] = $params['password'];
-	$post['space'] = (empty($params['configoptions'][v_fn('space')]) || $params['configoptions'][v_fn('space')] == 0 ? $params['configoption2'] : $params['configoptions'][v_fn('space')]);
-	$post['ram'] = (empty($params['configoptions'][v_fn('ram')]) || $params['configoptions'][v_fn('ram')] == 0 ? $params['configoption3'] : $params['configoptions'][v_fn('ram')]);
-	$post['bandwidth'] = (empty($params['configoptions'][v_fn('bandwidth')]) || $params['configoptions'][v_fn('bandwidth')] == 0 ? (empty($params['configoption6']) ? '0' : $params['configoption6']) : $params['configoptions'][v_fn('bandwidth')]);
-	$post['cores'] = (empty($params['configoptions'][v_fn('cores')]) || $params['configoptions'][v_fn('cores')] == 0 ? $params['configoption7'] : $params['configoptions'][v_fn('cores')]);
-	$post['addvs'] = 1;	
-	
-	// Is is OpenVZ
-	if($virttype == 'openvz' || $virttype == 'vzo'){
-	
-		$post['burst'] = $params['configoption4'];
-		
-	// Is it Xen PV?
-	}elseif(in_array($virttype, array('xen', 'xcp', 'kvm', 'vzk', 'proxk'))){
-	
-		$post['swap'] = $params['configoption5'];
-		
-	}
-	
-	// VNC
-	if($params['configoption8'] == 'yes' || $params['configoption8'] == 'on'){
-		$post['vnc'] = 1;
-		$post['vncpass'] = generateRandStr(8);
-	}
-	
-	// Are there any configurable options
-	if(!empty($params['configoptions'])){
-		foreach($params['configoptions'] as $k => $v){
-			if(!isset($post[$k])){
-				$post[$k] = $v;
-			}
-		}
-	}
-	
-	if($loglevel > 0) logActivity('POST : '.var_export($post, 1));
-	
-	// Setup cPanel licenses if cPanel configurable option is set
-	if($ctrlpanel != -1 && $ctrlpanel != 'none'){
-	
-		if($ctrlpanel == 'cpanel' && !empty($virtualizor_conf['cp']['buy_cpanel_login']) && !empty($virtualizor_conf['cp']['buy_cpanel_apikey'])){
-			logActivity("CPANEL : cPanel issued for ip $_ips[0] of ordertype $cpanel");
-			
-			$url = 'https://www.buycpanel.com/api/order.php?';
-			$login = 'login='.$virtualizor_conf['cp']['buy_cpanel_login'].'&';
-			$key = 'key='.$virtualizor_conf['cp']['buy_cpanel_apikey'].'&';
-			$domain = 'domain='.$params['domain'].'&';
-			$serverip = 'serverip='.$_ips[0].'&';
-			$ordertype = 'ordertype=10';
-			
-			$url .= $login.$key.$domain.$serverip.$ordertype;
-			
-			$ret = file_get_contents($url);
-			
-			$ret = json_decode($ret);
-			
-			if($ret->success == 0){
-				return 'Errors : cPanel Licensing : '.$ret->faultstring;
-			}
-		}
 	}
 	
 	$ret = VirtCloud_Curl::call($params["serverip"], $params["serverusername"], $params["serverpassword"], 'index.php?act=create', $post);
@@ -451,7 +739,7 @@ function virtualizor_cloud_TerminateAccount($params) {
 		
 			list($cpanel_ip_id, $cpanel_ip) = array_shift($data);
 			
-			logActivity("CPANEL : cPanel delete for ip $_ips[0]");
+			//logActivity("CPANEL : cPanel delete for ip $_ips[0]");
 			
 			$url = 'https://www.buycpanel.com/api/cancel.php?';
 			$login = 'login='.$virtualizor_conf['cp']['buy_cpanel_login'].'&';
@@ -564,20 +852,35 @@ function virtualizor_cloud_UnsuspendAccount($params) {
 function virtualizor_cloud_ChangePassword($params) {
 
 	# Code to perform action goes here...
-	$data = VirtCloud_Curl::e_make_api_call($params["serverip"], $params["serverpassword"], 'index.php?act=editvs&vpsid='.$params['customfields']['vpsid']);
+	$data = VirtCloud_Curl::e_make_api_call($params["serverip"], $params['serverusername'], $params['serverpassword'], 0, 'index.php?act=editvm&vid='.$params['customfields']['vpsid']);
 	
 	if(empty($data)){
 		return 'Could not load the server data.'.VirtCloud_Curl::error($params["serverip"]);
 	}
 	$post_vps = $data['vps'];
 	
-	$post_vps['editvps'] = 1;
+	// Are there any configurable options
+	if(!empty($params['configoptions'])){
+
+		foreach($params['configoptions'] as $k => $v){
+			if(!isset($post_vps[$k])){
+				$post_vps[$k] = $v;
+			}
+		}
+		
+	}
+
+	$post_vps['ips'] = count($post_vps['ips']);
+	$post_vps['ips6'] = count($post_vps['ips6']);
+	$post_vps['ips6_subnet'] = count($post_vps['ips6_subnet']);
+	$post_vps['ips_int'] = count($post_vps['ips_int']);
+	$post_vps['editvm'] = 1;
 	
 	$post_vps['rootpass'] = $params['password'];
 		
 	if($loglevel > 0) logActivity('Post Array : '.var_export($post_vps, 1));
 	
-	$ret = VirtCloud_Curl::e_make_api_call($params["serverip"], $params["serverpassword"], 'index.php?act=editvs&vpsid='.$params['customfields']['vpsid'], array(), $post_vps);
+	$ret = VirtCloud_Curl::e_make_api_call($params["serverip"], $params['serverusername'], $params['serverpassword'], 0, 'index.php?act=editvm&vid='.$params['customfields']['vpsid'], $post_vps);
 	
 	unset($ret['scripts']);
 	unset($ret['iscripts']);
@@ -590,16 +893,64 @@ function virtualizor_cloud_ChangePassword($params) {
 		return 'Could not load the server data after processing.'.VirtCloud_Curl::error($params["serverip"]);
 	}
 	
-    if ($successful) {
-		$result = "success";
-	} else {
+	if(!empty($ret['done'])){
 		
+		$result = "success";
+		
+		$tmp_ips = array();
+		
+		if(!empty($ret['editvm_vps']['ips'])){
+			foreach($ret['editvm_vps']['ips'] as $k => $v){
+				$tmp_ips[] = $v;
+			}
+		}
+
+		if(!empty($ret['editvm_vps']['ips6_subnet'])){
+			foreach($ret['editvm_vps']['ips6_subnet'] as $k => $v){
+				$tmp_ips[] = $v;
+			}
+		}
+
+		if(!empty($ret['editvm_vps']['ips6'])){
+			foreach($ret['editvm_vps']['ips6'] as $k => $v){
+				$tmp_ips[] = $v;
+			}
+		}
+
+		if(!empty($ret['editvm_vps']['ips_int'])){
+			foreach($ret['editvm_vps']['ips_int'] as $k => $v){
+				$tmp_ips[] = $v;
+			}
+		}
+		
+		if(!empty($tmp_ips)){
+		
+			// The Dedicated IP
+			Capsule::table('tblhosting')->where('id',$serviceid)->update(
+				array('dedicatedip'=>$tmp_ips[0])
+			);
+		
+			// Extra IPs
+			$tmp_cnt = count($tmp_ips);
+			if(!empty($tmp_cnt)){
+				unset($tmp_ips[0]);
+				Capsule::table('tblhosting')->where('id',$serviceid)->update(
+					array('assignedips'=>implode("\n", $tmp_ips))
+				);
+			}
+			
+		}
+		
+	}else{
+				
 		if(!empty($ret['error'])){
 			return 'Errors : '.implode('<br>', $ret['error']);
 		}
-		
-		$result = "An Error occured...Please check logs.";
+			
+		$result = 'Unknown error occured. Please check logs';
+			
 	}
+	
 	return $result;
 }
 
@@ -616,78 +967,120 @@ function virtualizor_cloud_ChangePackage($params) {
 	}
 
 	// Get the Data
-	$data = VirtCloud_Curl::call($params["serverip"], $params['serverusername'], $params["serverpassword"], 'index.php?vid='.$params['customfields']['vpsid'].'&act=editvm');
-	
-	logActivity("Data:".var_export($data, 1));
+	$data = VirtCloud_Curl::e_make_api_call($params["serverip"], $params['serverusername'], $params['serverpassword'], 0, 'index.php?act=editvm&vid='.$params['customfields']['vpsid']);
 	
 	if(empty($data)){
 		return 'Could not load the server data.'.VirtCloud_Curl::error($params["serverip"]);
 	}
 	
 	$post_vps = $data['vps'];
-	
 	if($loglevel > 0) logActivity('Change Package Params : '.var_export($params, 1));
 	if($loglevel > 0) logActivity('Orig VPS : '.var_export($post_vps, 1));
 	
-	// POST Variables
-	$post_vps['space'] = (empty($params['configoptions'][v_fn('space')]) || $params['configoptions'][v_fn('space')] == 0 ? $params['configoption2'] : $params['configoptions'][v_fn('space')]);
-	$post_vps['ram'] = (empty($params['configoptions'][v_fn('ram')]) || $params['configoptions'][v_fn('ram')] == 0 ? $params['configoption3'] : $params['configoptions'][v_fn('ram')]);
-	$post_vps['bandwidth'] = (empty($params['configoptions'][v_fn('bandwidth')]) || $params['configoptions'][v_fn('bandwidth')] == 0 ? (empty($params['configoption6']) ? '0' : $params['configoption7']) : $params['configoptions'][v_fn('bandwidth')]);
-	$post_vps['cores'] = (empty($params['configoptions'][v_fn('cores')]) || $params['configoptions'][v_fn('cores')] == 0 ? $params['configoption7'] : $params['configoptions'][v_fn('cores')]);
-	$post_vps['network_speed'] = (empty($params['configoptions'][v_fn('network_speed')]) || $params['configoptions'][v_fn('network_speed')] == 0 ? $params['configoption14'] : $params['configoptions'][v_fn('network_speed')]);
-	$post_vps['cpu_percent'] = (empty($params['configoptions'][v_fn('cpu_percent')]) || $params['configoptions'][v_fn('cpu_percent')] == 0 ? $params['configoption10'] : $params['configoptions'][v_fn('cpu_percent')]);
-	$post_vps['cpu'] = $params['configoption8'];
+	$new_module = false;
 
-	$post_vps['inodes'] = $params['configoption3'];
-	$post_vps['burst'] = $params['configoption5'];
-	$post_vps['priority'] = $params['configoption11'];
-	$post_vps['swapram'] = $params['configoption5'];
+	// Are you using New module ?
+	if(!in_array($params['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))){
+		
+		$new_module = true;
+		
+		// Now get the plan ID to post
+		$tmp_plid = explode('-', $params['configoption3']);
+		$post_vps['plid'] = trim($tmp_plid[0]);
+		$virttype = $data['vps']['virt'];
+		$post_vps['user_email'] = $params["clientsdetails"]['email'];
+		$tmp_region = explode('-', $params['configoption2']);
+		$post_vps['sgid'] = (int) trim($tmp_region[0]);
+		
+		// Are there any configurable options
+		if(!empty($params['configoptions'])){
+			foreach($params['configoptions'] as $k => $v){
+				if(!isset($post_vps[$k])){
+					$post_vps[$k] = $v;
+				}
+			}
+		}
+		//logActivity('Params : '.var_export($params, 1));
+		
+		if($loglevel > 0) logActivity('params : '.var_export($params, 1));
+		
+		//logActivity('Post Array : '.var_export($post_vps, 1));
+		if($loglevel > 0) logActivity('Post Array : '.var_export($post_vps, 1));
 	
-	// Fixes for SolusVM imported ConfigOptions
-	if(empty($post_vps['ram']) && !empty($params['configoptions']['Memory'])){
-		$post_vps['ram'] = $params['configoptions']['Memory'];
-	}
-	if(empty($post_vps['space']) && !empty($params['configoptions']['Disk Space'])){
-		$post_vps['space'] = $params['configoptions']['Disk Space'];
-	}
-	if(empty($post_vps['cores']) && !empty($params['configoptions']['CPU'])){
-			$post_vps['cores'] = $params['configoptions']['CPU'];
+	// This is OLD Module
+	}else{
+		
+		// POST Variables
+		$post_vps['space'] = (empty($params['configoptions'][v_fn('space')]) || $params['configoptions'][v_fn('space')] == 0 ? $params['configoption2'] : $params['configoptions'][v_fn('space')]);
+		$post_vps['ram'] = (empty($params['configoptions'][v_fn('ram')]) || $params['configoptions'][v_fn('ram')] == 0 ? $params['configoption3'] : $params['configoptions'][v_fn('ram')]);
+		$post_vps['bandwidth'] = (empty($params['configoptions'][v_fn('bandwidth')]) || $params['configoptions'][v_fn('bandwidth')] == 0 ? (empty($params['configoption6']) ? '0' : $params['configoption7']) : $params['configoptions'][v_fn('bandwidth')]);
+		$post_vps['cores'] = (empty($params['configoptions'][v_fn('cores')]) || $params['configoptions'][v_fn('cores')] == 0 ? $params['configoption7'] : $params['configoptions'][v_fn('cores')]);
+		$post_vps['network_speed'] = (empty($params['configoptions'][v_fn('network_speed')]) || $params['configoptions'][v_fn('network_speed')] == 0 ? $params['configoption13'] : $params['configoptions'][v_fn('network_speed')]);
+		$post_vps['upload_speed'] = (empty($params['configoptions'][v_fn('upload_speed')]) || $params['configoptions'][v_fn('upload_speed')] == 0 ? $params['configoption14'] : $params['configoptions'][v_fn('upload_speed')]);
+		$post_vps['cpu_percent'] = (empty($params['configoptions'][v_fn('cpu_percent')]) || $params['configoptions'][v_fn('cpu_percent')] == 0 ? $params['configoption10'] : $params['configoptions'][v_fn('cpu_percent')]);
+		$post_vps['cpu'] = $params['configoption8'];
+
+		$post_vps['inodes'] = $params['configoption3'];
+		$post_vps['burst'] = $params['configoption5'];
+		$post_vps['priority'] = $params['configoption11'];
+		$post_vps['swapram'] = $params['configoption5'];
+		
+		// Fixes for SolusVM imported ConfigOptions
+		if(empty($post_vps['ram']) && !empty($params['configoptions']['Memory'])){
+			$post_vps['ram'] = $params['configoptions']['Memory'];
+		}
+		if(empty($post_vps['space']) && !empty($params['configoptions']['Disk Space'])){
+			$post_vps['space'] = $params['configoptions']['Disk Space'];
+		}
+		if(empty($post_vps['cores']) && !empty($params['configoptions']['CPU'])){
+				$post_vps['cores'] = $params['configoptions']['CPU'];
+			}
+			
+		if($params['configoption8'] == 'yes' || $params['configoption8'] == 'on'){
+			$post_vps['vnc'] = 1;
+			if(empty($vps['vnc'])){
+				$post_vps['vncpass'] = generateRandStr(8);
+			}
 		}
 		
-	if($params['configoption8'] == 'yes' || $params['configoption8'] == 'on'){
-		$post_vps['vnc'] = 1;
-		if(empty($vps['vnc'])){
-			$post_vps['vncpass'] = generateRandStr(8);
+		$virttype = $post_vps['virt'];
+		
+		// IPs are the same always
+		$post_vps['ips'] = $post_vps['ips'];
+		
+		// Add the IPv6
+		if(!empty($post_vps['ips6'])){
+			$post_vps['ips6'] = $post_vps['ips6'];
 		}
-	}
-	
-	$virttype = $post_vps['virt'];
-	
-	// IPs are the same always
-	$post_vps['ips'] = $post_vps['ips'];
-	
-	// Add the IPv6
-	if(!empty($post_vps['ips6'])){
-		$post_vps['ips6'] = $post_vps['ips6'];
-	}
-	
-	if(!empty($post_vps['ips6_subnet'])){
-		$post_vps['ips6_subnet'] = $post_vps['ips6_subnet'];
-		foreach($post_vps['ips6_subnet'] as $k => $v){
-			$tmp = explode('/', $v);
-			$post_vps['ips6_subnet'][$k] = $tmp[0];
+		
+		if(!empty($post_vps['ips6_subnet'])){
+			$post_vps['ips6_subnet'] = $post_vps['ips6_subnet'];
+			foreach($post_vps['ips6_subnet'] as $k => $v){
+				$tmp = explode('/', $v);
+				$post_vps['ips6_subnet'][$k] = $tmp[0];
+			}
 		}
+		
+	}//End of OLD Module
+
+	$numips = (empty($params['configoptions'][v_fn('ips')]) || $params['configoptions'][v_fn('ips')] == 0 ? ( empty($new_module) ? $params['configoption9'] : 0 )  : $params['configoptions'][v_fn('ips')]);
+	$numips6 = (empty($params['configoptions'][v_fn('ips6')]) || $params['configoptions'][v_fn('ips6')] == 0 ? ( empty($new_module) ? $params['configoption10'] : 0 ) : $params['configoptions'][v_fn('ips6')]);
+	$numips6_subnet = (empty($params['configoptions'][v_fn('ips6_subnet')]) || $params['configoptions'][v_fn('ips6_subnet')] == 0 ? ( empty($new_module) ? $params['configoption12'] : 0 ) : $params['configoptions'][v_fn('ips6_subnet')]);
+
+	// Are there any IPv4 to assign ?
+	if($numips > 0){
+		$post['ips'] = $numips;
 	}
 	
-	$numips = (empty($params['configoptions'][v_fn('ips')]) || $params['configoptions'][v_fn('ips')] == 0 ? $params['configoption9'] : $params['configoptions'][v_fn('ips')]);
-	$numips6 = (empty($params['configoptions'][v_fn('ips6')]) || $params['configoptions'][v_fn('ips6')] == 0 ? $params['configoption10'] : $params['configoptions'][v_fn('ips6')]);
-	$numips6_subnet = (empty($params['configoptions'][v_fn('ips6_subnet')]) || $params['configoptions'][v_fn('ips6_subnet')] == 0 ? $params['configoption12'] : 
-	$params['configoptions'][v_fn('ips6_subnet')]);
+	// Are there any IPv6 to assign ?
+	if($numips6 > 0){
+		$post['ipv6'] = $numips6;	
+	}
 	
-	//Assigning the count of ips to send it to Virtualizor
-	$post_vps['ips'] = $numips;
-	$post_vps['ipv6'] = $numips6;
-	$post_vps['ipv6_subnet'] = $numips6_subnet;
+	// Are there any IPv6 Subnets to assign ?
+	if($numips6_subnet > 0){
+		$post['ipv6_subnet'] = $numips6_subnet;	
+	}
 	
 	// Fixes for SolusVM imported ConfigOptions
 	if(empty($numips) && !empty($params['configoptions']['Extra IP Address'])){
@@ -703,9 +1096,16 @@ function virtualizor_cloud_ChangePackage($params) {
 		}
 	}
 
+	$post_vps['ips'] = count($post_vps['ips']);
+    	$post_vps['ips6'] = count($post_vps['ips6']);
+	$post_vps['ips6_subnet'] = count($post_vps['ips6_subnet']);
+	$post_vps['ips_int'] = count($post_vps['ips_int']);
+    	$post_vps['hostname'] = $params['domain'];	
+	
 	$post_vps['editvm'] = 1;
 		
-	$ret = VirtCloud_Curl::call($params["serverip"],$params['serverusername'], $params["serverpassword"], 'index.php?vid='.$params['customfields']['vpsid'].'&act=editvm', $post_vps);
+	$ret = VirtCloud_Curl::e_make_api_call($params["serverip"], $params['serverusername'], $params['serverpassword'], 0, 'index.php?act=editvm&vid='.$params['customfields']['vpsid'], $post_vps);
+	//logActivity('Return after Edit: '.var_export($ret, 1));
 	
 	unset($ret['scripts']);
 	unset($ret['iscripts']);
@@ -748,20 +1148,25 @@ function virtualizor_cloud_ChangePackage($params) {
 				$tmp_ips[] = $v;
 			}
 		}
-	
-		// The Dedicated IP
-		Capsule::table('tblhosting')->where('id',$serviceid)->update(
-			array('dedicatedip'=>$tmp_ips[0])
-		);
-	
-		// Extra IPs
-		$tmp_cnt = count($tmp_ips);
-		if(!empty($tmp_cnt)){
-			unset($tmp_ips[0]);
-			Capsule::table('tblhosting')->where('id',$serviceid)->update(
-				array('assignedips'=>implode("\n", $tmp_ips))
-			);
-		}
+		
+	    if(!empty($tmp_ips)){
+	    
+	        // The Dedicated IP
+    		Capsule::table('tblhosting')->where('id',$serviceid)->update(
+    			array('dedicatedip'=>$tmp_ips[0])
+    		);
+    	
+    		// Extra IPs
+    		$tmp_cnt = count($tmp_ips);
+    		if(!empty($tmp_cnt)){
+    			unset($tmp_ips[0]);
+    			Capsule::table('tblhosting')->where('id',$serviceid)->update(
+    				array('assignedips'=>implode("\n", $tmp_ips))
+    			);
+    		}
+    		
+	    }
+		
 	}else{
 				
 		if(!empty($ret['error'])){
@@ -914,13 +1319,12 @@ class VirtCloud_Curl {
 
 	public static function e_make_api_call($ip, $userkey, $pass, $vid, $path, $post = array()){
 		
-		// If we get an empty $vid we will just return false.
-		if(empty($vid)){
-			return false;
-		}
 		$v = new Virtualizor_Enduser_Cloud_API($ip, $userkey, $pass);
+		if(!empty($vid)){
+		    $path = $path.'&svs='.$vid;
+		}
 		
-		return $v->call($path.'&svs='.$vid, $post);
+		return $v->call($path, $post);
 		
 	}	
 	
@@ -976,13 +1380,27 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 		$var['giver'] = $url_prefix.'&id='.$params['serviceid'].'&';
 		$var['url'] = $url_prefix.'&id='.$params['serviceid'].'&';
 		$var['copyright'] = 'Virtualizor';
-		$var['version'] = '2.0.9';
+		$var['version'] = '2.2.0';
 		$var['logo'] = '';
 		$var['theme'] = $modules_url.'/virtualizor_cloud/ui/';
 		$var['theme_path'] = dirname(__FILE__).'/ui/';
 		$var['images'] = $var['theme'].'images/';
 		$var['virt_dev_license'] = ' ';
 		$var['virt_pirated_license'] = ' ';
+
+		// For short name of VPS
+		if(!empty($virtualizor_conf['vm_short'])){
+			define('VM_SHORT', $virtualizor_conf['vm_short']);
+		}else{
+			define('VM_SHORT', 'VPS');
+		}
+
+		// For long name of VPS
+		if(!empty($virtualizor_conf['vm_long'])){
+			define('VM_LONG', $virtualizor_conf['vm_long']);
+		}else{
+			define('VM_LONG', 'Virtual Server');
+		}
 		
 		if($_GET['give'] == 'index.html'){
 			
@@ -1004,7 +1422,6 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 			$jspath = $var['theme_path'].'js2/';
 			$files = array('jquery.min.js',
 							'jquery.dataTables.min.js',
-							'jquery.bpopup.min.js',
 							'jquery.tablesorter.min.js',
 							'jquery.flot.min.js',
 							'jquery.flot.pie.min.js',
@@ -1016,9 +1433,10 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 							'jquery.flot.selection.min.js',
 							'jquery.flot.resize.min.js',
 							'jquery.scrollbar.min.js',
-							'tiptip.js',
-							'chosen.jquery.min.js',
+							'popper.min.js',
+							'select2.js',
 							'bootstrap.min.js',
+							'jquery.responsivetabs.js',
 							'virtualizor.js',
 							'haproxy.js',
 						);
@@ -1046,10 +1464,10 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 			$data = '';
 			$jspath = $var['theme_path'].'css2/';
 			$files = array('bootstrap.min.css',
-							'font-awesome.min.css',
-				'jquery.dataTables.css',
-				'chosen.min.css',
-				'jquery.scrollbar.css',
+							'all.min.css',
+							'jquery.dataTables.min.css',
+							'select2.css',
+							'jquery.scrollbar.css',
 							'style.css',
 						);
 			foreach($files as $k => $v){
@@ -1086,7 +1504,7 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 		$_GET['SET_REMOTE_IP'] = $_SERVER['REMOTE_ADDR'];
 		
 		// The list of the VPS Action allowed for VPS USER ONLY !!!
-		$vps_actions = array('vpsmanage', 'usersettings', 'managezone', 'tasks', 'self_shutdown', 'logs', 'system_alerts', 'statuslogs', 'stop', 'restart', 'start', 'poweroff', 'backup', 'rescue', 'ostemplate', 'monitor', 'cpu', 'ram', 'processes', 'disk', 'services', 'performance', 'ssh', 'console', 'statuslogs', 'system_alerts', 'logs', 'bandwidth', 'changepassword', 'controlpanel', 'hostname', 'rdns', 'vnc', 'vncpass', 'ips', 'hvmsettings', 'listrecipes', 'managezone', 'managesubnets', 'tasks', 'backup2', 'addiso', 'euiso', 'managevdf', 'sshkeys', 'webuzo');		
+		$vps_actions = array('vpsmanage', 'usersettings', 'managezone', 'tasks', 'self_shutdown', 'logs', 'system_alerts', 'statuslogs', 'stop', 'restart', 'start', 'poweroff', 'backup', 'rescue', 'ostemplate', 'monitor', 'cpu', 'ram', 'processes', 'disk', 'services', 'performance', 'ssh', 'console', 'statuslogs', 'system_alerts', 'logs', 'bandwidth', 'changepassword', 'controlpanel', 'hostname', 'rdns', 'vnc', 'vncpass', 'ips', 'hvmsettings', 'listrecipes', 'managezone', 'managesubnets', 'tasks', 'backup2', 'addiso', 'euiso', 'managevdf', 'sshkeys', 'webuzo', 'editsshkey');		
 
 		if(!in_array($_GET['act'], $vps_actions)){
 			$_GET['act'] = 'vpsmanage';
@@ -1113,7 +1531,7 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 		
 		// fetch the novnc file
 		$modules_url_vnc = $modules_url.'/virtualizor_cloud';
-		$novnc_viewer = file_get_contents($modules_url_vnc.'/novnc/novnc.html');
+		$novnc_viewer = file_get_contents($modules_url_vnc.'/novnc/vnc_auto_virt.html');
 		
 		$novnc_password = $data['info']['password'];
 		$vpsid = $params['customfields']['vpsid'];

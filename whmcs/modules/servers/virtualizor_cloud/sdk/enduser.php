@@ -77,9 +77,12 @@ class Virtualizor_Enduser_Cloud_API {
 		$var = @unserialize($str);
 		
 		if(empty($var)){
-		
-			$str = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'._strlen('$2').':\"$2\";'", $str);
 			
+			preg_match_all('!s:(\d+):"(.*?)";!s', $str, $matches);
+			foreach($matches[2] as $mk => $mv){
+				$tmp_str = 's:'.strlen($mv).':"'.$mv.'";';
+				$str = str_replace($matches[0][$mk], $tmp_str, $str);
+			}
 			$var = @unserialize($str);
 		
 		}

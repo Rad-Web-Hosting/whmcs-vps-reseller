@@ -36,7 +36,7 @@ $virtualizor_conf['fields']['space'] = 'Space';
 $virtualizor_conf['fields']['ram'] = 'RAM';
 $virtualizor_conf['fields']['bandwidth'] = 'Bandwidth';
 $virtualizor_conf['fields']['cores'] = 'CPU Cores';
-$virtualizor_conf['fields']['network_speed'] = 'Network Speed';
+$virtualizor_conf['fields']['network_speed'] = 'Network Speed (KB)';
 $virtualizor_conf['fields']['OS'] = 'Operating System';
 $virtualizor_conf['fields']['ctrlpanel'] = 'Control Panel';
 $virtualizor_conf['fields']['slave_server'] = 'Server';
@@ -45,10 +45,11 @@ $virtualizor_conf['fields']['cpu_percent'] = 'CPU Percent';
 $virtualizor_conf['fields']['total_iops_sec'] = 'Total I/Os per sec';
 $virtualizor_conf['fields']['read_bytes_sec'] = 'Read Mega Bytes/s';
 $virtualizor_conf['fields']['write_bytes_sec'] = 'Write Mega Bytes/s';
+$virtualizor_conf['fields']['upload_speed'] = 'Upload Speed (KB)';
 
-// Control Panel API Keys - Deprecated
-// $virtualizor_conf['cp']['buy_cpanel_login'] = '';
-// $virtualizor_conf['cp']['buy_cpanel_apikey'] = '';
+// Control Panel API Keys
+$virtualizor_conf['cp']['buy_cpanel_login'] = '';
+$virtualizor_conf['cp']['buy_cpanel_apikey'] = '';
 
 // Node Selection Algo
 $virtualizor_conf['node_ram_select'] = 0;
@@ -87,5 +88,11 @@ $virtualizor_conf['vps_control']['custom_hname'] = '';
 
 // Load as per old module
 $virtualizor_conf['no_virt_plans'] = 0;
+
+// Set the alias for VPS 
+$virtualizor_conf['vm_short'] = '';
+
+// Set the alias for VPS server
+$virtualizor_conf['vm_long'] = '';
 
 ?>

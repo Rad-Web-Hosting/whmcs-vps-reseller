@@ -76,8 +76,11 @@ function _unserialize($str){
 	
 	if(empty($var)){
 	
-		$str = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $str);
-		
+			preg_match_all('!s:(\d+):"(.*?)";!s', $str, $matches);
+			foreach($matches[2] as $mk => $mv){
+				$tmp_str = 's:'.strlen($mv).':"'.$mv.'";';
+				$str = str_replace($matches[0][$mk], $tmp_str, $str);
+			}
 		$var = @unserialize($str);
 	
 	}
@@ -238,7 +241,7 @@ if(!class_exists('hash_encryption')){
 		 * Secret value added to randomize output and protect the user provided key
 		 * @var	string	Change this value to add more randomness to your encryption
 		 **/	
-		var $salt = 'Change this to any secret value you like. "6rtd4schjfwf5whsm427crne" might be a good example.';
+		var $salt = 'Change this to any secret value you like. "d41d8cd98f00b204e9800998ecf8427e" might be a good example.';
 		
 	
 		/**

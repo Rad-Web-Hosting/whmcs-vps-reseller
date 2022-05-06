@@ -15,14 +15,19 @@ var vdf_edit_ico, vdf_save_ico, vdf_delete_ico, vdf_revert_ico;
 var cur_vps;
 
 // Add search feature to select input
-function add_chosen(id){
-	$('#'+id+' .chosen').chosen();
-	$('.chosen-single').css({'height':'32px'});
+function add_select2(id){
+	$('#'+id+' .chosen').select2({width:"100%"});
 }
 
 function listvpsforwardertbl(){//-
 	var $tmp_ha = {};
 	var alert_entries = {};
+
+	if(empty($haproxydata)){
+		$('#vdf-list').html(`<div class="notice">{{no_vdf}}</div>`);
+		return;
+	}
+
 	for(x in $haproxydata){
 		$tmp_ha[x] = {};
 		
@@ -38,24 +43,24 @@ function listvpsforwardertbl(){//-
 		$tmp_ha[x]['dest_ip'] = '<span id="'+$haproxydata[x]['id']+'_dest_ip"><span class="coldat">'+$haproxydata[x]['dest_ip']+'</span></span>';
 		$tmp_ha[x]['dest_port'] = '<span id="'+$haproxydata[x]['id']+'_dest_port"><span class="coldat">'+$haproxydata[x]['dest_port']+'</span></span>';
 		$tmp_ha[x]['actions'] = '<span class="vdf_actions" id="'+$haproxydata[x]['id']+'_vdf_actions"><span class="vdf_edit" id="'+$haproxydata[x]['id']+'_edit"><i class="'+vdf_edit_ico+'"  onclick="edit_row(this, '+$haproxydata[x]['id']+');" data-toggle="tooltip" data-placement="auto" title="{{vdf_tooltip_edit}}" ></i></span><span class="vdf_delete"><i class="'+vdf_delete_ico+'" onclick="vdf_confirm('+$haproxydata[x]['id']+');" data-toggle="tooltip" data-placement="auto" title="{{vdf_tooltip_delete}}" ></i></span></span>';
-		$tmp_ha[x]['select_all'] = '<span id="'+$haproxydata[x]['id']+'_checkbox"><input type="checkbox" class="ios" name="vdf_list[]" value="'+$haproxydata[x]['id']+'"/>';
+		$tmp_ha[x]['select_all'] = '<span id="'+$haproxydata[x]['id']+'_checkbox" class="custom-control custom-checkbox"><input type="checkbox" class="ios custom-control-input" name="vdf_list[]" id="vdf-checkbox'+$haproxydata[x]['id']+'" value="'+$haproxydata[x]['id']+'"/><label class="custom-control-label" for="vdf-checkbox'+$haproxydata[x]['id']+'">';
 		
 	}
 	
 	var cols = new Object();
 	if(is_admin != undefined){
-		cols["id"] = {"l" : "{{id}}", "centered" : true};
-		cols["vpsuuid"] = {"l" : "{{vdf_vpsid}}", "centered" : true};
-		cols["serid"] = {"l" : "{{vdf_serid}}", "centered" : true};
+		cols["id"] = {"l" : "{{id}}"};
+		cols["vpsuuid"] = {"l" : "{{vdf_vpsid}}"};
+		cols["serid"] = {"l" : "{{vdf_serid}}"};
 	}
 	
-	cols["protocol"] = {"l" : "{{vdf_proto}}", "centered" : true};
-	cols["src_hostname"] = {"l" : "{{vdf_src_hname}}", "centered" : true};
-	cols["src_port"] = {"l" : "{{vdf_src_port}}", "centered" : true};
-	cols["dest_ip"] = {"l" : "{{vdf_dest_ip}}", "centered" : true};
-	cols["dest_port"] = {"l" : "{{vdf_dest_port}}", "centered" : true};
-	cols["actions"] = {"l" : "{{actions}}", "centered" : true, "class" : "tbl_actions"};
-	cols["select_all"] = {"l" : '<input type="checkbox" class="select_all" name="select_all" id="select_all" onclick=\"checkbox_select_all();\" />', "centered" : true};
+	cols["protocol"] = {"l" : "{{vdf_proto}}"};
+	cols["src_hostname"] = {"l" : "{{vdf_src_hname}}"};
+	cols["src_port"] = {"l" : "{{vdf_src_port}}"};
+	cols["dest_ip"] = {"l" : "{{vdf_dest_ip}}"};
+	cols["dest_port"] = {"l" : "{{vdf_dest_port}}"};
+	cols["actions"] = {"l" : "{{actions}}", "class" : "tbl_actions"};
+	cols["select_all"] = {"l" : '<div class="custom-control custom-checkbox"><input type="checkbox" class="select_all custom-control-input" name="select_all" id="vdf_select_all" onclick=\"checkbox_select_all(this);\" /><label class="custom-control-label" for="vdf_select_all"></label></div>', "class" : "select-all-checkbox"};
 
 	// Form the TABLE
 	table({'id' : 'vdf_tbl_div', 'tid' : 'vps_forwarders_tbl', "width" : '100%'}, cols, $tmp_ha);
@@ -65,6 +70,8 @@ function listvpsforwardertbl(){//-
 	$('#vdf_tbl_div select[name="vps_forwarders_tbl_length"]').on('change', update_record_alerts);
 	$('#vdf_tbl_div .paginate_button').on('click', update_record_alerts);
 	update_record_alerts();
+
+	$("#addvdf").trigger("reset");
 };
 
 function update_record_alerts(){
@@ -132,22 +139,22 @@ function edit_row(self, vdfid){
 function edit_row_afterips(self, vdfid, vpsips){
 	var coleditelms = {};
 	coleditelms["protocol"] = "<span class=\"coledit\">";
-	coleditelms["protocol"] += "<select id=\""+vdfid+"_protocol_edit\" class=\"form-control chosen\" onchange=\"handleprotochange(this, "+vdfid+");\">";
+	coleditelms["protocol"] += "<select id=\""+vdfid+"_protocol_edit\" class=\"form-control\" onchange=\"handleprotochange(this, "+vdfid+");\">";
 	$.each($supported_protocols, function(i,t){
 		coleditelms["protocol"] += "<option value=\""+t+"\" "+($("#"+vdfid+"_protocol .coldat").html() == t ? "selected=\"selected\"" : "")+">"+t+"</option>";
 	});
 	coleditelms["protocol"] += "</select></span>";
 	
 	coleditelms["src_hostname"] = "<span class=\"coledit\">";
-	coleditelms["src_hostname"] += "<input id=\""+vdfid+"_src_hostname_edit\" type=\"text\" class=\"form-control\" value=\""+$("#"+vdfid+"_src_hostname .coldat").html()+"\" />";
+	coleditelms["src_hostname"] += "<input id=\""+vdfid+"_src_hostname_edit\" type=\"text\" class=\"form-control mb-0\" value=\""+$("#"+vdfid+"_src_hostname .coldat").html()+"\" />";
 	coleditelms["src_hostname"] += "</span>";
 	
 	coleditelms["src_port"] = "<span class=\"coledit\">";
-	coleditelms["src_port"] += "<input id=\""+vdfid+"_src_port_edit\" type=\"text\" class=\"form-control\" value=\""+$("#"+vdfid+"_src_port .coldat").html()+"\" />";
+	coleditelms["src_port"] += "<input id=\""+vdfid+"_src_port_edit\" type=\"text\" class=\"form-control mb-0\" value=\""+$("#"+vdfid+"_src_port .coldat").html()+"\" />";
 	coleditelms["src_port"] += "</span>";
 	
 	coleditelms["dest_ip"] = "<span class=\"coledit\">";
-	coleditelms["dest_ip"] += "<select id=\""+vdfid+"_dest_ip_edit\" class=\"form-control chosen\">";
+	coleditelms["dest_ip"] += "<select id=\""+vdfid+"_dest_ip_edit\" class=\"form-control\">";
 	
 	$.each(vpsips, function(i,t){
 		coleditelms["dest_ip"] += "<option value=\""+i+"\" "+($("#"+vdfid+"_dest_ip .coldat").html() == i ? "selected=\"selected\"" : "")+">"+i+"</option>";
@@ -155,7 +162,7 @@ function edit_row_afterips(self, vdfid, vpsips){
 	coleditelms["dest_ip"] += "</select></span>";
 	
 	coleditelms["dest_port"] = "<span class=\"coledit\">";
-	coleditelms["dest_port"] += "<input id=\""+vdfid+"_dest_port_edit\" type=\"text\" class=\"form-control\" value=\""+$("#"+vdfid+"_dest_port .coldat").html()+"\" />";
+	coleditelms["dest_port"] += "<input id=\""+vdfid+"_dest_port_edit\" type=\"text\" class=\"form-control mb-0\" value=\""+$("#"+vdfid+"_dest_port .coldat").html()+"\" />";
 	coleditelms["dest_port"] += "</span>";
 	
 	
@@ -173,7 +180,7 @@ function edit_row_afterips(self, vdfid, vpsips){
 	$("#"+vdfid+"_protocol select").trigger("change");
 	
 	// Add search feature to select and adjust select height
-	add_chosen("vps_forwarders_tbl");
+	add_select2("vps_forwarders_tbl");
 };
 
 function save_vdf(self){
@@ -257,7 +264,7 @@ function vdf_confirm(vdfid){
 	if(vdfid < 1){
 
 		if(selectIndx == -1){
-			alert("{{vdf_no_act_sel}}");
+			error_alert("{{vdf_no_act_sel}}");
 			return false;
 		}
 	
@@ -271,41 +278,45 @@ function vdf_confirm(vdfid){
 	}
 	
 	if(vdfids.length < 1){
-		alert("{{nothing_selected}}");
+		error_alert("{{nothing_selected}}");
 		return false;
 	}
 
-	var r = confirm(confirmmsg[selectIndx]);
-	if(r != true){
-		return false;
-	}
-	
-	var finalids = new Object();
+	modalConfirm(function(confirm){
+		if(!confirm){
+			return false;
+		}else{
 
-	//finalids["action"] = selectvals[selectIndx];
-	finalids["ids"] = vdfids.join(",");
-	finalids["vdf_action"] = "delvdf";
-	
-	$("#progress_bar").show();
-	
-	processing_symb(1);
-	// Post the data
-	POST({
-		url: vdf_url,
-		data: $.param(finalids),
-	}, function(data){	
-		processing_symb();
-		if('done' in data){
-			if(is_admin != undefined){
-				window.location = window.location;
-				return;
-			}
-			$.each(vdfids, function(i, t){
-				delete $haproxydata[t];
+			var finalids = new Object();
+
+			//finalids["action"] = selectvals[selectIndx];
+			finalids["ids"] = vdfids.join(",");
+			finalids["vdf_action"] = "delvdf";
+			
+			$("#progress_bar").show();
+			
+			processing_symb(1);
+			// Post the data
+			POST({
+				url: vdf_url,
+				data: $.param(finalids),
+			}, function(data){	
+				processing_symb();
+				if('done' in data){
+					if(is_admin != undefined){
+						window.location = window.location;
+						return;
+					}
+					$.each(vdfids, function(i, t){
+						delete $haproxydata[t];
+					});
+					listvpsforwardertbl();
+				}
 			});
-			listvpsforwardertbl();
+			
 		}
-	});
+	}, confirmmsg[selectIndx]);
+	
 };
 
 function handleprotochange(self, vdfid){
@@ -319,7 +330,7 @@ function handleprotochange(self, vdfid){
 		// List source IPs as src_hostname
 		var str = "";
 		str = "<span class=\"coledit\">";
-		str += "<select id=\""+vdfid+"_src_hostname_edit\" class=\"form-control chosen\">";
+		str += "<select id=\""+vdfid+"_src_hostname_edit\" class=\"form-control\">";
 		$.each($arr_src_ips, function(i,t){
 			str += "<option value=\""+t+"\" "+(t == $("#"+vdfid+"_src_hostname .coldat").html() ? "selected=\"selected\"" : "")+">"+t+"</option></span>";
 		});
@@ -329,14 +340,14 @@ function handleprotochange(self, vdfid){
 	}else{
 		//src_hostname
 		str = "<span class=\"coledit\">";
-		str += "<input id=\""+vdfid+"_src_hostname_edit\" type=\"text\" class=\"form-control\" value=\""+$("#"+vdfid+"_src_hostname .coldat").html()+"\" />";
+		str += "<input id=\""+vdfid+"_src_hostname_edit\" type=\"text\" class=\"form-control mb-0\" value=\""+$("#"+vdfid+"_src_hostname .coldat").html()+"\" />";
 		str += "</span>";
 	}
 	$("#"+vdfid+"_src_hostname .coledit").remove();
 	$("#"+vdfid+"_src_hostname").append(str);
 	
 	// add search feature to select
-	add_chosen("vps_forwarders_tbl");
+	add_select2("vps_forwarders_tbl");
 	
 };
 
@@ -366,7 +377,6 @@ function processaddvdfform(self){
 							}
 						});
 						$("#vpsuuid").html(str);
-						$("#vpsuuid").trigger("chosen:updated");
 					}
 				}
 			});
@@ -401,7 +411,6 @@ function processaddvdfform(self){
 						});
 					}
 					$("#dest_ip").html(str);
-					$("#dest_ip").trigger("chosen:updated");
 				}
 			});
 			return true;
@@ -418,14 +427,14 @@ function processaddvdfform(self){
 			if(is_admin != undefined){
 				var serid = $("#serid").val();
 				if($servers[serid] == undefined){
-					alert("'.$l['no_server_found'].'");
+					error_alert("'.$l['no_server_found'].'");
 					return;
 				}else{
 					$arr_src_ips = $servers[serid]["arr_haproxy_src_ips"];
 				}
 			}
 			
-			str = "<select class=\"form-control chosen\" id=\"src_hostname\" name=\"src_hostname\">";
+			str = "<label class='form-label' for='src_hostname' >{{vdf_src_hname}}</label><select class=\"form-control\" id=\"src_hostname\" name=\"src_hostname\">";
 			str += "<option value=\"-1\">{{vdf_select_ip}}</option>";
 			$.each($arr_src_ips, function(i,t){
 				str += "<option value=\""+t+"\">"+t+"</option>";
@@ -437,7 +446,7 @@ function processaddvdfform(self){
 			
 		// https or http
 		}else{
-			str = "<input type=\"text\" id=\"src_hostname\" class=\"form-control\" name=\"src_hostname\"/>";
+			str = "<label class='form-label' for='src_hostname' >{{vdf_src_hname}}</label><input type=\"text\" id=\"src_hostname\" class=\"form-control w-100\" name=\"src_hostname\"/>";
 			if($(self).val() == "HTTP"){
 				$("#src_port").val("80");
 				$("#dest_port").val("80");
@@ -454,7 +463,7 @@ function processaddvdfform(self){
 		$(parent).html(str);
 		
 		// add search feature to select
-		add_chosen("addvdf_form_div");
+		add_select2("addvdf_form_div");
 		
 		return true;
 	}
@@ -548,17 +557,7 @@ function showvdfform(){
 	$("#showaddvdfformbtn").hide();
 	
 	// add search feature to select
-	add_chosen("addvdf_form_div");
-}
-
-function checkbox_select_all(){
-	$(".ios").each(function(){
-		if($_("select_all").checked){
-			$(this).prop("checked", true);
-		}else{
-			$(this).prop("checked", false);
-		}
-	});
+	add_select2("addvdf_form_div");
 }
 
 // Creates the TABLE
@@ -579,7 +578,19 @@ function apply_data_table(fp_tid){
 				"next":"{{next}}",
 				"previous":"{{previous}}"
 			}
-		}
+		},
+		'columnDefs': [ {
+			'targets': [6,5], // column index (start from 0)
+			'orderable': false, // set orderable false for selected columns,
+			'width' : '5%'
+		 },
+		 { "width": "13%", "targets": [0] },
+		 { "width": "21%", "targets": [1] },
+		 { "width": "16%", "targets": [2] },
+		 { "width": "18%", "targets": [3] },
+		 { "width": "20%", "targets": [4] },
+		],
+		'autoWidth': true,
 	});
 };
 

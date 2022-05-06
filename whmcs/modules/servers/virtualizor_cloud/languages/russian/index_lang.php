@@ -33,6 +33,7 @@ $l['virt_proxl'] = 'Proxmox LXC';
 $l['virt_vzk'] = 'Virtuozzo KVM';
 $l['virt_vzo'] = 'Virtuozzo OpenVZ';
 
+$l['err_locked_vps'] = VM_SHORT.' is locked, hence no actions are allowed to perform';
 $l['user_data_error_t'] = 'Ошибка пользовательских данных';
 $l['user_data_error'] = 'Не удалось загрузить информацию об учетной записи. Сообщите об этом администратору сервера!';
 
@@ -113,12 +114,13 @@ $l['dock_sync'] = 'Синхронизация с другими автоуста
 $l['go_home'] = 'Домой';
 $l['dock_user'] = 'Профиль пользователя';
 $l['dock_password'] = 'Изменить пароль';
-$l['dock_vps'] = 'Список VPS';
+$l['dock_vps'] = 'Список '.VM_SHORT;
 
 // Left Menu
 $l['lm_file_mgr'] = 'Файловый менеджер';
 $l['lm_res'] = 'Ресурсы';
-$l['lm_performance'] = 'Производительность';
+$l['lm_performance'] = 'Server Monitoring';
+$l['lm_disk_health'] ='Raid Health';
 $l['lm_process'] = 'Процессы';
 $l['lm_service'] = 'Сервисы';
 $l['lm_firewall'] = 'Брандмауэр';
@@ -134,15 +136,13 @@ $l['lm_changepass'] = 'Сменить пароль';
 $l['lm_controlpanel'] = 'Панель управления';
 $l['lm_recipes'] = 'Задачи';
 $l['lm_disk'] = 'Disk';
-$l['lm_backup'] = 'Backup';
 $l['lm_ostemp'] ='Переустановка ОС';
 $l['lm_cpu'] = 'CPU';
 $l['lm_ram'] = 'RAM';
 $l['lm_host'] = 'Hostname';
 $l['lm_logs'] = 'Логи';
 $l['lm_ips'] = 'IP-адрес';
-$l['lm_backup'] = 'Backups';
-$l['lm_hvmsettings'] = 'VPS настройки';
+$l['lm_hvmsettings'] = VM_SHORT.' настройки';
 $l['lm_apikey'] = 'Учетные данные API';
 $l['lm_pdns'] = 'DNS';
 $l['lm_rdns'] = 'Reverse DNS';
@@ -158,8 +158,8 @@ $l['lm_billing'] = 'Billing';
 
 
 // Users left menu
-$l['lm_vs'] = 'Список VPS';
-$l['lm_addvs'] = 'Launch Instance';
+$l['lm_vs'] = 'Список '.VM_SHORT;
+$l['lm_addvs'] = 'Launch '.VM_SHORT;
 $l['lm_resources'] = 'Cloud Resources';
 $l['lm_users'] = 'Users';
 $l['lm_usr_settings'] = 'Настройки';
@@ -174,10 +174,11 @@ $l['page_page'] = 'страница';
 $l['page_of'] = 'из';
 $l['page_go'] = 'дальше';
 
-// Create VPS related for Kernel
-$l['build_no_vs'] = 'VPS не найден в базе данных';
+// Create '.VM_SHORT.' related for Kernel
+$l['build_no_vs'] = VM_SHORT.' не найден в базе данных';
+$l['rescue_not_synced'] = 'It seems that rescue was called but as per DB rescue is not enabled. This might happen if the Master DB is not synced with slave server.';
 $l['build_no_os'] = 'Шаблон ОС не найден';
-$l['build_no_ip'] = 'Первичный IP отсутствует для VPS';
+$l['build_no_ip'] = 'Первичный IP отсутствует для '.VM_SHORT;
 $l['build_no_os_iso'] = 'Нет шаблона ОС или файла ISO не найдено';
 
 // Wrong and Right Kernel
@@ -190,52 +191,52 @@ $l['temp_snap_err'] = 'The Snapshot could not be created and hence the template 
 $l['wrong_xm'] = 'Модуль XEN загружен неправильно';
 $l['lxc_module'] = 'LXC не установлен.';
 
-// Xen VPS Creation errors
-$l['xen_err_lvm'] = 'Произошла ошибка в создании LVM VPS';
-$l['xen_err_swap'] = 'Произошла ошибка в создании SWAP VPS';
+// Xen '.VM_SHORT.' Creation errors
+$l['xen_err_lvm'] = 'Произошла ошибка в создании LVM '.VM_SHORT;
+$l['xen_err_swap'] = 'Произошла ошибка в создании SWAP '.VM_SHORT;
 $l['xen_err_tmp'] = 'Ошибка при создании точки монтирования';
-$l['xen_err_mount'] = 'Произошла ошибка при установке VPS LVM';
-$l['xen_err_unmount'] = 'Произошла ошибка в размонтировании VPS LVM';
+$l['xen_err_mount'] = 'Произошла ошибка при установке '.VM_SHORT.' LVM';
+$l['xen_err_unmount'] = 'Произошла ошибка в размонтировании '.VM_SHORT.' LVM';
 $l['xen_err_dd'] = 'Во время операции копирования диска произошла ошибка';
-$l['xen_err_mkfs'] = 'При форматировании VPS произошла ошибка';
-$l['xen_err_mkswap'] = 'При форматировании SWAP VPS произошла ошибка';
+$l['xen_err_mkfs'] = 'При форматировании '.VM_SHORT.' произошла ошибка';
+$l['xen_err_mkswap'] = 'При форматировании SWAP '.VM_SHORT.' произошла ошибка';
 $l['xen_err_untar'] = 'При извлечении образа ОС произошла ошибка';
 $l['xen_err_part'] = 'При создании разделов диска произошла ошибка';
 $l['xen_err_kpart'] = 'При отображении раздела (ов) произошла ошибка';
 $l['xen_err_resizefs'] = 'При изменении размера файловой системы произошла ошибка';
 
-// XCP VPS Creation errors
+// XCP '.VM_SHORT.' Creation errors
 $l['xcp_err_vdi'] = 'При создании VDI виртуальной машины произошла ошибка';
 $l['xcp_err_iso'] = 'При загрузке ISO произошла ошибка';
-$l['xcp_err_vif'] = 'При создании VIF для VPS произошла ошибка';
+$l['xcp_err_vif'] = 'При создании VIF для '.VM_SHORT.' произошла ошибка';
 $l['xcp_xentools_missing'] = 'Could not find the Xentools ISO';
 
-// KVM VPS Creation errors
-$l['kvm_err_lvm'] = 'Произошла ошибка в создании LVM VPS';
-$l['kvm_err_mount'] = 'Произошла ошибка при установке VPS LVM';
-$l['kvm_err_unmount'] = 'Произошла ошибка в размонтировании VPS LVM';
+// KVM '.VM_SHORT.' Creation errors
+$l['kvm_err_lvm'] = 'Произошла ошибка в создании LVM '.VM_SHORT;
+$l['kvm_err_mount'] = 'Произошла ошибка при установке '.VM_SHORT.' LVM';
+$l['kvm_err_unmount'] = 'Произошла ошибка в размонтировании '.VM_SHORT.' LVM';
 $l['kvm_err_dd'] = 'Во время операции копирования диска произошла ошибка';
 $l['kvm_err_resizefs'] = 'При изменении размера файловой системы произошла ошибка'	;
 $l['kvm_err_part'] = 'При создании раздела диска произошла ошибка';
 $l['kvm_err_kpart'] = 'При отображении раздела (ов) произошла ошибка';
-$l['kvm_err_mkswap'] = 'При форматировании SWAP VPS произошла ошибка';
+$l['kvm_err_mkswap'] = 'При форматировании SWAP '.VM_SHORT.' произошла ошибка';
 $l['kvm_err_ceph_block'] = 'There was an error creating the CEPH block device';
 $l['kvm_err_ceph_block_map'] = 'There was an error mapping the CEPH block device';
 $l['kvm_err_ceph_block_rmmap'] = 'There was an error in deleting the map of the CEPH block device';
 $l['kvm_err_ceph_block_rm'] = 'There was an error in delete of the CEPH block device';
 
-// LXC VPS Creation errors
+// LXC '.VM_SHORT.' Creation errors
 $l['lxc_err_untar'] = 'При извлечении шаблона ОС произошла ошибка';
-$l['lxc_err_unmount'] = 'Произошла ошибка в размонтировании VPS LVM';
+$l['lxc_err_unmount'] = 'Произошла ошибка в размонтировании '.VM_SHORT.' LVM';
 $l['lxc_err_resizefs'] = 'При изменении размера файловой системы произошла ошибка';
 $l['lxc_network'] = 'The '.$globals['bridge'].' Не запускается. Запустите <b> запуск службы virtnetwork </b>';
-$l['lxc_err_mount'] = 'Произошла ошибка при установке VPS LVM';
+$l['lxc_err_mount'] = 'Произошла ошибка при установке '.VM_SHORT.' LVM';
 
-// Virtuozzo VPS Creation errors
-$l['virtuzo_create_error'] = 'При создании VPS произошла ошибка';
+// Virtuozzo '.VM_SHORT.' Creation errors
+$l['virtuzo_create_error'] = 'При создании '.VM_SHORT.' произошла ошибка';
 $l['err_vncpass'] = 'При настройке пароля VNC произошла ошибка';
-$l['err_set_iso'] = 'Был присоединен ISO к VPS';
-$l['err_disk_create'] = 'При создании диска VPS произошла ошибка';
+$l['err_set_iso'] = 'Был присоединен ISO к '.VM_SHORT;
+$l['err_disk_create'] = 'При создании диска '.VM_SHORT.' произошла ошибка';
 $l['err_set_boot_order'] = 'При установке порядка загрузки произошла ошибка';
 $l['err_set_ram'] = 'При установке ОЗУ произошла ошибка';
 $l['err_set_pinning'] = 'При установке CPU Affinity произошла ошибка';
@@ -256,9 +257,10 @@ $l['err_create_backup_date_folder'] = 'There was an error while creating the bac
 $l['err_backup_command_fail'] = 'Не удалось создать резервный образ, Код возврата: ';
 $l['backup_err_snap_switch'] = 'There was an error while reverting to the snapshot';
 $l['backup_err_snap_del'] = 'There was an error while deleting the snapshot';
-$l['vps_uuid_empty'] = 'VPS UUID is empty!';
+$l['vps_uuid_empty'] = VM_SHORT.' UUID is empty!';
+$l['vg_space_arr'] = 'There is not enough space in ';
 
-// OpenVZ VPS Creation errors
+// OpenVZ '.VM_SHORT.' Creation errors
 $l['openvz_err_ubc'] = 'Ошибка сохранения настроек UBC';
 $l['openvz_err_ostemplate'] = 'Ошибка установки шаблона ОС';
 $l['openvz_err_space'] = 'Ошибка установки дискового пространства';
@@ -277,68 +279,71 @@ $l['vswap_error'] = 'При настройке параметров VSwap про
 $l['err_downloading'] = 'There was an error downloading the rescue template';
 $l['err_delete_disk'] = 'There was an error while deleting the rescue disk';
 
-// Enduser VPS status column
+// Enduser '.VM_SHORT.' status column
 $l['lm_status_online'] = 'Работает';
 $l['lm_status_offline'] = 'Выключен';
 $l['lm_status_suspended'] = 'Приостановлен';
-$l['vps_is_suspended'] = 'Этот VPS заблокирован. Вы не можете выполнять какие-либо операции с VPS!';
-$l['suspend_reason_bw'] = 'Этот VPS приостановлен из-за превышения лимито канала. Вы не можете выполнять какие-либо операции для VPS!';
+$l['vps_is_suspended'] = 'Этот '.VM_SHORT.' заблокирован. Вы не можете выполнять какие-либо операции с '.VM_SHORT.'!';
+$l['suspend_reason_bw'] = 'Этот '.VM_SHORT.' приостановлен из-за превышения лимито канала. Вы не можете выполнять какие-либо операции для '.VM_SHORT.'!';
 
 $l['unknown'] = 'Unknown';
-$l['change_onboot'] = 'Изменение применяться, когда VPS снова загрузится.';
+$l['change_onboot'] = 'Изменение применяться, когда '.VM_SHORT.' снова загрузится.';
 $l['completed'] = 'Completed';
 $l['vpsdisk_resize_err'] = 'При изменении размера Дисков произошла ошибка';
-$l['mount_undetermined'] = 'В VPS не было обнаружено раздела Linux';
+$l['mount_undetermined'] = 'В '.VM_SHORT.' не было обнаружено раздела Linux';
 $l['disk_destroy_err'] = 'При удалении дисков произошла ошибка';
 $l['started'] = 'Started';
 $l['ended'] = 'Ended';
 $l['updated'] = 'Updated';
-$l['edit_xcperror'] = 'При попытке редактировать VPS произошла ошибка';
+$l['edit_xcperror'] = 'При попытке редактировать '.VM_SHORT.' произошла ошибка';
 $l['bandwidth_threshold_mail_sub'] = 'Bandwidth threshold exceeded';
 $l['bandwidth_threshold_mail_message'] = 'Hi,
 
-Your VPS {{hostname}} has exceeded {{vps_bandwidth_threshold}} % of the bandwidth limit.
+Your '.VM_SHORT.' {{hostname}} has exceeded {{vps_bandwidth_threshold}} % of the bandwidth limit.
 
-The VPS has used {{used_gb}} GB of bandwidth out of {{limit_gb}} GB. 
+The '.VM_SHORT.' has used {{used_gb}} GB of bandwidth out of {{limit_gb}} GB. 
 
 Regards,
 {{sn}}';
 
-$l['bandwidth_mail_sub'] = 'VPS приостанавливается из-за чрезмерного использования трафика';
+$l['bandwidth_mail_sub'] = VM_SHORT.' приостанавливается из-за чрезмерного использования трафика';
 $l['bandwidth_mail_message'] = 'Здравствуйте,
 
-Your VPS `{{hostname}}` Был приостановлен, поскольку он превысил свой назначенный предел пропускной способности.
+Your '.VM_SHORT.' `{{hostname}}` Был приостановлен, поскольку он превысил свой назначенный предел пропускной способности.
 
-The VPS has used {{used_gb}} GB of bandwidth but it was allowed only {{limit_gb}} GB. 
+The '.VM_SHORT.' has used {{used_gb}} GB of bandwidth but it was allowed only {{limit_gb}} GB. 
 
 Regards,
 {{sn}}';
 
-$l['speed_capped_mail_sub'] = 'VPS network speed capped due to bandwidth overuse';
+$l['temp_vps_net_speed_capped'] = VM_SHORT.' Network Speed Capped';
+$l['temp_vps_net_speed_capped_restore'] = VM_SHORT.' Network Speed Restored';
+
+$l['speed_capped_mail_sub'] = VM_SHORT.' network speed capped due to bandwidth overuse';
 $l['speed_capped_mail_message'] = 'Hi,
 
-The network speed of your VPS {{hostname}} has been capped because it has reached its assigned bandwidth limit.
+The network speed of your '.VM_SHORT.' {{hostname}} has been capped because it has reached its assigned bandwidth limit.
 
-The VPS has used {{used_gb}} GB of bandwidth out of allowed {{limit_gb}} GB.
+The '.VM_SHORT.' has used {{used_gb}} GB of bandwidth out of allowed {{limit_gb}} GB.
 
 Regards,
 {{sn}}';
 
-$l['removed_speed_capped_mail_sub'] = 'VPS network speed has been restored';
+$l['removed_speed_capped_mail_sub'] = VM_SHORT.' network speed has been restored';
 $l['removed_speed_capped_mail_message'] = 'Hi,
 
-The network speed of your VPS {{hostname}} has been restored.
+The network speed of your '.VM_SHORT.' {{hostname}} has been restored.
 
-The VPS has used {{used_gb}} GB of bandwidth out of allowed {{limit_gb}} GB.
+The '.VM_SHORT.' has used {{used_gb}} GB of bandwidth out of allowed {{limit_gb}} GB.
 
 Regards,
 {{sn}}';
 
 // Power cron Notification
-$l['self_shutdown_sub'] = 'VPS {{action}}';
+$l['self_shutdown_sub'] = VM_SHORT.' {{action}}';
 $l['self_shutdown_body'] = 'Здравствуйте
 
-Ваш Vps {{vpsid}} был {{действие}} в соответствии с установленным временем ({{время}})
+Ваш VM_SHORT {{vpsid}} был {{действие}} в соответствии с установленным временем ({{время}})
 ';
 
 $l['self_shutdown_start'] = 'Запустить';
@@ -356,9 +361,9 @@ $l['failed_connect_proxmox'] = 'Не удалось выполнить запр�
 
 // Speed cap messages and label:
 $l['speed_cap_down']= 'Capped Download Speed ';
-$l['exp_speed_cap_down'] = 'Download speed after the bandwidth is overused for a VPS, 0 or emtpy value indicates no capping';
+$l['exp_speed_cap_down'] = 'Download speed after the bandwidth is overused for a '.VM_SHORT.', 0 or emtpy value indicates no capping';
 $l['speed_cap_up']= 'Capped Upload Speed ';
-$l['exp_speed_cap_up'] = 'Upload speed after the bandwidth is overused for a VPS, 0 or emtpy value indicates no capping';
+$l['exp_speed_cap_up'] = 'Upload speed after the bandwidth is overused for a '.VM_SHORT.', 0 or emtpy value indicates no capping';
 
 // ISO Related
 $l['admin_iso'] = 'Admin ISOs';
@@ -392,7 +397,44 @@ $l['cat_php_erp'] = 'ERP';
 $l['cat_php_dbtools'] = 'DB Tools';
 $l['cat_php_files'] = 'File Management';
 
-$l['inv_winpass_chars'] = 'Allowed special characters for windows vps root password are :';
+$l['inv_winpass_chars'] = 'Allowed special characters for windows VM_SHORT root password are :';
 $l['invalid_transaction'] = 'Transaction Failed/Invalid. Please try again';
 $l['success'] = 'success';
 $l['failed'] = 'failed';
+
+// For universal search
+$l['unisear_hdr_res'] = 'Search Results';
+$l['unisear_no_res'] = 'No search results!';
+$l['unisear_placeholder'] = 'Search '.VM_SHORT.', User, IPs';
+$l['unisear_show_all'] = 'Show all';
+$l['unisear_res'] = 'results >>';
+$l['unisear_matched'] = 'Matched';
+$l['unisear_in'] = 'in';
+$l['unisear_for'] = 'for';
+$l['unisear_list'] = 'list';
+$l['unisear_vps'] = VM_SHORT;
+$l['unisear_user'] = 'User';
+$l['unisear_ips'] = 'IP';
+$l['unisear_vps_name'] = VM_SHORT.' name';
+$l['unisear_vpsid'] = VM_SHORT.' ID';
+$l['unisear_hostname'] = 'Hostname';
+$l['unisear_server'] = 'Server';
+$l['unisear_virt'] = 'Virt type';
+$l['unisear_os_name'] = 'OS name';
+$l['unisear_iso'] = 'ISO';
+$l['unisear_free_ips'] = 'IP (free)';
+$l['unisear_storage'] = 'Storage';
+$l['unisear_st_uuid'] = 'UUID';
+$l['unisear_st_name'] = 'Name';
+
+//Tun Tap Handle
+$l['tuntap_handle'] = 'Tun/Tap Handle';
+$l['enable_tuntap'] = 'Enabling Tun/Tap';
+$l['disable_tuntap'] = 'Disabling Tun/Tap';
+$l['server_ram_threshold'] = 'RAM threshold level reached';
+$l['server_disk_threshold'] = 'Disk threshold level reached';
+$l['vm_locked_backup'] = VM_SHORT.' backup is running';
+$l['vm_locked_restore'] = VM_SHORT.' restore is running';
+
+$l['reinstall_callback'] = 'Callback for Reinstall';
+$l['no_timezone'] = 'None';
