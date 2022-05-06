@@ -121,13 +121,13 @@ http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
         
 ### Configuration Tips to Simplify Administration
 
-* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the  "OS|Operating System" configurable option.
+* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the "Operating System" configurable option.
 * Please also refer to [this article](https://docs.whmcs.com/Addons_and_Configurable_Options#Configurable_Options) to find more information about using configurable options in WHMCS.
     * Configurable Options group can be assigned to all VPS products (of the same Virtualization)-this will be much more desirable from an administrative perspective, should the available OS templates options ever change.
     * In the event of new OS template available for VPS, you can simply modify this single Configurable Option (assuming the group is assigned to multiple VPS products for same Virtualization), as opposed to editing the custom fields drop-down values for every related VPS product individually.
 * Where to get the values for available OS templates (for KVM virtualization VPS)?
 * Rad Web Hosting keeps a public list of available KVM OS templates in the Knowledgebase, at: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html)
-* Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "OS|Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](https://new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
+* Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](https://new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
 
 ### Client Area Features
 
