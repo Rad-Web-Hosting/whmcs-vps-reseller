@@ -120,6 +120,7 @@ class Virtualizor_Enduser_Cloud_API {
 		} else {
 			$url .= '&api=serialize&apikey='.rawurlencode($this->key).'&apipass='.rawurlencode($this->pass);
 		}
+		$url .= '&skip_callback=whmcs';
 		
 		// Set the curl parameters.
 		$ch = curl_init();
