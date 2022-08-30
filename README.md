@@ -1,4 +1,4 @@
-# whmcs-vps-reseller
+# WHMCS VPS Reseller
 WHMCS server module for provisioning and management of VPS servers from reseller's remote WHMCS installation. Enables reseller to deploy live cloud VMs from custom VPS package configurations. Features robust end-user management interface for reseller's client to manage server from within client area of WHMCS.
 
 <p align="center"><a href="https://radwebhosting.com" target="_blank"><img width="350" src="https://avatars0.githubusercontent.com/u/16030710?s=460&v=4" alt="Rad Web Hosting"></a></p>
@@ -73,11 +73,17 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     1.  Module: **Virtualizor\_cloud**
     2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-configure-module-settings.png)
 4.  Go to "Custom Fields" and create new Custom Field with the following details:
-    1.  Field Name: vpsid (exactly as written)
+    1.  Field Name: "vpsid" (without quotes)
     2.  Field Type: **Text Box**
     3.  Description: **The ID of the server from VPS Panel.** 
     4.  Validation: Leave blank
     5.  Check **Admin Only** tick box.
+5.  Create "Custom Fields" entry to satisfy **VPS operating system** requirements:
+    1.  Field Name: **"OS"** (without quotes) or **"OS|Operating System"**
+    2.  Field Type: **Dropdown**
+    3.  Description: **Choose OS to install on server** 
+    4.  Validation: Leave blank
+    5.  Select Options field: enter OS template file names (without .img extensions) like "centos-7.1-x86_64". Retrieve possible values from: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html).
 
 ![Product Custom Fields](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-configure-product-custom-fields.png)
 
@@ -121,13 +127,13 @@ http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
         
 ### Configuration Tips to Simplify Administration
 
-* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the  "OS|Operating System" configurable option.
+* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the "Operating System" configurable option.
 * Please also refer to [this article](https://docs.whmcs.com/Addons_and_Configurable_Options#Configurable_Options) to find more information about using configurable options in WHMCS.
     * Configurable Options group can be assigned to all VPS products (of the same Virtualization)-this will be much more desirable from an administrative perspective, should the available OS templates options ever change.
     * In the event of new OS template available for VPS, you can simply modify this single Configurable Option (assuming the group is assigned to multiple VPS products for same Virtualization), as opposed to editing the custom fields drop-down values for every related VPS product individually.
 * Where to get the values for available OS templates (for KVM virtualization VPS)?
 * Rad Web Hosting keeps a public list of available KVM OS templates in the Knowledgebase, at: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html)
-* Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "OS|Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](https://new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
+* Use the highlighted values (from the "Name" column) in the below image to for the Configurable Options "Operating System" drop-down values (this must be exactly the same for the automated provisioning to work): ![list of available OS templates](https://new.radwebhosting.com/client_area/images/knowledgebase/current-list-of-available-vps-os-templates-highlighted.png "list of available OS templates")
 
 ### Client Area Features
 
