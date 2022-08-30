@@ -89,6 +89,10 @@ $virtualizor_conf['vps_control']['custom_hname'] = '';
 // Load as per old module
 $virtualizor_conf['no_virt_plans'] = 0;
 
+// Custom language set by the clients
+// Value must be the matched by the individual language folder in the module
+$virtualizor_conf['default_language'] = '';
+
 // Set the alias for VPS 
 $virtualizor_conf['vm_short'] = '';
 

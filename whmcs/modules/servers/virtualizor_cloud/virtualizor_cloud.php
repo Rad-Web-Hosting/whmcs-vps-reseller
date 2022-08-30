@@ -1,6 +1,6 @@
 <?php
-// Last updated : 31/03/2022
-// Version : 2.2.0
+// Last updated : 22/08/2022
+// Version : 2.2.1
 use WHMCS\Database\Capsule;
 use WHMCS\Auth;
 
@@ -421,50 +421,6 @@ function virtualizor_cloud_CreateAccount($params) {
 			}
 		}
 
-		if(!empty($params['configoptions'][v_fn('ips')])){
-			$post['num_ips'] = $params['configoptions'][v_fn('ips')];
-		}
-		
-		if(!empty($params['configoptions'][v_fn('ips_int')])){
-			$post['num_ips_int'] = $params['configoptions'][v_fn('ips_int')];
-		}
-		
-		if(!empty($params['configoptions'][v_fn('ips6')])){
-			$post['num_ips6'] = $params['configoptions'][v_fn('ips6')];
-		}
-		
-		if(!empty($params['configoptions'][v_fn('ips6_subnet')])){
-			$post['num_ips6_subnet'] = $params['configoptions'][v_fn('ips6_subnet')];
-		}
-        
-        	if(!empty($params['configoptions']['ippoolid'])){
-			$post['ippoolid'] = $params['configoptions']['ippoolid'];
-		}
-		
-		if(!empty($params['configoptions'][v_fn('space')])){
-			$post['space'] = $params['configoptions'][v_fn('space')];
-		}
-		
-		if(!empty($params['configoptions'][v_fn('ram')])){
-			$post['ram'] = $params['configoptions'][v_fn('ram')];
-		}
-		
-		if(!empty($params['configoptions'][v_fn('cores')])){
-			$post['cores'] = $params['configoptions'][v_fn('cores')];
-		}
-			
-		if(!empty($params['configoptions'][v_fn('ctrlpanel')])){
-			$post['control_panel'] = $params['configoptions'][v_fn('ctrlpanel')];
-		}
-
-		if(!empty($params['configoptions'][v_fn('network_speed')])){
-			$post['control_panel'] = $params['configoptions'][v_fn('network_speed')];
-		}
-
-		if(!empty($params['configoptions'][v_fn('upload_speed')])){
-			$post['control_panel'] = $params['configoptions'][v_fn('upload_speed')];
-		}
-
 		$tmp_pid = explode('-', $params['configoption3']);
 		$post['plid'] = trim($tmp_pid[0]);
 
@@ -614,6 +570,52 @@ function virtualizor_cloud_CreateAccount($params) {
 	if($numips6_subnet > 0){
 		$post['ipv6_subnet'] = $numips6_subnet;	
 	}
+
+	if(!empty($params['configoptions'][v_fn('ips')])){
+		$post['num_ips'] = $params['configoptions'][v_fn('ips')];
+	}
+	
+	if(!empty($params['configoptions'][v_fn('ips_int')])){
+		$post['num_ips_int'] = $params['configoptions'][v_fn('ips_int')];
+	}
+	
+	if(!empty($params['configoptions'][v_fn('ips6')])){
+		$post['num_ips6'] = $params['configoptions'][v_fn('ips6')];
+	}
+	
+	if(!empty($params['configoptions'][v_fn('ips6_subnet')])){
+		$post['num_ips6_subnet'] = $params['configoptions'][v_fn('ips6_subnet')];
+	}
+	
+	if(!empty($params['configoptions']['ippoolid'])){
+		$post['ippoolid'] = $params['configoptions']['ippoolid'];
+	}
+	
+	if(!empty($params['configoptions'][v_fn('space')])){
+		$post['space'] = $params['configoptions'][v_fn('space')];
+	}
+	
+	if(!empty($params['configoptions'][v_fn('ram')])){
+		$post['ram'] = $params['configoptions'][v_fn('ram')];
+	}
+	
+	if(!empty($params['configoptions'][v_fn('cores')])){
+		$post['cores'] = $params['configoptions'][v_fn('cores')];
+	}
+		
+	if(!empty($params['configoptions'][v_fn('ctrlpanel')])){
+		$post['control_panel'] = $params['configoptions'][v_fn('ctrlpanel')];
+	}
+
+	if(!empty($params['configoptions'][v_fn('network_speed')])){
+		$post['network_speed'] = $params['configoptions'][v_fn('network_speed')];
+	}
+
+	if(!empty($params['configoptions'][v_fn('upload_speed')])){
+		$post['upload_speed'] = $params['configoptions'][v_fn('upload_speed')];
+	}
+
+	//logActivity('post : '.var_export($post, 1));
 	
 	$ret = VirtCloud_Curl::call($params["serverip"], $params["serverusername"], $params["serverpassword"], 'index.php?act=create', $post);
 	
@@ -1251,7 +1253,7 @@ class VirtCloud_Curl {
 		
 		$url = 'https://'.$ip.':4085/'.$path;	
 		$url .= (strstr($url, '?') ? '' : '?');	
-		$url .= '&api=serialize&apikey='.rawurlencode($apikey);
+		$url .= '&api=serialize&apikey='.rawurlencode($apikey).'&skip_callback=whmcs';
 		
 		// Pass some data if there
 		if(!empty($data)){
@@ -1320,6 +1322,7 @@ class VirtCloud_Curl {
 	public static function e_make_api_call($ip, $userkey, $pass, $vid, $path, $post = array()){
 		
 		$v = new Virtualizor_Enduser_Cloud_API($ip, $userkey, $pass);
+		$path = $path.'&skip_callback=whmcs';
 		if(!empty($vid)){
 		    $path = $path.'&svs='.$vid;
 		}
@@ -1380,7 +1383,7 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 		$var['giver'] = $url_prefix.'&id='.$params['serviceid'].'&';
 		$var['url'] = $url_prefix.'&id='.$params['serviceid'].'&';
 		$var['copyright'] = 'Virtualizor';
-		$var['version'] = '2.2.0';
+		$var['version'] = '2.2.1';
 		$var['logo'] = '';
 		$var['theme'] = $modules_url.'/virtualizor_cloud/ui/';
 		$var['theme_path'] = dirname(__FILE__).'/ui/';
@@ -1487,9 +1490,15 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 			$data = str_replace('[['.$k.']]', $v, $data);
 		}
 		
+		$lang = $params['clientsdetails']['language'];
+		
+		// Sets the language preferred by the clients 
+		if(!empty($virtualizor_conf['default_language'])){
+			$lang = $virtualizor_conf['default_language'];
+		}
 		
 		// Parse the languages
-		vload_lang($params['clientsdetails']['language']);
+		vload_lang($lang);
 		echo vparse_lang($data);
 		
 		die();
@@ -2977,10 +2986,15 @@ function virt_cloud_ips($params){
 }
 
 function virtualizor_cloud_TestConnection($params){
-   
-	$data = VirtCloud_Curl::call($params["serverip"], $params['serverusername'], $params['serverpassword'], 'index.php?act=listvs');
+
+	$host = $params["serverip"];
+	if(empty($params["serverip"]) && !empty($params['serverhostname'])){
+		$host = $params['serverhostname'];
+	}
+
+	$data = VirtCloud_Curl::call($host, $params['serverusername'], $params['serverpassword'], 'index.php?act=listvs');
 			
-	if(empty($data)){
+	if(empty($data) || $data['act'] == 'login'){
 		return array('error' => 'FAILED: Could not connect to Virtualizor. Please make sure that all Ports from 4081 to 4085 are open on your WHMCS Server or please check the server details entered are as displayed on Cloud Panel >> API Credentials');
 	}else{
 		return array('success' => true);

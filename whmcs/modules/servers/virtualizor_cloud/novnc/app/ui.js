@@ -6,17 +6,17 @@
  * See README.md for usage and integration instructions.
  */
 
-import * as Log from '/themes/default/novnc/core/util/logging.js';
-import _, { l10n } from '/themes/default/novnc/app/localization.js';
+import * as Log from '../core/util/logging.js';
+import _, { l10n } from '../app/localization.js';
 import { isTouchDevice, isSafari, hasScrollbarGutter, dragThreshold }
-    from '/themes/default/novnc/core/util/browser.js';
-import { setCapture, getPointerEvent } from '/themes/default/novnc/core/util/events.js';
-import KeyTable from "/themes/default/novnc/core/input/keysym.js";
-import keysyms from "/themes/default/novnc/core/input/keysymdef.js";
-import Keyboard from "/themes/default/novnc/core/input/keyboard.js";
-import RFB from "/themes/default/novnc/core/rfb.js";
-import Display from "/themes/default/novnc/core/display.js";
-import * as WebUtil from "/themes/default/novnc/app/webutil.js";
+    from '../core/util/browser.js';
+import { setCapture, getPointerEvent } from '../core/util/events.js';
+import KeyTable from "../core/input/keysym.js";
+import keysyms from "../core/input/keysymdef.js";
+import Keyboard from "../core/input/keyboard.js";
+import RFB from "../core/rfb.js";
+import Display from "../core/display.js";
+import * as WebUtil from "../app/webutil.js";
 
 const PAGE_TITLE = "noVNC";
 
@@ -62,7 +62,7 @@ const UI = {
         // Translate the DOM
         l10n.translateDOM();
 
-        WebUtil.fetchJSON('./themes/default/novnc/package.json')
+        WebUtil.fetchJSON('./package.json')
             .then((packageInfo) => {
                 Array.from(document.getElementsByClassName('noVNC_version')).forEach(el => el.innerText = packageInfo.version);
             })
