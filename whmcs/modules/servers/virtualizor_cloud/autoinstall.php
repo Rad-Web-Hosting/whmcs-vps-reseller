@@ -36,8 +36,8 @@ function virtualizor_cloud_installpredefined()
         'fedora-32-x86_64|Fedora 32 (64 bit)',
         'fedora-34-x86_64|Fedora 34 (64 bit)',
         'ubuntu-16.04-x86_64|Ubuntu 16.04 (64 bit)',
-        'ubuntu-18.04-x86_64|Ubuntu 16.04 (64 bit)',
-        'ubuntu-20.04-x86_64|Ubuntu 16.04 (64 bit)',
+        'ubuntu-18.04-x86_64|Ubuntu 18.04 (64 bit)',
+        'ubuntu-20.04-x86_64|Ubuntu 20.04 (64 bit)',
     ];
     $currenciesarray = Capsule::table('tblcurrencies')->pluck('code', 'id');
     if (!is_array($currenciesarray)) {
