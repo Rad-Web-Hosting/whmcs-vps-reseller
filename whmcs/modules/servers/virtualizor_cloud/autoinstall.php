@@ -30,6 +30,7 @@ function virtualizor_cloud_installpredefined()
         'almalinux-9.0-x86_64|AlmaLinux 9 (64 bit)',
         'oracle-8.6-x86_64|Oracle Linux 8 (64 bit)',
         'rocky-8.4-x86_64|Rocky Linux 8 (64 bit)',
+        'rocky-9.1-x86_64|Rocky Linux 9 (64 bit)',
         'centos-7.8-x86_64|CentOS 7 (64 bit)',
         'centos-8.2-x86_64|CentOS 8 (64 bit)',
         'debian-9.4-x86_64|Debian 9 (64 bit)',
@@ -41,6 +42,7 @@ function virtualizor_cloud_installpredefined()
         'ubuntu-18.04-x86_64|Ubuntu 18.04 (64 bit)',
         'ubuntu-20.04-x86_64|Ubuntu 20.04 (64 bit)',
         'ubuntu-22.04-x86_64|Ubuntu 22.04 (64 bit)',
+        'cyberpanel-centos7-x86_64|CyberPanel (64 bit)',
     ];
     $currenciesarray = Capsule::table('tblcurrencies')->pluck('code', 'id');
     if (!is_array($currenciesarray)) {
