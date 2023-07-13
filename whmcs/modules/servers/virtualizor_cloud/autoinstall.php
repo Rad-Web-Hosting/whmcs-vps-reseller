@@ -27,8 +27,9 @@ function virtualizor_cloud_installpredefined()
     ]);
     $list = [
         'almalinux-8.4-x86_64|AlmaLinux 8 (64 bit)',
-        'almalinux-9.0-x86_64|AlmaLinux 9 (64 bit)',
+        'almalinux-9.2-x86_64|AlmaLinux 9 (64 bit)',
         'oracle-8.6-x86_64|Oracle Linux 8 (64 bit)',
+        'oracle-9.2-x86_64|Oracle Linux 8 (64 bit)',
         'rocky-8.4-x86_64|Rocky Linux 8 (64 bit)',
         'rocky-9.1-x86_64|Rocky Linux 9 (64 bit)',
         'centos-7.8-x86_64|CentOS 7 (64 bit)',
