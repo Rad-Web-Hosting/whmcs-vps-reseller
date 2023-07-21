@@ -37,8 +37,10 @@ function virtualizor_cloud_installpredefined()
         'debian-9.4-x86_64|Debian 9 (64 bit)',
         'debian-10-x86_64|Debian 10 (64 bit)',
         'debian-11-x86_64|Debian 11 (64 bit)',
+        'debian-12-x86_64|Debian 11 (64 bit)',
         'fedora-34-x86_64|Fedora 34 (64 bit)',
         'scientific-7.4-x86_64|Scientific Linux 7.4 (64 bit)',
+        'suse-13.1-x86_64|openSUSE 13.1 (64 bit)',
         'suse-15.1-x86_64|openSUSE 15.1 (64 bit)',
         'ubuntu-18.04-x86_64|Ubuntu 18.04 (64 bit)',
         'ubuntu-20.04-x86_64|Ubuntu 20.04 (64 bit)',
@@ -92,7 +94,7 @@ function virtualizor_cloud_installpredefined()
     $newProduct = new WHMCS\Product\Product();
     $newProduct->type = 'server';
     $newProduct->productGroupId = $groupId;
-    $newProduct->name = 'KVM-1GB';
+    $newProduct->name = 'KVM-SSD-1GB';
     $newProduct->paymentType = "free";
     $newProduct->showDomainOptions = 0;
     $newProduct->module = 'virtualizor_cloud';
@@ -108,8 +110,8 @@ function virtualizor_cloud_installpredefined()
     Capsule::table('tblproducts_slugs')->insert([
         'product_id' => $newProduct->id,
         'group_id' => $groupId,
-        'group_slug' => 'vps-servers',
-        'slug' => 'kvm-1gb',
+        'group_slug' => 'cloud-vps',
+        'slug' => 'kvm-ssd-1gb',
         'active' => 1,
         'clicks' => 1,
     ]);
