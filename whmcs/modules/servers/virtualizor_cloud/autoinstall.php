@@ -29,7 +29,7 @@ function virtualizor_cloud_installpredefined()
         'almalinux-8.4-x86_64|AlmaLinux 8 (64 bit)',
         'almalinux-9.2-x86_64|AlmaLinux 9 (64 bit)',
         'oracle-8.6-x86_64|Oracle Linux 8 (64 bit)',
-		'oracle-9.2-x86_64|Oracle Linux 8 (64 bit)',
+        'oracle-9.2-x86_64|Oracle Linux 8 (64 bit)',
         'rocky-8.4-x86_64|Rocky Linux 8 (64 bit)',
         'rocky-9.1-x86_64|Rocky Linux 9 (64 bit)',
         'centos-7.8-x86_64|CentOS 7 (64 bit)',
@@ -37,20 +37,21 @@ function virtualizor_cloud_installpredefined()
         'debian-9.4-x86_64|Debian 9 (64 bit)',
         'debian-10-x86_64|Debian 10 (64 bit)',
         'debian-11-x86_64|Debian 11 (64 bit)',
-		'debian-12-x86_64|Debian 11 (64 bit)',
+        'debian-12-x86_64|Debian 11 (64 bit)',
         'fedora-34-x86_64|Fedora 34 (64 bit)',
         'scientific-7.4-x86_64|Scientific Linux 7.4 (64 bit)',
+        'suse-13.1-x86_64|openSUSE 13.1 (64 bit)',
         'suse-15.1-x86_64|openSUSE 15.1 (64 bit)',
         'ubuntu-18.04-x86_64|Ubuntu 18.04 (64 bit)',
         'ubuntu-20.04-x86_64|Ubuntu 20.04 (64 bit)',
         'ubuntu-22.04-x86_64|Ubuntu 22.04 (64 bit)',
         'cyberpanel-centos7-x86_64|CyberPanel (64 bit) (10GB+ Disk)',
-		'azuracast-20.04-lts-x86_64|AzuraCast on Focal (64 bit) (10GB+ Disk)',
-		'windows-2008r2|Windows Server 2008 R2 EVAL (15GB+ Disk)',
-		'windows-2012r2|Windows Server 2012 R2 EVAL (15GB+ Disk)',
-		'windows-2016|Windows Server 2016 EVAL (20GB+ Disk)',
-		'windows-2019|Windows Server 2019 EVAL (20GB+ Disk)',
-		'windows-2022|Windows Server 2022 EVAL (20GB+ Disk)',
+	      'azuracast-20.04-lts-x86_64|AzuraCast on Focal (64 bit) (10GB+ Disk)',
+    		'windows-2008r2|Windows Server 2008 R2 EVAL (15GB+ Disk)',
+	    	'windows-2012r2|Windows Server 2012 R2 EVAL (15GB+ Disk)',
+    		'windows-2016|Windows Server 2016 EVAL (20GB+ Disk)',
+    		'windows-2019|Windows Server 2019 EVAL (20GB+ Disk)',
+	    	'windows-2022|Windows Server 2022 EVAL (20GB+ Disk)',
     ];
     $currenciesarray = Capsule::table('tblcurrencies')->pluck('code', 'id');
     if (!is_array($currenciesarray)) {
@@ -99,7 +100,7 @@ function virtualizor_cloud_installpredefined()
     $newProduct = new WHMCS\Product\Product();
     $newProduct->type = 'server';
     $newProduct->productGroupId = $groupId;
-    $newProduct->name = 'KVM-1GB';
+    $newProduct->name = 'KVM-SSD-1GB';
     $newProduct->paymentType = "free";
     $newProduct->showDomainOptions = 0;
     $newProduct->module = 'virtualizor_cloud';
@@ -115,8 +116,8 @@ function virtualizor_cloud_installpredefined()
     Capsule::table('tblproducts_slugs')->insert([
         'product_id' => $newProduct->id,
         'group_id' => $groupId,
-        'group_slug' => 'vps-servers',
-        'slug' => 'kvm-1gb',
+        'group_slug' => 'cloud-vps',
+        'slug' => 'kvm-ssd-1gb',
         'active' => 1,
         'clicks' => 1,
     ]);
