@@ -32,20 +32,20 @@ function virtualizor_cloud_ConfigOptions() {
 	
 	# Should return an array of the module options for each product - Minimum of 24
 	$config_array = array(
-	 "Type" => array( "Type" => "dropdown", "Options" => "KVM"),
+	 "Type" => array( "Type" => "dropdown", "Options" => "OpenVZ,Xen PV,Xen HVM,KVM,XCP HVM,XCP PV,LXC,Virtuozzo OpenVZ,Virtuozzo KVM,Proxmox KVM,Proxmox OpenVZ,Proxmox LXC"),
 	 "Disk Space" => array( "Type" => "text", "Size" => "25", "Description" => "GB"),
 	 "Guaranteed RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB"),
-	 "Burstable RAM" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "MB (OpenVZ)"), 
-	 "SWAP RAM" => array( "Type" => "dropdown", 'Options' => '1024', 'Value' => '1024', 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "MB (Xen, XCP and KVM)"),
+	 "Burstable RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (OpenVZ)"), 
+	 "SWAP RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (Xen, XCP and KVM)"), 
 	 "Bandwidth" => array( "Type" => "text", "Size" => "25", "Description" => "GB (Zero or empty for unlimited)"),
 	 "CPU Cores" => array( "Type" => "text", "Size" => "25", "Description" => ""),
 	 "VNC" => array( "Type" => "yesno", "Description" => "Enable VNC (Xen, XCP and KVM)"),
 	 "IPs" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPs"),
 	 "IPv6" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Address"),
-	 "Region" => array( "Type" => "dropdown", 'Options' => 'USA', 'Value' => 'USA', 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "The region to create the VPS in"),
+	 "Region" => array( "Type" => "text", "Size" => "25", "Description" => "The region to create the VPS in"),
 	 "IPv6 Subnets" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Subnets"),
-	 "Network Speed (KB)" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25"),
-	 "Upload Speed (KB)" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25"),
+	 "Network Speed (KB)" => array( "Type" => "text", "Size" => "25"),
+	 "Upload Speed (KB)" => array( "Type" => "text", "Size" => "25"),
 	);
 	
 	// Get the product ID

@@ -1,0 +1,22 @@
+[2.2.5][01-06-2023]
+Region issue Fixed
+[2.2.4][17-05-2023]
+ - Fixed syntax errors according to PHP 8
+ - Fixed issue with ips update
+[2.2.3][05-01-2023]
+ - NoVNC Fixes
+ - Added PHP 8 Compatibility
+[2.2.2][16-12-2022]
+ - PHP 8 support added
+[2.2.1][22-08-2022]
+ - VNC was not working.
+ - Added 'default_language' parameter in virtualizor_conf file which is used to set default language for enduser panel.
+ - Some configurable options were not setting set.
+[2.2.0][31-03-2022]
+ - If no ssh keys were present add ssh key button was not shown.
+ - Maintenance mode page was not added.
+ - Cloud module update latest version of virtualizor.
+ - Added plid support cloud user with billing enabled.
+[2.1.1][06-12-2021]
+- Updated module to latest version of virtualizor
+- Updated vnc and added paste option in novnc
