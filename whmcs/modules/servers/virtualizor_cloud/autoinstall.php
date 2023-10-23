@@ -46,12 +46,12 @@ function virtualizor_cloud_installpredefined()
         'ubuntu-20.04-x86_64|Ubuntu 20.04 (64 bit)',
         'ubuntu-22.04-x86_64|Ubuntu 22.04 (64 bit)',
         'cyberpanel-centos7-x86_64|CyberPanel (64 bit) (10GB+ Disk)',
-	    'azuracast-20.04-lts-x86_64|AzuraCast on Focal (64 bit) (10GB+ Disk)',
+	'azuracast-20.04-lts-x86_64|AzuraCast on Focal (64 bit) (10GB+ Disk)',
     	'windows-2008r2|Windows Server 2008 R2 EVAL (15GB+ Disk)',
-	    'windows-2012r2|Windows Server 2012 R2 EVAL (15GB+ Disk)',
+	'windows-2012r2|Windows Server 2012 R2 EVAL (15GB+ Disk)',
     	'windows-2016|Windows Server 2016 EVAL (20GB+ Disk)',
     	'windows-2019|Windows Server 2019 EVAL (20GB+ Disk)',
-	    'windows-2022|Windows Server 2022 EVAL (20GB+ Disk)',
+	'windows-2022|Windows Server 2022 EVAL (20GB+ Disk)',
     ];
     $currenciesarray = Capsule::table('tblcurrencies')->pluck('code', 'id');
     if (!is_array($currenciesarray)) {
