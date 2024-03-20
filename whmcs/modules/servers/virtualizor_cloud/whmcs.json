@@ -1,0 +1,36 @@
+{
+    "schema": "1.0",
+    "type": "whmcs-servers",
+    "name": "vps-reseller-module",
+    "license": "MIT",
+    "category": "provisioning",
+    "description": {
+        "name": "VPS Reseller Module",
+        "tagline": "Industry-leading Cloud Provider with multiple data center locations",
+        "long": "Integrate with ready-made WHMCS module to leverage auto-provision of Cloud VPS servers from your private-label cloud controller. By integrating with Rad Web Hosting VPS Reseller module, your VPS procurement headaches are over.",
+        "features": [
+            "Provide both client and admin facing user interfaces",
+            "Utilize hook functionality within WHMCS",
+            "Provide structure for module commands"
+        ]
+    },
+    "marketplace": {
+        "url": "https:\/\/marketplace.whmcs.com\/product\/6108"
+    },
+    "logo": {
+        "filename": "logo.png"
+    },
+    "support": {
+        "homepage": "https:\/\/radwebhosting.com\/", 
+        "learn_more": "https:\/\/radwebhosting.com\/vps-reseller", 
+        "email": "support@radwebhosting.com", 
+        "support_url": "https:\/\/radwebhosting.com\/client_area\/submitticket.php",
+        "docs_url": "https:\/\/radwebhosting.com\/client_area\/knowledgebase.php"
+    },
+    "authors": [
+        {
+            "name": "Rad Web Hosting",
+            "homepage": "https:\/\/radwebhosting.com\/"
+        }
+    ]
+}
