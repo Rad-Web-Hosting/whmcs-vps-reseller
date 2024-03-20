@@ -142,10 +142,10 @@ Read our guide, [How to Integrate VPS Reseller with WHMCS](https://blog.radwebho
 For full documentation, please visit the Rad Web Hosting VPS API documentation on the website.
 
 ## Help
-If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/client_area/submitticket.php).
+If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/support).
 
 ## Bugs
-If you discover any bugs or issues with this module, please notify our staff via the [24/7 Helpdesk](https://radwebhosting.com/client_area/submitticket.php).
+If you discover any bugs or issues with this module, please notify our staff via the [24/7 Helpdesk](https://radwebhosting.com/support).
 
 ## License
 This project is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
