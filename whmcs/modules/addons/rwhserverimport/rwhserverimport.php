@@ -121,7 +121,7 @@ function rwhserverimport_output($vars) {
                         </table>
 <table class="form module-settings" width="100%" border="0" cellspacing="2" cellpadding="3" id="tblModuleSettings">
     <tbody>
-        <tr>
+        <tr style="display:none;">
             <td class="fieldlabel" width="20%">Type</td>
             <td class="fieldarea">
                 <input type="dropdown" name="packageconfigoption[1]" readonly="readonly" options="KVM" value="KVM">
@@ -131,7 +131,7 @@ function rwhserverimport_output($vars) {
                 <input type="text" name="packageconfigoption[2]" readonly="readonly" class="form-control input-inline input-25" value="10">
             </td>
         </tr>
-        <tr>
+        <tr style="display:none;">
             <td class="fieldlabel" width="20%">Guaranteed RAM</td>
             <td class="fieldarea">
                  <input type="text" name="packageconfigoption[3]" readonly="readonly" class="form-control input-inline input-25" value="512">
@@ -141,7 +141,7 @@ function rwhserverimport_output($vars) {
                 <input type="text" name="packageconfigoption[4]" readonly="readonly" class="form-control input-inline input-25" value="">
             </td>
         </tr>
-        <tr>
+        <tr style="display:none;">
             <td class="fieldlabel" width="20%">SWAP RAM</td>
             <td class="fieldarea">
                 <input type="text" name="packageconfigoption[5]" readonly="readonly" class="form-control input-inline input-25" value="512">
@@ -151,7 +151,7 @@ function rwhserverimport_output($vars) {
                 <input type="text" name="packageconfigoption[6]" readonly="readonly" class="form-control input-inline input-25" value="1000">
             </td>
         </tr>
-        <tr>
+        <tr style="display:none;">
             <td class="fieldlabel" width="20%">CPU Cores</td>
             <td class="fieldarea">
                 <input type="text" name="packageconfigoption[7]" readonly="readonly" class="form-control input-inline input-25" value="1">
@@ -161,7 +161,7 @@ function rwhserverimport_output($vars) {
                 <input type="yesno" name="packageconfigoption[8]" readonly="readonly" value="on">
             </td>
         </tr>
-		<tr>
+		<tr style="display:none;">
             <td class="fieldlabel" width="20%">IPs</td>
             <td class="fieldarea">
                 <input type="text" name="packageconfigoption[9]" readonly="readonly" class="form-control input-inline input-25" value="1">
@@ -171,7 +171,7 @@ function rwhserverimport_output($vars) {
                 <input type="text" name="packageconfigoption[10]" readonly="readonly" class="form-control input-inline input-25" value="1">
             </td>
         </tr>
-		<tr>
+		<tr style="display:none;">
             <td class="fieldlabel" width="20%">Region</td>
             <td class="fieldarea">
                 <input type="dropdown" name="packageconfigoption[11]" options="USA" readonly="readonly" value="USA">
@@ -209,9 +209,9 @@ function rwhserverimport_output($vars) {
             $i = 0;
             $iarray = array();
             $slist = $whmcs->get_req_var('packageconfigoption');
-            $configlist = array('configoption1' => '', 'configoption2' => '', 'configoption3' => '', 'configoption4' => '', 'configoption5' => '', 'configoption6' => '', 'configoption7' => '',);
+            $configlist = array('configoption1' => '', 'configoption2' => '', 'configoption3' => '', 'configoption4' => '', 'configoption5' => '', 'configoption6' => '', 'configoption7' => '', 'configoption8' => '', 'configoption9' => '', 'configoption10' => '', 'configoption11' => '', 'configoption12' => '', 'configoption13' => '', 'configoption14' => '',);
             if ($slist) {
-                for ($t = 1; $t <= 7; $t++) {
+                for ($t = 1; $t <= 14; $t++) {
                     if (isset($slist[$t])) {
                         $configlist['configoption' . $t] = $slist[$t];
                     }
