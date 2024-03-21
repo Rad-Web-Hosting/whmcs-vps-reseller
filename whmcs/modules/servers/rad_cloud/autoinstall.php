@@ -6,9 +6,9 @@ if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
 }
 
-function virtualizor_cloud_installpredefined()
+function rad_cloud_installpredefined()
 {
-    if (\WHMCS\Config\Setting::getValue('virtualizor_cloud_installed')) {
+    if (\WHMCS\Config\Setting::getValue('rad_cloud_installed')) {
         return '';
     }
     global $CONFIG;
@@ -103,7 +103,7 @@ function virtualizor_cloud_installpredefined()
     $newProduct->name = 'KVM-SSD-1GB';
     $newProduct->paymentType = "free";
     $newProduct->showDomainOptions = 0;
-    $newProduct->module = 'virtualizor_cloud';
+    $newProduct->module = 'rad_cloud';
     $newProduct->isHidden = 0;
     $newProduct->autoSetup = 'payment';
     $displayOrder = WHMCS\Database\Capsule::table("tblproducts")->where("gid", "=", $groupId)->max("order");
@@ -163,6 +163,6 @@ function virtualizor_cloud_installpredefined()
         "showinvoice" => 1,
         "sortorder" => 1
     ]);
-    \WHMCS\Config\Setting::setValue('virtualizor_cloud_installed', '1');
+    \WHMCS\Config\Setting::setValue('rad_cloud_installed', '1');
     return '';
 }

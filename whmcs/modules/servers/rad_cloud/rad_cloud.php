@@ -4,7 +4,7 @@
 use WHMCS\Database\Capsule;
 use WHMCS\Auth;
 
-include_once('virtualizor_conf.php');
+include_once('rad_conf.php');
 include_once('php/VPHP_class.php');
 include_once('php/ARRAYS_triat.php');
 include_once('functions.php');
@@ -12,15 +12,15 @@ include_once('autoinstall.php');
 include_once('sdk/enduser.php');
 
 
-function virtualizor_cloud_ConfigOptions() {
+function rad_cloud_ConfigOptions() {
 	
-	global $virtualizor_conf, $whmcsmysql;	
+	global $rad_conf, $whmcsmysql;	
 	
 	// Get the Servers
-	$res = Capsule::table('tblservers')->where('type','virtualizor_cloud')->get();
+	$res = Capsule::table('tblservers')->where('type','rad_cloud')->get();
 	
 	if(empty($res)){
-		echo '<font color="#FF0000">The virtualizor Cloud servers could not be found. Please add the Virtualizor Server and Server group to proceed</font>';
+		echo '<font color="#FF0000">The rad Cloud servers could not be found. Please add the rad Server and Server group to proceed</font>';
 		return;
 	}
 	$server_list = array();
@@ -32,20 +32,20 @@ function virtualizor_cloud_ConfigOptions() {
 	
 	# Should return an array of the module options for each product - Minimum of 24
 	$config_array = array(
-	 "Type" => array( "Type" => "dropdown", "Options" => "OpenVZ,Xen PV,Xen HVM,KVM,XCP HVM,XCP PV,LXC,Virtuozzo OpenVZ,Virtuozzo KVM,Proxmox KVM,Proxmox OpenVZ,Proxmox LXC"),
+	 "Type" => array( "Type" => "dropdown", "Options" => "KVM"),
 	 "Disk Space" => array( "Type" => "text", "Size" => "25", "Description" => "GB"),
 	 "Guaranteed RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB"),
-	 "Burstable RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (OpenVZ)"), 
-	 "SWAP RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (Xen, XCP and KVM)"), 
+	 "Burstable RAM" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "MB (OpenVZ)"), 
+	 "SWAP RAM" => array( "Type" => "dropdown", 'Options' => '1024', 'Value' => '1024', 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "MB (Xen, XCP and KVM)"),
 	 "Bandwidth" => array( "Type" => "text", "Size" => "25", "Description" => "GB (Zero or empty for unlimited)"),
 	 "CPU Cores" => array( "Type" => "text", "Size" => "25", "Description" => ""),
 	 "VNC" => array( "Type" => "yesno", "Description" => "Enable VNC (Xen, XCP and KVM)"),
 	 "IPs" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPs"),
 	 "IPv6" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Address"),
-	 "Region" => array( "Type" => "text", "Size" => "25", "Description" => "The region to create the VPS in"),
+	 "Region" => array( "Type" => "dropdown", 'Options' => 'USA', 'Value' => 'USA', 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "The region to create the VPS in"),
 	 "IPv6 Subnets" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Subnets"),
-	 "Network Speed (KB)" => array( "Type" => "text", "Size" => "25"),
-	 "Upload Speed (KB)" => array( "Type" => "text", "Size" => "25"),
+	 "Network Speed (KB)" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25"),
+	 "Upload Speed (KB)" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25"),
 	);
 	
 	// Get the product ID
@@ -58,11 +58,11 @@ function virtualizor_cloud_ConfigOptions() {
 	//rprint($row);
 	
 	$configarray = array(
-		'Virtualizor Servers' => array("Type" => "dropdown", "Options" => implode(',', array_values($server_list)))
+		'rad Servers' => array("Type" => "dropdown", "Options" => implode(',', array_values($server_list)))
 	);
 	
 	// If this is filled up then user is using the OLD method
-	if((!empty($row['configoption1']) && in_array($row['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))) || !empty($virtualizor_conf['no_virt_plans'])){
+	if((!empty($row['configoption1']) && in_array($row['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))) || !empty($rad_conf['no_virt_plans'])){
 		
 		//array_values($server_list)
 		$tmp_type = array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC');
@@ -71,7 +71,7 @@ function virtualizor_cloud_ConfigOptions() {
 		$config_array['Type']['Options'] = implode(',', $tmp_type);
 		$configarray = $config_array;
 	
-	// If we get the Virtualizor server in configoption1, we will make an API call and load other fields
+	// If we get the rad server in configoption1, we will make an API call and load other fields
 	}elseif(!empty($row['configoption1']) && in_array($row['configoption1'], array_values($server_list))){
 		
 		// Get the server ID
@@ -83,7 +83,7 @@ function virtualizor_cloud_ConfigOptions() {
 			$tmp_hostname = $ser_data['ipaddress'];
 		}
 		
-		// Get the data from virtualizor
+		// Get the data from rad
 		$data = VirtCloud_Curl::e_make_api_call($tmp_hostname, $ser_data['username'], get_server_pass_from_whmcs($ser_data['password']), 0, 'index.php?act=create');
 		//logActivity('data--: '.var_export($data, 1));
 		if(empty($data)){
@@ -140,16 +140,16 @@ function virtualizor_cloud_ConfigOptions() {
 	return $configarray;
 }
 
-function virtualizor_cloud_CreateAccount($params) {
+function rad_cloud_CreateAccount($params) {
 
-	global $virtualizor_conf, $whmcsmysql;
+	global $rad_conf, $whmcsmysql;
 
 	# ** The variables listed below are passed into all module functions **
 	
 	$loglevel = (int) @$_REQUEST['loglevel'];
 	
-	if(!empty($virtualizor_conf['loglevel'])){
-		$loglevel = $virtualizor_conf['loglevel'];
+	if(!empty($rad_conf['loglevel'])){
+		$loglevel = $rad_conf['loglevel'];
 	}
 	
 	$serviceid = $params["serviceid"]; # Unique ID of the product/service in the WHMCS Database
@@ -352,7 +352,7 @@ function virtualizor_cloud_CreateAccount($params) {
 		$Nvirt = $data['ostemplates'][$post_osid]['Nvirt'];
 		$post['virt'] = $Nvirt;
 		
-		if(empty($virtualizor_conf['vps_control']['custom_hname'])){
+		if(empty($rad_conf['vps_control']['custom_hname'])){
 			$post['hostname'] = $params['domain'];
 		}else{
 			// Select the Order ID
@@ -360,7 +360,7 @@ function virtualizor_cloud_CreateAccount($params) {
 			
 			$hosting_details = (array) $res[0];
 			
-			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $virtualizor_conf['vps_control']['custom_hname']);
+			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $rad_conf['vps_control']['custom_hname']);
 			if(preg_match('/(\{RAND(\d{1,3})\})/is', $post['hostname'], $matches)){
 				$post['hostname'] = str_replace($matches[1], generateRandStr($matches[2]), $post['hostname']);
 			}
@@ -404,12 +404,12 @@ function virtualizor_cloud_CreateAccount($params) {
 		// Setup cPanel licenses if cPanel configurable option is set
 		if($ctrlpanel != -1 && $ctrlpanel != 'none'){
 		
-			if($ctrlpanel == 'cpanel' && !empty($virtualizor_conf['cp']['buy_cpanel_login']) && !empty($virtualizor_conf['cp']['buy_cpanel_apikey'])){
+			if($ctrlpanel == 'cpanel' && !empty($rad_conf['cp']['buy_cpanel_login']) && !empty($rad_conf['cp']['buy_cpanel_apikey'])){
 				logActivity("CPANEL : cPanel issued for ip $_ips[0] of ordertype $cpanel");
 				
 				$url = 'https://www.buycpanel.com/api/order.php?';
-				$login = 'login='.$virtualizor_conf['cp']['buy_cpanel_login'].'&';
-				$key = 'key='.$virtualizor_conf['cp']['buy_cpanel_apikey'].'&';
+				$login = 'login='.$rad_conf['cp']['buy_cpanel_login'].'&';
+				$key = 'key='.$rad_conf['cp']['buy_cpanel_apikey'].'&';
 				$domain = 'domain='.$params['domain'].'&';
 				$serverip = 'serverip='.$_ips[0].'&';
 				$ordertype = 'ordertype=10';
@@ -480,7 +480,7 @@ function virtualizor_cloud_CreateAccount($params) {
 		}
 		
 		$post['virt'] = $Nvirt;
-		if(empty($virtualizor_conf['vps_control']['custom_hname'])){
+		if(empty($rad_conf['vps_control']['custom_hname'])){
 			$post['hostname'] = $params['domain'];
 		}else{
 			// Select the Order ID
@@ -488,7 +488,7 @@ function virtualizor_cloud_CreateAccount($params) {
 			
 			$hosting_details = (array) $res[0];
 			
-			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $virtualizor_conf['vps_control']['custom_hname']);
+			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $rad_conf['vps_control']['custom_hname']);
 			if(preg_match('/(\{RAND(\d{1,3})\})/is', $post['hostname'], $matches)){
 				$post['hostname'] = str_replace($matches[1], generateRandStr($matches[2]), $post['hostname']);
 			}
@@ -534,12 +534,12 @@ function virtualizor_cloud_CreateAccount($params) {
 		// Setup cPanel licenses if cPanel configurable option is set
 		if($ctrlpanel != -1 && $ctrlpanel != 'none'){
 		
-			if($ctrlpanel == 'cpanel' && !empty($virtualizor_conf['cp']['buy_cpanel_login']) && !empty($virtualizor_conf['cp']['buy_cpanel_apikey'])){
+			if($ctrlpanel == 'cpanel' && !empty($rad_conf['cp']['buy_cpanel_login']) && !empty($rad_conf['cp']['buy_cpanel_apikey'])){
 				//logActivity("CPANEL : cPanel issued for ip $_ips[0] of ordertype $cpanel");
 				
 				$url = 'https://www.buycpanel.com/api/order.php?';
-				$login = 'login='.$virtualizor_conf['cp']['buy_cpanel_login'].'&';
-				$key = 'key='.$virtualizor_conf['cp']['buy_cpanel_apikey'].'&';
+				$login = 'login='.$rad_conf['cp']['buy_cpanel_login'].'&';
+				$key = 'key='.$rad_conf['cp']['buy_cpanel_apikey'].'&';
 				$domain = 'domain='.$params['domain'].'&';
 				$serverip = 'serverip='.$_ips[0].'&';
 				$ordertype = 'ordertype=10';
@@ -631,7 +631,7 @@ function virtualizor_cloud_CreateAccount($params) {
 	// Was the VPS Inserted
 	if(!empty($ret['newvs']['vpsid'])){
 		
-		// vpsid of virtualizor
+		// vpsid of rad
 		$query = Capsule::table('tblcustomfields')
 			->where('relid',$pid)
 			->where('fieldname','vpsid')
@@ -725,20 +725,20 @@ function virtualizor_cloud_CreateAccount($params) {
 }
 
 
-function virtualizor_cloud_TerminateAccount($params) {
+function rad_cloud_TerminateAccount($params) {
 
-	global $virtualizor_conf, $whmcsmysql;
+	global $rad_conf, $whmcsmysql;
 	
 	$ctrlpanel = (empty($params['configoptions'][v_fn('ctrlpanel')]) ? -1 : $params['configoptions'][v_fn('ctrlpanel')]);
 	
-	if(!empty($virtualizor_conf['admin_ui']['disable_terminate'])){
+	if(!empty($rad_conf['admin_ui']['disable_terminate'])){
 		return 'Termination has been disabled by the Global Administrator';
 	}
 
 	// Setup cPanel licenses if cPanel configurable option is set
 	if($ctrlpanel != -1 && $ctrlpanel != 'none'){
 		
-		if($ctrlpanel == 'cpanel' && !empty($virtualizor_conf['cp']['buy_cpanel_login']) && !empty($virtualizor_conf['cp']['buy_cpanel_apikey'])){
+		if($ctrlpanel == 'cpanel' && !empty($rad_conf['cp']['buy_cpanel_login']) && !empty($rad_conf['cp']['buy_cpanel_apikey'])){
 		
 			$data = VirtCloud_Curl::call($params["serverip"], $params["serverusername"], $params["serverpassword"], 'index.php?act=listvs');
 
@@ -749,8 +749,8 @@ function virtualizor_cloud_TerminateAccount($params) {
 			//logActivity("CPANEL : cPanel delete for ip $_ips[0]");
 			
 			$url = 'https://www.buycpanel.com/api/cancel.php?';
-			$login = 'login='.$virtualizor_conf['cp']['buy_cpanel_login'].'&';
-			$key = 'key='.$virtualizor_conf['cp']['buy_cpanel_apikey'].'&';
+			$login = 'login='.$rad_conf['cp']['buy_cpanel_login'].'&';
+			$key = 'key='.$rad_conf['cp']['buy_cpanel_apikey'].'&';
 			$currentip = 'currentip='.$cpanel_ip.'&';
 			$url .= $login.$key.$currentip;
 			
@@ -773,7 +773,7 @@ function virtualizor_cloud_TerminateAccount($params) {
 	// If the VPS has been deleted
 	if (!empty($data['delvs']['done'])) {
 	
-		// vpsid of virtualizor
+		// vpsid of rad
 		$query = Capsule::table('tblcustomfields')
 			->select('id')
 			->where('relid',$params["pid"])
@@ -807,13 +807,13 @@ function virtualizor_cloud_TerminateAccount($params) {
 	return $result;
 }
 
-function virtualizor_cloud_AdminServicesTabFields($params) {
+function rad_cloud_AdminServicesTabFields($params) {
 	
 	if(!empty($_GET['vapi_mode'])){
 		ob_end_clean();
 	}
 	
-	$code = virtualizor_cloudUI($params, 'clientsservices.php?vapi_mode=1&userid='.$params['userid'], '../modules/servers');
+	$code = rad_cloudUI($params, 'clientsservices.php?vapi_mode=1&userid='.$params['userid'], '../modules/servers');
 	
 	$fieldsarray = array(
 	 'VPS Information' => '<div style="width:100%" id="tab1"></div>'.$code,
@@ -822,7 +822,7 @@ function virtualizor_cloud_AdminServicesTabFields($params) {
 
 }
 
-function virtualizor_cloud_SuspendAccount($params) {
+function rad_cloud_SuspendAccount($params) {
 
 	$data = VirtCloud_Curl::call($params["serverip"], $params["serverusername"], $params["serverpassword"], 'index.php?act=listvs&suspend='.$params['customfields']['vpsid']);
 			
@@ -839,7 +839,7 @@ function virtualizor_cloud_SuspendAccount($params) {
 	return $result;
 }
 
-function virtualizor_cloud_UnsuspendAccount($params) {
+function rad_cloud_UnsuspendAccount($params) {
 
 	$data = VirtCloud_Curl::call($params["serverip"], $params["serverusername"], $params["serverpassword"], 'index.php?act=listvs&unsuspend='.$params['customfields']['vpsid']);
 			
@@ -856,7 +856,7 @@ function virtualizor_cloud_UnsuspendAccount($params) {
 	return $result;
 }
 
-function virtualizor_cloud_ChangePassword($params) {
+function rad_cloud_ChangePassword($params) {
 
 	# Code to perform action goes here...
 	$data = VirtCloud_Curl::e_make_api_call($params["serverip"], $params['serverusername'], $params['serverpassword'], 0, 'index.php?act=editvm&vid='.$params['customfields']['vpsid']);
@@ -961,16 +961,16 @@ function virtualizor_cloud_ChangePassword($params) {
 	return $result;
 }
 
-function virtualizor_cloud_ChangePackage($params) {
+function rad_cloud_ChangePackage($params) {
 
-	global $virtualizor_conf;
+	global $rad_conf;
 	
 	$loglevel = (int) @$_REQUEST['loglevel'];
 	
 	$serviceid = $params["serviceid"]; # Unique ID of the product/service in the WHMCS Database
 	
-	if(!empty($virtualizor_conf['loglevel'])){
-		$loglevel = $virtualizor_conf['loglevel'];
+	if(!empty($rad_conf['loglevel'])){
+		$loglevel = $rad_conf['loglevel'];
 	}
 
 	// Get the Data
@@ -1197,18 +1197,18 @@ function virtualizor_cloud_ChangePackage($params) {
 
 }
 
-function virtualizor_cloud_AdminLink($params) {
-	$code = '<a href="https://'.$params["serverip"].':4083/index.php?act=login" target="_blank">Virtualizor Panel</a>';
+function rad_cloud_AdminLink($params) {
+	$code = '<a href="https://'.$params["serverip"].':4083/index.php?act=login" target="_blank">Rad Panel</a>';
 	return $code;
 }
 
-function virtualizor_cloud_LoginLink($params) {
-	$code =  "<a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\" style=\"color:#cc0000\">Login to Virtualizor</a>";
+function rad_cloud_LoginLink($params) {
+	$code =  "<a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\" style=\"color:#cc0000\">Login to Rad</a>";
 	
 	return $code;
 }
 
-function virtualizor_cloud_AdminCustomButtonArray() {
+function rad_cloud_AdminCustomButtonArray() {
 	# This function can define additional functions your module supports, the example here is a reboot button and then the reboot function is defined below
 	$buttonarray = array(
 	 "Start VPS" => "admin_start",
@@ -1220,7 +1220,7 @@ function virtualizor_cloud_AdminCustomButtonArray() {
 }
 
 
-function virtualizor_cloud_ClientAreaCustomButtonArray() {
+function rad_cloud_ClientAreaCustomButtonArray() {
 	# This function can define additional functions your module supports, the example here is a reboot button and then the reboot function is defined below
 	$buttonarray = array(
 	 "Start VPS" => "start",
@@ -1252,7 +1252,7 @@ class VirtCloud_Curl {
 	
 	public static function call($ip, $userkey, $pass, $path, $post = array(), $cookies = array()){
 
-		$v = new Virtualizor_Enduser_Cloud_API($ip, $userkey, $pass);
+		$v = new rad_Enduser_Cloud_API($ip, $userkey, $pass);
 		
 		return $v->call($path, $post, $cookies);
 		
@@ -1260,7 +1260,7 @@ class VirtCloud_Curl {
 	
 	static function make_api_call($ip, $pass, $path, $data = array(), $post = array(), $cookies = array()){
 		
-		global $virtualizor_conf, $whmcsmysql;
+		global $rad_conf, $whmcsmysql;
 		
 		$key = generateRandStr(8);
 		$apikey = make_apikey($key, $pass);
@@ -1274,7 +1274,7 @@ class VirtCloud_Curl {
 			$url .= '&apidata='.rawurlencode(base64_encode(serialize($data)));
 		}
 	
-		if($virtualizor_conf['loglevel'] > 0){
+		if($rad_conf['loglevel'] > 0){
 			logActivity('URL : '. $url);
 		}
 		
@@ -1335,7 +1335,7 @@ class VirtCloud_Curl {
 
 	public static function e_make_api_call($ip, $userkey, $pass, $vid, $path, $post = array()){
 		
-		$v = new Virtualizor_Enduser_Cloud_API($ip, $userkey, $pass);
+		$v = new rad_Enduser_Cloud_API($ip, $userkey, $pass);
 		$path = $path.'&skip_callback=whmcs';
 		if(!empty($vid)){
 			$path = $path.'&svs='.$vid;
@@ -1371,50 +1371,50 @@ class VirtCloud_Curl {
 } // class VirtCloud_Curl ends
 
 
-function virtualizor_cloud_ClientArea($params) {
+function rad_cloud_ClientArea($params) {
 	
-	global $virt_action_display, $virt_errors, $virt_resp, $virtualizor_conf, $whmcsmysql;
+	global $virt_action_display, $virt_errors, $virt_resp, $rad_conf, $whmcsmysql;
 	
-	return virtualizor_cloudUI($params);
+	return rad_cloudUI($params);
 
 }
 
-function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetails', $modules_url = 'modules/servers'){
+function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetails', $modules_url = 'modules/servers'){
 	
-	global $virt_action_display, $virt_errors, $virt_resp, $virtualizor_conf, $whmcsmysql;
+	global $virt_action_display, $virt_errors, $virt_resp, $rad_conf, $whmcsmysql;
 	
 	//Is the VPS there?
 	if(empty($params['customfields']['vpsid'])){
 		return 'VPS not Provisioned';
 	}
 	
-	// New method of Virtualizor Module
+	// New method of rad Module
 	if(isset($_GET['give'])){
 		
-		$var['APP'] = 'Virtualizor';
+		$var['APP'] = 'rad';
 		$var['site_name'] = 'WHMCS';
 		$var['API'] = $url_prefix.'&id='.$params['serviceid'].'&api=json&';		
 		$var['giver'] = $url_prefix.'&id='.$params['serviceid'].'&';
 		$var['url'] = $url_prefix.'&id='.$params['serviceid'].'&';
-		$var['copyright'] = 'Virtualizor';
+		$var['copyright'] = 'rad';
 		$var['version'] = '2.2.5';
 		$var['logo'] = '';
-		$var['theme'] = $modules_url.'/virtualizor_cloud/ui/';
+		$var['theme'] = $modules_url.'/rad_cloud/ui/';
 		$var['theme_path'] = dirname(__FILE__).'/ui/';
 		$var['images'] = $var['theme'].'images/';
 		$var['virt_dev_license'] = ' ';
 		$var['virt_pirated_license'] = ' ';
 
 		// For short name of VPS
-		if(!empty($virtualizor_conf['vm_short'])){
-			define('VM_SHORT', $virtualizor_conf['vm_short']);
+		if(!empty($rad_conf['vm_short'])){
+			define('VM_SHORT', $rad_conf['vm_short']);
 		}else{
 			define('VM_SHORT', 'VPS');
 		}
 
 		// For long name of VPS
-		if(!empty($virtualizor_conf['vm_long'])){
-			define('VM_LONG', $virtualizor_conf['vm_long']);
+		if(!empty($rad_conf['vm_long'])){
+			define('VM_LONG', $rad_conf['vm_long']);
 		}else{
 			define('VM_LONG', 'Virtual Server');
 		}
@@ -1454,7 +1454,7 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 							'select2.js',
 							'bootstrap.min.js',
 							'jquery.responsivetabs.js',
-							'virtualizor.js',
+							'rad.js',
 							'haproxy.js',
 						);
 						
@@ -1471,7 +1471,7 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 			header("Content-type: text/javascript; charset: UTF-8");
 			
 			// Set a zero Mtime
-			$filetime = filemtime($var['theme_path'].'/js2/virtualizor.js');
+			$filetime = filemtime($var['theme_path'].'/js2/rad.js');
 			
 		}
 		
@@ -1507,8 +1507,8 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 		$lang = $params['clientsdetails']['language'];
 		
 		// Sets the language preferred by the clients 
-		if(!empty($virtualizor_conf['default_language'])){
-			$lang = $virtualizor_conf['default_language'];
+		if(!empty($rad_conf['default_language'])){
+			$lang = $rad_conf['default_language'];
 		}
 		
 		// Parse the languages
@@ -1553,7 +1553,7 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 		$params['serverhostname'] = $server_details['hostname'];
 		
 		// fetch the novnc file
-		$modules_url_vnc = $modules_url.'/virtualizor_cloud';
+		$modules_url_vnc = $modules_url.'/rad_cloud';
 		$novnc_viewer = file_get_contents($modules_url_vnc.'/novnc/vnc_auto_virt.html');
 		
 		$novnc_password = $data['info']['password'];
@@ -1640,16 +1640,16 @@ function virtualizor_cloudUI($params, $url_prefix = 'clientarea.php?action=produ
 		
 	}
 	
-	if(!empty($virtualizor_conf['client_ui']['direct_login'])){
-		return "<center><a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\">Login to Virtualizor</a></center>";
+	if(!empty($rad_conf['client_ui']['direct_login'])){
+		return "<center><a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\">Login to rad</a></center>";
 	}
 
 	$code .= '<script data-cfasync="false" type="text/javascript">
 		
 function iResize(){
 	try{
-		document.getElementById("virtualizor_manager").style.height = 
-		document.getElementById("virtualizor_manager").contentWindow.document.body.offsetHeight + "px";
+		document.getElementById("rad_manager").style.height = 
+		document.getElementById("rad_manager").contentWindow.document.body.offsetHeight + "px";
 	}catch(e){ };
 }
 
@@ -1663,12 +1663,12 @@ $(document).ready(function(){
 	}
 	
 	var myDiv = document.createElement("div");
-	myDiv.id = "virtualizor_load_div";
+	myDiv.id = "rad_load_div";
 	myDiv.innerHTML = \'<center style="padding:10px; background-color: #FAFBD9;">Loading Panel options ...</center><br /><br /><br />\';
 	document.getElementById(divID).appendChild(myDiv);
 	
 	var iframe = document.createElement("iframe");
-	iframe.id = "virtualizor_manager";
+	iframe.id = "rad_manager";
 	iframe.width = "100%";
 	iframe.style.display = "none";
 	iframe.style.border = "none";
@@ -1676,8 +1676,8 @@ $(document).ready(function(){
 	iframe.src = "'.$url_prefix.'&id='.$params['serviceid'].'&give=index.html#act=vpsmanage";
 	document.getElementById(divID).appendChild(iframe);
 	
-	$("#virtualizor_manager").load(function(){
-		$("#virtualizor_load_div").hide();
+	$("#rad_manager").load(function(){
+		$("#rad_load_div").hide();
 		$(this).show();
 		iResize();
 	});
@@ -1802,7 +1802,7 @@ function virt_cloud_controlpanel($params) {
 	
 }
 
-function virtualizor_cloud_start($params) {
+function rad_cloud_start($params) {
 	
 	global $virt_action_display, $virt_errors;
 	
@@ -1820,7 +1820,7 @@ function virtualizor_cloud_start($params) {
 
 }
 
-function virtualizor_cloud_stop($params) {
+function rad_cloud_stop($params) {
 	
 	global $virt_action_display, $virt_errors;
 	
@@ -1838,7 +1838,7 @@ function virtualizor_cloud_stop($params) {
 
 }
 
-function virtualizor_cloud_reboot($params) {
+function rad_cloud_reboot($params) {
 	
 	global $virt_action_display, $virt_errors;
 	
@@ -1857,7 +1857,7 @@ function virtualizor_cloud_reboot($params) {
 }
 
 
-function virtualizor_cloud_poweroff($params) {
+function rad_cloud_poweroff($params) {
 	
 	global $virt_action_display, $virt_errors;
 	
@@ -1876,8 +1876,8 @@ function virtualizor_cloud_poweroff($params) {
 }
 
 
-function virtualizor_cloud_admin_start($params) {
-	$ret = virtualizor_cloud_start($params);
+function rad_cloud_admin_start($params) {
+	$ret = rad_cloud_start($params);
 	
 	if($ret === true){
 		return 'success';
@@ -1886,8 +1886,8 @@ function virtualizor_cloud_admin_start($params) {
 	}
 }
 
-function virtualizor_cloud_admin_stop($params) {
-	$ret = virtualizor_cloud_stop($params);
+function rad_cloud_admin_stop($params) {
+	$ret = rad_cloud_stop($params);
 	
 	if($ret === true){
 		return 'success';
@@ -1896,8 +1896,8 @@ function virtualizor_cloud_admin_stop($params) {
 	}
 }
 
-function virtualizor_cloud_admin_reboot($params) {
-	$ret = virtualizor_cloud_reboot($params);
+function rad_cloud_admin_reboot($params) {
+	$ret = rad_cloud_reboot($params);
 	
 	if($ret === true){
 		return 'success';
@@ -1906,8 +1906,8 @@ function virtualizor_cloud_admin_reboot($params) {
 	}
 }
 
-function virtualizor_cloud_admin_poweroff($params) {
-	$ret = virtualizor_cloud_poweroff($params);
+function rad_cloud_admin_poweroff($params) {
+	$ret = rad_cloud_poweroff($params);
 	
 	if($ret === true){
 		return 'success';
@@ -1917,7 +1917,7 @@ function virtualizor_cloud_admin_poweroff($params) {
 }
 
 
-function virtualizor_cloud_vnc($params){
+function rad_cloud_vnc($params){
 	
 	global $virt_action_display, $virt_errors;
 	
@@ -2999,7 +2999,7 @@ function virt_cloud_ips($params){
 	
 }
 
-function virtualizor_cloud_TestConnection($params){
+function rad_cloud_TestConnection($params){
 
 	$host = $params["serverip"];
 	if(empty($params["serverip"]) && !empty($params['serverhostname'])){
@@ -3009,7 +3009,7 @@ function virtualizor_cloud_TestConnection($params){
 	$data = VirtCloud_Curl::call($host, $params['serverusername'], $params['serverpassword'], 'index.php?act=listvs');
 			
 	if(empty($data) || $data['act'] == 'login'){
-		return array('error' => 'FAILED: Could not connect to Virtualizor. Please make sure that all Ports from 4081 to 4085 are open on your WHMCS Server or please check the server details entered are as displayed on Cloud Panel >> API Credentials');
+		return array('error' => 'FAILED: Could not connect to rad. Please make sure that all Ports from 4081 to 4085 are open on your WHMCS Server or please check the server details entered are as displayed on Cloud Panel >> API Credentials');
 	}else{
 		return array('success' => true);
 	}    

@@ -20,19 +20,19 @@
 //===========================================================
 //////////////////////////////////////////////////////////////
 
-global $virtualizor_conf;
+global $rad_conf;
 
 // Common Functions
 
 if(!function_exists('v_fn')){
 
 function v_fn($f){
-	global $virtualizor_conf;
+	global $rad_conf;
 	
-	if(empty($virtualizor_conf['fields'][$f])){
+	if(empty($rad_conf['fields'][$f])){
 		$r = $f;
 	}else{
-		$r = $virtualizor_conf['fields'][$f];
+		$r = $rad_conf['fields'][$f];
 	}
 	
 	return $r;	
@@ -40,7 +40,7 @@ function v_fn($f){
 
 }
 
-// The following function is a variation of v_fn() to support virtualizor_cloud_account as is uses another config variable $virtcloud_acc
+// The following function is a variation of v_fn() to support rad_cloud_account as is uses another config variable $virtcloud_acc
 if(!function_exists('vc_fn')){
 
 function vc_fn($f){
@@ -175,7 +175,7 @@ function vlang_vars_name($str, $array){
 
 
 if(!function_exists('vparse_lang')){
-// Parse Virtualizor Languages
+// Parse rad Languages
 function vparse_lang($str){
 	
 	global $vlang;
@@ -192,7 +192,7 @@ function vparse_lang($str){
 }
 
 if(!function_exists('vload_lang')){
-	// Load Virtualizor Languages
+	// Load rad Languages
 	function vload_lang($lang = 'english'){
 		
 		global $vlang;

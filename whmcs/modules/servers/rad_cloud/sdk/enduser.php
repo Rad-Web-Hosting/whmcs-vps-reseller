@@ -4,14 +4,14 @@
 //===========================================================
 // enduser.php (API)
 //===========================================================
-// SOFTACULOUS VIRTUALIZOR
+// SOFTACULOUS rad
 // Version : 1.0
 // Inspired by the DESIRE to be the BEST OF ALL
 // ----------------------------------------------------------
 // Started by: Alons
 // Date:       8th Mar 2010
 // Time:       23:00 hrs
-// Site:       https://www.virtualizor.com/ (SOFTACULOUS VIRTUALIZOR)
+// Site:       https://www.virtualizor.com/ (SOFTACULOUS rad)
 // ----------------------------------------------------------
 // Please Read the Terms of use at https://www.virtualizor.com
 // ----------------------------------------------------------
@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////
 
 
-class Virtualizor_Enduser_Cloud_API {
+class rad_Enduser_Cloud_API {
 	
 	var $key = '';
 	var $pass = '';
@@ -134,7 +134,7 @@ class Virtualizor_Enduser_Cloud_API {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 			
 		// UserAgent
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Virtualizor');
+		curl_setopt($ch, CURLOPT_USERAGENT, 'rad');
 		
 		// Cookies
 		if(!empty($cookies)){
@@ -1325,7 +1325,7 @@ class Virtualizor_Enduser_Cloud_API {
 // Examples
 //////////////
 
-//$v = new Virtualizor_Enduser_Cloud_API('127.0.0.1', '16_BIT_API_KEY', '32_BIT_API_PASS');
+//$v = new rad_Enduser_Cloud_API('127.0.0.1', '16_BIT_API_KEY', '32_BIT_API_PASS');
 
 // Get the list of the VPS
 //$v->r($v->listvs());
