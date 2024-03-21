@@ -109,11 +109,11 @@ function rwhserverimport_output($vars) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 30%;" class="fieldlabel">Stock Control :</td>
+                                    <td style="width: 30%;" class="fieldlabel">Import Level :</td>
                                     <td class="fieldarea">
                                         <select name="instock" class="form-control input-400 input-inline">
-                                            <option value="1">Import All products</option>
-                                            <option value="2">Import just in stock</option>
+                                            <option value="1">Import All Products</option>
+                                            <option value="2">Import Lite Products</option>
                                         </select>
                                     </td>
                                 </tr>
