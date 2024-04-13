@@ -1,7 +1,7 @@
 {
   "schema": "1.0",
   "type": "rwh-addons",
-  "name": "RWHServerImport",
+  "name": "rwhserverimport",
   "version": "1.0.0",
   "license": "proprietary",
   "category": "utilities",
