@@ -27,26 +27,26 @@ To enable Rad Cloud Server Import addon module for WHMCS, follow the steps:
 
 1.  Navigate to the Addon Modules settings interface (Access from '/whmcs/your_admin/configaddonmods.php', where "your_admin" is the WHMCS admin directory).
 2.  Click the "Activate" button corresponding with the "Rad Cloud Server Import" module:  
-    ![Activate Rad Cloud Server Import addon module](//new.radwebhosting.com/client_area/images/knowledgebase/activate-rad-cloud-server-import-addon-module.webp)
+    ![Activate Rad Cloud Server Import addon module](https://imgur.com/lZHPekv)
 3.  Click "Configure" to configure the module access group.
 4.  Choose "Full Administrator" and click "Save Changes" to enable the settings:  
-    ![Configure access for the ](//new.radwebhosting.com/client_area/images/knowledgebase/addon-give-access-to-admin-role-group.webp)
+    ![Configure access for the ](https://imgur.com/fyhcQi3)
 5.  Navigate to 'Rad Cloud Server Import' from the Addons dropdown menu:  
-    ![Navigate to Rad Cloud Server Importer from addons menu](//new.radwebhosting.com/client_area/images/knowledgebase/navigate-to-rad-cloud-server-importer-from-addons-menu.webp)
+    ![Navigate to Rad Cloud Server Importer from addons menu](https://imgur.com/MWtQUID)
 6.  (STEP 1) From the Rad Cloud Server Import Manager, click "Continue" to initiate Rad Cloud Server Import process:  
-    ![initiate Rad Cloud Server Import addon module](//new.radwebhosting.com/client_area/images/knowledgebase/initiate-rad-cloud-server-importer-addon-module.webp)
+    ![initiate Rad Cloud Server Import addon module](https://imgur.com/q4KVZGi)
 7.  (STEP 2) Configure the Import Settings according to your preferences:  
-    ![Step 2: Configure import settings](//new.radwebhosting.com/client_area/images/knowledgebase/rad-cloud-import-addon-step-2-configure-import-settings.webp)
+    ![Step 2: Configure import settings](https://imgur.com/655LoiL)
 8.  (STEP 2) Configure the Product Group imported products should be assigned to:  
-    ![configure product group for imported products](//new.radwebhosting.com/client_area/images/knowledgebase/configure-product-group.webp)
+    ![configure product group for imported products](https://imgur.com/4dKr7in)
 9.  (STEP 2) Configure the Welcome Email template imported products should use:  
-    ![configure the Welcome Email template to assign to imported products](//new.radwebhosting.com/client_area/images/knowledgebase/configure-product-welcome-email-template.webp)
+    ![configure the Welcome Email template to assign to imported products](https://imgur.com/ssjGKdx)
 10.  (STEP 2) Select "Import Level" value ('Lite Import' recommended for new installs)
 11.  (STEP 2) Once all options set, click "Start Importing Process" button to initiate import
 12.  (STEP 3) Receive confirmation of successfully imported products and list of products:  
-    ![Step 3: Successful product creation confirmation](//new.radwebhosting.com/client_area/images/knowledgebase/rad-cloud-import-addon-step-3-successful-products-created-confirmation.webp)
+    ![Step 3: Successful product creation confirmation](https://imgur.com/MTxDZtZ)
 13.  Navigate to Products/Services settings page in WHMCS Admin for overview:  
-    ![Overview of imported products from WHMCS admin Products/Services settings page](//new.radwebhosting.com/client_area/images/knowledgebase/imported-products-configured-with-rad-cloud-server-module.webp)
+    ![Overview of imported products from WHMCS admin Products/Services settings page](https://imgur.com/4X1BOV1)
 
 ### Conclusion
 
