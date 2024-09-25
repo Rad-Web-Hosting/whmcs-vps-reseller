@@ -1,10 +1,10 @@
 {
   "schema": "1.0",
   "type": "rwh-addons",
-  "name": "RWHServerImport",
+  "name": "rwhserverimport",
   "version": "1.0.0",
   "license": "proprietary",
-  "category": "other",
+  "category": "utilities",
   "description": {
     "name": "RWH Server Import",
     "tagline": "The module will offer one time discount for any product you choose.",
