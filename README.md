@@ -4,7 +4,7 @@ WHMCS server module for provisioning and management of VPS servers from reseller
 <p align="center"><a href="https://radwebhosting.com" target="_blank"><img width="350" src="https://avatars0.githubusercontent.com/u/16030710?s=460&v=4" alt="Rad Web Hosting"></a></p>
 
 ## About
-* This is a Server Provisioning module for WHMCS to integrate API functionality for VPS resellers, allowing them to remotely manage Rad Web Hosting VPS Servers in remote WHMCS installation. This module also installs Client Area domain management functions for use by end-clients.
+* This is a Server Provisioning module for WHMCS to integrate API functionality for VPS resellers, allowing them to remotely manage Rad Web Hosting VPS Servers in remote WHMCS installation.
 * Simplifies the automation of provisioning, selling, and managing VPS Servers, and provides for complete remote control of all VPS functions. 
 
 ## Prerequisites
@@ -17,7 +17,7 @@ Users can gain access to API key by signing up for a VPS Reseller account
 ## Installation
 1. Download the module
 2. Upload to WHMCS Server Modules directory (i.e. /home/user/whmcs/modules/servers ) and extract the files
-3. In WHMCS Admin area, navigate to Setup -> Products/Services -> Servers and create the `virtualizor_cloud` server
+3. In WHMCS Admin area, navigate to Setup -> Products/Services -> Servers and create the `rad_cloud` server
 4. Enter your API username and API secret. These can be obtained via your VPS Reseller Welcome Email.
 
 Getting Started with VPS Reseller with WHMCS
@@ -34,7 +34,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 ### Install WHMCS VPS Module
 
 1.  Download and extract the WHMCS integration \[[HERE](https://marketplace.whmcs.com/product/6108-vps-reseller "Download WHMCS Module")\].
-2.  Copy the entire directory via FTP, SFTP, SCP, etc. to /<WHMCS\_PATH>/modules/servers/virtualizor\_cloud/
+2.  Copy the entire directory via FTP, SFTP, SCP, etc. to /<WHMCS\_PATH>/modules/servers/rad\_cloud/
 
 ### Get API Credentials
 
@@ -55,7 +55,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     3.  IP Address: This will be provided by the data center.
     4.  Nameservers are not required for this module
 3.  **Server Details**
-    1.  Module: "Virtualizor\_cloud" .
+    1.  Module: "Rad\_cloud" .
     2.  Username: API Key (created in previous step)
     3.  Password: API Password (created in previous step)
     4.  Access Hash: Leave empty
@@ -70,7 +70,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     2.  Product Group: Any
     3.  Product Name: Any
 3.  Go to "Module Settings" tab and enter the following details:
-    1.  Module: **Virtualizor\_cloud**
+    1.  Module: **Rad\_cloud**
     2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-configure-module-settings.png)
 4.  Go to "Custom Fields" and create new Custom Field with the following details:
     1.  Field Name: "vpsid" (without quotes)
@@ -79,11 +79,11 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     4.  Validation: Leave blank
     5.  Check **Admin Only** tick box.
 5.  Create "Custom Fields" entry to satisfy **VPS operating system** requirements:
-    1.  Field Name: **"OS"** (without quotes) or **"OS|Operating System"**
+    1.  Field Name: **OS** or **OS|Operating System**
     2.  Field Type: **Dropdown**
     3.  Description: **Choose OS to install on server** 
     4.  Validation: Leave blank
-    5.  Select Options field: enter OS template file names (without .img extensions) like "centos-7.1-x86_64". Retrieve possible values from: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html).
+    5.  Select Options field: enter OS template file names (without .img extensions) like **debian-12-x86_64**. Retrieve possible values from: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html).
 
 ![Product Custom Fields](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-configure-product-custom-fields.png)
 
@@ -104,7 +104,7 @@ We are glad to inform you that the virtual machine you ordered has been set up.
 
 Manager Details
 =============================
-URL: https://your.master.domain.com:4083
+URL: https://<custom_cloud_panel_domain>:4083
 Username: {$service_username}
 Password: {$service_password}
 
@@ -127,7 +127,7 @@ http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
         
 ### Configuration Tips to Simplify Administration
 
-* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the "Operating System" configurable option.
+* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the **Operating System** configurable option.
 * Please also refer to [this article](https://docs.whmcs.com/Addons_and_Configurable_Options#Configurable_Options) to find more information about using configurable options in WHMCS.
     * Configurable Options group can be assigned to all VPS products (of the same Virtualization)-this will be much more desirable from an administrative perspective, should the available OS templates options ever change.
     * In the event of new OS template available for VPS, you can simply modify this single Configurable Option (assuming the group is assigned to multiple VPS products for same Virtualization), as opposed to editing the custom fields drop-down values for every related VPS product individually.
@@ -148,10 +148,10 @@ Read our guide, [How to Integrate VPS Reseller with WHMCS](https://blog.radwebho
 For full documentation, please visit the Rad Web Hosting VPS API documentation on the website.
 
 ## Help
-If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/client_area/submitticket.php).
+If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/client_area/knowledgebase/112/Open-Support-Ticket.html).
 
 ## Bugs
-If you discover any bugs or issues with this module, please notify our staff via the [24/7 Helpdesk](https://radwebhosting.com/client_area/submitticket.php).
+If you discover any bugs or issues with this module, please notify our staff via the [24/7 Helpdesk](https://radwebhosting.com/support).
 
 ## License
 This project is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
