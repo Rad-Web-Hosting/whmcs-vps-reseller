@@ -2,7 +2,7 @@
   "schema": "1.0",
   "type": "rwh-addons",
   "name": "RWHServerImport",
-  "version": "1.0.0",
+  "version": "2.0.3",
   "license": "proprietary",
   "category": "other",
   "description": {
@@ -12,17 +12,23 @@
     "features": [
       "Multi-Language Support",
       "Supports WHMCS Templates six",
-      "Imports products configured using Rad Cloud VPS Reseller module.",
+      "Imports products configured using Rad Cloud VPS Reseller module",
       "Imports configurable options like Operating Systems and IP Addresses",
       "and more"
     ]
+  },
+  "marketplace": {
+    "url": "https:\/\/marketplace.whmcs.com\/product\/6108"
   },
   "logo": {
     "filename": "logo.png"
   },
   "support": {
-    "docs_url": "https:\/\/radwebhosting.com\/client_area\/knowledgebase\/43\/VPS-Reseller-WHMCS-Module",
-	"learn_more": "https:\/\/radwebhosting.com\/vps-reseller"
+    "homepage": "https:\/\/radwebhosting.com\/", 
+    "learn_more": "https:\/\/radwebhosting.com\/vps-reseller", 
+    "email": "support@radwebhosting.com", 
+    "support_url": "https:\/\/radwebhosting.com\/support",
+    "docs_url": "https:\/\/radwebhosting.com\/client_area\/knowledgebase\/43\/VPS-Reseller-WHMCS-Module"
   },
   "authors": [
     {
