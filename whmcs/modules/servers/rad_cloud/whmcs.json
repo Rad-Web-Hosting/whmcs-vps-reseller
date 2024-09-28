@@ -2,6 +2,7 @@
     "schema": "1.0",
     "type": "whmcs-servers",
     "name": "vps-reseller-module",
+	"version": "2.0.3",
     "license": "MIT",
     "category": "provisioning",
     "description": {
@@ -25,7 +26,7 @@
         "learn_more": "https:\/\/radwebhosting.com\/vps-reseller", 
         "email": "support@radwebhosting.com", 
         "support_url": "https:\/\/radwebhosting.com\/support",
-        "docs_url": "https:\/\/radwebhosting.com\/client_area\/knowledgebase.php"
+        "docs_url": "https:\/\/radwebhosting.com\/client_area\/knowledgebase\/43\/VPS-Reseller-WHMCS-Module"
     },
     "authors": [
         {
