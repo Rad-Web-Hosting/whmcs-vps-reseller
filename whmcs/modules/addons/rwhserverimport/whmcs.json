@@ -2,7 +2,7 @@
   "schema": "1.0",
   "type": "rwh-addons",
   "name": "rwhserverimport",
-  "version": "1.0.0",
+  "version": "2.0.3",
   "license": "proprietary",
   "category": "utilities",
   "description": {
@@ -21,8 +21,11 @@
     "filename": "logo.png"
   },
   "support": {
-    "docs_url": "https:\/\/radwebhosting.com\/client_area\/knowledgebase\/43\/VPS-Reseller-WHMCS-Module",
-	"learn_more": "https:\/\/radwebhosting.com\/vps-reseller"
+    "homepage": "https:\/\/radwebhosting.com\/", 
+    "learn_more": "https:\/\/radwebhosting.com\/vps-reseller", 
+    "email": "support@radwebhosting.com", 
+    "support_url": "https:\/\/radwebhosting.com\/support",
+    "docs_url": "https:\/\/radwebhosting.com\/client_area\/knowledgebase\/43\/VPS-Reseller-WHMCS-Module"
   },
   "authors": [
     {
