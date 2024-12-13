@@ -1,6 +1,6 @@
 {
   "schema": "1.0",
-  "type": "rwh-addons",
+  "type": "whmcs-addons",
   "name": "RWHServerImport",
   "version": "2.0.3",
   "license": "proprietary",
