@@ -137,9 +137,9 @@ http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 
 ![WHMCS Admin Product Management](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-admin-768x1495.jpg "WHMCS Admin Product Management")
 
-Read our guide, [How to Integrate VPS Reseller with WHMCS](https://blog.radwebhosting.com/how-to-integrate-vps-reseller-with-whmcs/)
+Read our guide, [5 Minute Guide to Integrate WHMCS VPS Reseller](https://blog.radwebhosting.com/5-minute-guide-to-integrate-whmcs-vps-reseller/)
 
-For full documentation, please visit the Rad Web Hosting VPS API documentation on the website.
+For full documentation, please visit the Rad Web Hosting [VPS Reseller documentation](https://radwebhosting.com/client_area/knowledgebase/39/VPS-Reseller-Guides) on the website.
 
 ## Help
 If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/support).
