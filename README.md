@@ -1,10 +1,10 @@
-# WHMCS VPS Reseller
+# whmcs-vps-reseller
 WHMCS server module for provisioning and management of VPS servers from reseller's remote WHMCS installation. Enables reseller to deploy live cloud VMs from custom VPS package configurations. Features robust end-user management interface for reseller's client to manage server from within client area of WHMCS.
 
 <p align="center"><a href="https://radwebhosting.com" target="_blank"><img width="350" src="https://avatars0.githubusercontent.com/u/16030710?s=460&v=4" alt="Rad Web Hosting"></a></p>
 
 ## About
-* This is a Server Provisioning module for WHMCS to integrate API functionality for VPS resellers, allowing them to remotely manage Rad Web Hosting VPS Servers in remote WHMCS installation.
+* This is a Server Provisioning module for WHMCS to integrate API functionality for VPS resellers, allowing them to remotely manage Rad Web Hosting VPS Servers in remote WHMCS installation. This module also installs Client Area domain management functions for use by end-clients.
 * Simplifies the automation of provisioning, selling, and managing VPS Servers, and provides for complete remote control of all VPS functions. 
 
 ## Prerequisites
@@ -42,13 +42,13 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 2.  Access the side menu and navigate to "API Credentials".
 3.  Create a API Key Pair by clicking the button. ![create api key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-create-api-key-pair.png "create api key pair")
 4.  API Key Pair success message will display upon successful creation.![API Key Pair created](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-api-key-pair-created.png "API Key Pair created")
-5.  Copy the API key pair credentials (these will be needed to configure WHMCS server connection).![Copy API key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-panel-api-credentials.png)
+5.  Copy the API key pair credentials (these will be needed to configure WHMCS server connection).![Copy API key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-panel-api-credentials.png "Copy API key pair")
 
 ### Create Server in WHMCS Admin
 
-![Configure Server in WHMCS](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-add-server-in-whmcs-600px.png)
+![Configure Server in WHMCS](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-add-server-in-whmcs.png "Configure Server in WHMCS")
 
-1.  From WHMCS Admin > Setup > Products/Services > Servers
+1.  From WHMCS Admin > Setup > Products/Services > Servers
 2.  Click "Add New Server". Follow directions:
     1.  Name: Can Be Anything
     2.  Hostname: The Hostname of VPS Reseller
@@ -57,12 +57,12 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 3.  **Server Details**
     1.  Module: "Rad\_cloud" .
     2.  Username: API Key (created in previous step)
-    3.  Password: API Password (created in previous step)
+    3.  Password: API Password (created in previous step)
     4.  Access Hash: Leave empty
 
 ### Create Product
 
-![Configure WHMCS product](https://new.radwebhosting.com/client_area/images/knowledgebase/configure-whmcs-product-vps-reseller.gif "Configure WHMCS product")
+![Configure WHMCS product](https://new.radwebhosting.com/client_area/images/knowledgebase/configure-product-whmcs-vps-reseller.gif "Configure WHMCS product")
 
 1.  Navigate to Setup > Products/Services > Products/Services.
 2.  Select "**Create a new Product**"
@@ -71,31 +71,25 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     3.  Product Name: Any
 3.  Go to "Module Settings" tab and enter the following details:
     1.  Module: **Rad\_cloud**
-    2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-configure-module-settings.png)
+    2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/configure-vps-product-marked-1024x510.gif "Configure Product Module Settings")
 4.  Go to "Custom Fields" and create new Custom Field with the following details:
-    1.  Field Name: "vpsid" (without quotes)
+    1.  Field Name: vpsid (exactly as written)
     2.  Field Type: **Text Box**
     3.  Description: **The ID of the server from VPS Panel.** 
     4.  Validation: Leave blank
     5.  Check **Admin Only** tick box.
-5.  Create "Custom Fields" entry to satisfy **VPS operating system** requirements:
-    1.  Field Name: **OS** or **OS|Operating System**
-    2.  Field Type: **Dropdown**
-    3.  Description: **Choose OS to install on server** 
-    4.  Validation: Leave blank
-    5.  Select Options field: enter OS template file names (without .img extensions) like **debian-12-x86_64**. Retrieve possible values from: [VPS Guides -> List of Available OS Templates](https://radwebhosting.com/client_area/knowledgebase/246/List-of-Available-OS-Templates.html).
 
 ![Product Custom Fields](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-configure-product-custom-fields.png)
 
 ### Optional WHMCS Integration Customization
 
-*   Create new VPS welcome email template. We have provided a custom email template to use for sending VPS server credentials to enduser when VPS is provisioned (created). This template will utilize merge fields and organize important server details better than the default "VPS/Dedicated Server Welcome Email" template  that is provided with WHMCS.
+*   Create new VPS welcome email template. We have provided a custom email template to use for sending VPS server credentials to enduser when VPS is provisioned (created). This template will utilize merge fields and organize important server details better than the default "VPS/Dedicated Server Welcome Email" template  that is provided with WHMCS.
     *   You can add the template from your WHMCS Admin area by navigating to "Setup->Email Templates"
     *   Choose to "Create New Email Template"
     *   Choose "Product/Service" from the "Email Type" drop-down menu and give the template a unique name ![create custom VPS welcome email template](https://new.radwebhosting.com//client_area/images/knowledgebase/create-vps-welcome-email-template.gif "create custom VPS welcome email template")
     *   Configure the email sending settings
     *   Add a subject for your email (i.e. "New VPS Server Details")
-    *   To import  our pre-made template, click "Enable/Disable Rich-Text Editor" button
+    *   To import  our pre-made template, click "Enable/Disable Rich-Text Editor" button
     *   Copy and paste the email template from below:
 ```
 Dear {$client_name},
@@ -104,7 +98,7 @@ We are glad to inform you that the virtual machine you ordered has been set up.
 
 Manager Details
 =============================
-URL: https://<custom_cloud_panel_domain>:4083
+URL: https://your.master.domain.com:4083
 Username: {$service_username}
 Password: {$service_password}
 
@@ -127,7 +121,7 @@ http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
         
 ### Configuration Tips to Simplify Administration
 
-* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the **Operating System** configurable option.
+* Instead of creating each VPS product with Custom Field: "OS|Operating System" and drop-down list of all available templates, we recommend creating a "Configurable Options" group with the "Operating System" configurable option.
 * Please also refer to [this article](https://docs.whmcs.com/Addons_and_Configurable_Options#Configurable_Options) to find more information about using configurable options in WHMCS.
     * Configurable Options group can be assigned to all VPS products (of the same Virtualization)-this will be much more desirable from an administrative perspective, should the available OS templates options ever change.
     * In the event of new OS template available for VPS, you can simply modify this single Configurable Option (assuming the group is assigned to multiple VPS products for same Virtualization), as opposed to editing the custom fields drop-down values for every related VPS product individually.
@@ -143,12 +137,12 @@ http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 
 ![WHMCS Admin Product Management](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-admin-768x1495.jpg "WHMCS Admin Product Management")
 
-Read our guide, [How to Integrate VPS Reseller with WHMCS](https://blog.radwebhosting.com/how-to-integrate-vps-reseller-with-whmcs/)
+Read our guide, [5 Minute Guide to Integrate WHMCS VPS Reseller](https://blog.radwebhosting.com/5-minute-guide-to-integrate-whmcs-vps-reseller/)
 
-For full documentation, please visit the Rad Web Hosting VPS API documentation on the website.
+For full documentation, please visit the Rad Web Hosting [VPS Reseller documentation](https://radwebhosting.com/client_area/knowledgebase/39/VPS-Reseller-Guides) on the website.
 
 ## Help
-If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/client_area/knowledgebase/112/Open-Support-Ticket.html).
+If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/support).
 
 ## Bugs
 If you discover any bugs or issues with this module, please notify our staff via the [24/7 Helpdesk](https://radwebhosting.com/support).
