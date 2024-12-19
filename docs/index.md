@@ -17,7 +17,7 @@ Users can gain access to API key by signing up for a VPS Reseller account
 ## Installation
 1. Download the module
 2. Upload to WHMCS Server Modules directory (i.e. /home/user/whmcs/modules/servers ) and extract the files
-3. In WHMCS Admin area, navigate to Setup -> Products/Services -> Servers and create the `virtualizor_cloud` server
+3. In WHMCS Admin area, navigate to Setup -> Products/Services -> Servers and create the `rad_cloud` server
 4. Enter your API username and API secret. These can be obtained via your VPS Reseller Welcome Email.
 
 Getting Started with VPS Reseller with WHMCS
@@ -34,7 +34,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 ### Install WHMCS VPS Module
 
 1.  Download and extract the WHMCS integration \[[HERE](https://marketplace.whmcs.com/product/6108-vps-reseller "Download WHMCS Module")\].
-2.  Copy the entire directory via FTP, SFTP, SCP, etc. to /<WHMCS\_PATH>/modules/servers/virtualizor\_cloud/
+2.  Copy the entire directory via FTP, SFTP, SCP, etc. to /<WHMCS\_PATH>/modules/servers/rad\_cloud/
 
 ### Get API Credentials
 
@@ -55,7 +55,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     3.  IP Address: This will be provided by the data center.
     4.  Nameservers are not required for this module
 3.  **Server Details**
-    1.  Module: "Virtualizor\_cloud" .
+    1.  Module: "Rad\_cloud" .
     2.  Username: API Key (created in previous step)
     3.  Password: API Password (created in previous step)
     4.  Access Hash: Leave empty
@@ -70,7 +70,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     2.  Product Group: Any
     3.  Product Name: Any
 3.  Go to "Module Settings" tab and enter the following details:
-    1.  Module: **Virtualizor\_cloud**
+    1.  Module: **Rad\_cloud**
     2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-configure-module-settings.png)
 4.  Go to "Custom Fields" and create new Custom Field with the following details:
     1.  Field Name: vpsid (exactly as written)
