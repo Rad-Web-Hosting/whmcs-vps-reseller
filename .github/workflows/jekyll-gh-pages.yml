@@ -30,8 +30,10 @@ jobs:
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v3.0.6
 
-      - name: Build Jekyll site
-        uses: actions/jekyll-build-pages@v1
+      - name: Build Jekyll site (manual)
+        run: |
+          bundle install
+          bundle exec jekyll build -d _site
         with:
           source: ./
           destination: ./_site
