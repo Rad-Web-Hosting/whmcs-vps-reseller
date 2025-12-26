@@ -2,7 +2,7 @@
   "schema": "1.0",
   "type": "whmcs-addons",
   "name": "RWHServerImport",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "license": "proprietary",
   "category": "utilities",
   "description": {

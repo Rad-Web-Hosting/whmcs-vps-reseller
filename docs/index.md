@@ -17,7 +17,7 @@ Users can gain access to API key by signing up for a VPS Reseller account
 ## Installation
 1. Download the module
 2. Upload to WHMCS Server Modules directory (i.e. /home/user/whmcs/modules/servers ) and extract the files
-3. In WHMCS Admin area, navigate to Setup -> Products/Services -> Servers and create the `virtualizor_cloud` server
+3. In WHMCS Admin area, navigate to Setup -> Products/Services -> Servers and create the `rad_cloud` server
 4. Enter your API username and API secret. These can be obtained via your VPS Reseller Welcome Email.
 
 Getting Started with VPS Reseller with WHMCS
@@ -34,7 +34,7 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 ### Install WHMCS VPS Module
 
 1.  Download and extract the WHMCS integration \[[HERE](https://marketplace.whmcs.com/product/6108-vps-reseller "Download WHMCS Module")\].
-2.  Copy the entire directory via FTP, SFTP, SCP, etc. to /<WHMCS\_PATH>/modules/servers/virtualizor\_cloud/
+2.  Copy the entire directory via FTP, SFTP, SCP, etc. to /<WHMCS\_PATH>/modules/servers/rad\_cloud/
 
 ### Get API Credentials
 
@@ -42,11 +42,11 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
 2.  Access the side menu and navigate to "API Credentials".
 3.  Create a API Key Pair by clicking the button. ![create api key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-create-api-key-pair.png "create api key pair")
 4.  API Key Pair success message will display upon successful creation.![API Key Pair created](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-api-key-pair-created.png "API Key Pair created")
-5.  Copy the API key pair credentials (these will be needed to configure WHMCS server connection).![Copy API key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-panel-api-credentials.png)
+5.  Copy the API key pair credentials (these will be needed to configure WHMCS server connection).![Copy API key pair](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-panel-api-credentials.png "Copy API key pair")
 
 ### Create Server in WHMCS Admin
 
-![Configure Server in WHMCS](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-add-server-in-whmcs-600px.png)
+![Configure Server in WHMCS](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-add-server-in-whmcs.png "Configure Server in WHMCS")
 
 1.  From WHMCS Admin > Setup > Products/Services > Servers
 2.  Click "Add New Server". Follow directions:
@@ -55,14 +55,14 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     3.  IP Address: This will be provided by the data center.
     4.  Nameservers are not required for this module
 3.  **Server Details**
-    1.  Module: "Virtualizor\_cloud" .
+    1.  Module: "Rad\_cloud" .
     2.  Username: API Key (created in previous step)
     3.  Password: API Password (created in previous step)
     4.  Access Hash: Leave empty
 
 ### Create Product
 
-![Configure WHMCS product](https://new.radwebhosting.com/client_area/images/knowledgebase/configure-whmcs-product-vps-reseller.gif "Configure WHMCS product")
+![Configure WHMCS product](https://new.radwebhosting.com/client_area/images/knowledgebase/configure-product-whmcs-vps-reseller.gif "Configure WHMCS product")
 
 1.  Navigate to Setup > Products/Services > Products/Services.
 2.  Select "**Create a new Product**"
@@ -70,8 +70,8 @@ Please follow the below guidelines to configure your VPS Reseller with WHMCS int
     2.  Product Group: Any
     3.  Product Name: Any
 3.  Go to "Module Settings" tab and enter the following details:
-    1.  Module: **Virtualizor\_cloud**
-    2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-configure-module-settings.png)
+    1.  Module: **Rad\_cloud**
+    2.  The remaining fields as described on that page ![Configure Product Module Settings](https://new.radwebhosting.com/client_area/images/knowledgebase/configure-vps-product-marked-1024x510.gif "Configure Product Module Settings")
 4.  Go to "Custom Fields" and create new Custom Field with the following details:
     1.  Field Name: vpsid (exactly as written)
     2.  Field Type: **Text Box**
@@ -137,9 +137,9 @@ http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 
 ![WHMCS Admin Product Management](https://new.radwebhosting.com/client_area/images/knowledgebase/vps-reseller-whmcs-admin-768x1495.jpg "WHMCS Admin Product Management")
 
-Read our guide, [How to Integrate VPS Reseller with WHMCS](https://blog.radwebhosting.com/how-to-integrate-vps-reseller-with-whmcs/)
+Read our guide, [5 Minute Guide to Integrate WHMCS VPS Reseller](https://blog.radwebhosting.com/5-minute-guide-to-integrate-whmcs-vps-reseller/)
 
-For full documentation, please visit the Rad Web Hosting VPS API documentation on the website.
+For full documentation, please visit the Rad Web Hosting [VPS Reseller documentation](https://radwebhosting.com/client_area/knowledgebase/39/VPS-Reseller-Guides) on the website.
 
 ## Help
 If you have any questions or problems please submit a [Support Ticket](https://radwebhosting.com/support).
