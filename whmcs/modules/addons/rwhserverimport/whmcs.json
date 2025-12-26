@@ -1,8 +1,8 @@
 {
   "schema": "1.0",
-  "type": "rwh-addons",
-  "name": "rwhserverimport",
-  "version": "2.0.6",
+  "type": "whmcs-addons",
+  "name": "RWHServerImport",
+  "version": "3.0.0",
   "license": "proprietary",
   "category": "utilities",
   "description": {
@@ -12,7 +12,7 @@
     "features": [
       "Multi-Language Support",
       "Supports WHMCS Templates six",
-      "Imports products configured using Rad Cloud VPS Reseller module.",
+      "Imports products configured using Rad Cloud VPS Reseller module",
       "Imports configurable options like Operating Systems and IP Addresses",
       "and more"
     ]

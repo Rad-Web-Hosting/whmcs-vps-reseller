@@ -1,38 +1,18 @@
 <?php
 
-//////////////////////////////////////////////////////////////
-//===========================================================
-// inc.php
-//===========================================================
-// SOFTACULOUS 
-// Version : 1.1
-// Inspired by the DESIRE to be the BEST OF ALL
-// ----------------------------------------------------------
-// Started by: Alons
-// Date:       10th Jan 2009
-// Time:       21:00 hrs
-// Site:       http://www.softaculous.com/ (SOFTACULOUS)
-// ----------------------------------------------------------
-// Please Read the Terms of use at http://www.softaculous.com
-// ----------------------------------------------------------
-//===========================================================
-// (c)Softaculous Inc.
-//===========================================================
-//////////////////////////////////////////////////////////////
-
-global $rad_conf;
+global $rad_cloud_conf;
 
 // Common Functions
 
 if(!function_exists('v_fn')){
 
 function v_fn($f){
-	global $rad_conf;
+	global $rad_cloud_conf;
 	
-	if(empty($rad_conf['fields'][$f])){
+	if(empty($rad_cloud_conf['fields'][$f])){
 		$r = $f;
 	}else{
-		$r = $rad_conf['fields'][$f];
+		$r = $rad_cloud_conf['fields'][$f];
 	}
 	
 	return $r;	
@@ -70,33 +50,33 @@ function make_apikey($key, $pass){
 
 if(!function_exists('_unserialize')){
 	
-function _unserialize($str){
+	function _unserialize($str){
 
-	$var = @unserialize($str);
-	
-	if(empty($var)){
-	
+		$var = @unserialize($str);
+		
+		if(empty($var)){
+			
 			preg_match_all('!s:(\d+):"(.*?)";!s', $str, $matches);
 			foreach($matches[2] as $mk => $mv){
 				$tmp_str = 's:'.strlen($mv).':"'.$mv.'";';
 				$str = str_replace($matches[0][$mk], $tmp_str, $str);
 			}
-		$var = @unserialize($str);
+			$var = @unserialize($str);
+		
+		}
+		
+		//If it is still empty false
+		if(empty($var)){
+		
+			return false;
+		
+		}else{
+		
+			return $var;
+		
+		}
 	
 	}
-	
-	//If it is still empty false
-	if(empty($var)){
-	
-		return false;
-	
-	}else{
-	
-		return $var;
-	
-	}
-
-}
 
 }
 
@@ -175,7 +155,7 @@ function vlang_vars_name($str, $array){
 
 
 if(!function_exists('vparse_lang')){
-// Parse rad Languages
+// Parse Rad_cloud Languages
 function vparse_lang($str){
 	
 	global $vlang;
@@ -192,22 +172,22 @@ function vparse_lang($str){
 }
 
 if(!function_exists('vload_lang')){
-	// Load rad Languages
-	function vload_lang($lang = 'english'){
-		
-		global $vlang;
+// Load Rad_cloud Languages
+function vload_lang($lang = 'english'){
 	
-		if(!@include_once(dirname(__FILE__).'/languages/'.$lang.'/index_lang.php')){
-			include_once(dirname(__FILE__).'/languages/english/index_lang.php');
-		}
-	
-		if(!@include_once(dirname(__FILE__).'/languages/'.$lang.'/enduser_lang.php')){
-			include_once(dirname(__FILE__).'/languages/english/enduser_lang.php');
-		}
-		
-		$vlang = $l;
-	
+	global $vlang;
+
+	if(!@include_once(dirname(__FILE__).'/languages/'.$lang.'/index_lang.php')){
+		include_once(dirname(__FILE__).'/languages/english/index_lang.php');
 	}
+
+	if(!@include_once(dirname(__FILE__).'/languages/'.$lang.'/enduser_lang.php')){
+		include_once(dirname(__FILE__).'/languages/english/enduser_lang.php');
+	}
+	
+	$vlang = $l;
+
+}
 }
 
 if(!function_exists('virt_val')){
@@ -330,8 +310,8 @@ if(!class_exists('hash_encryption')){
 			
 			// Loop through the whole input string
 			while($c < strlen($string)) {
-				// If we have used all characters of the current key we switch to a new one
 				if($this->hash_length > 0){
+					// If we have used all characters of the current key we switch to a new one
 					if(($c != 0) and ($c % $this->hash_length == 0)) {
 						// New key is the hash of current key and last block of plaintext
 						$key = $this->_hash($key . substr($out,$c - $this->hash_length,$this->hash_length));

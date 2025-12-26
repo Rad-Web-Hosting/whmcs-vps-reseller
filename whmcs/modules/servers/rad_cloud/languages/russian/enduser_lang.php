@@ -1,32 +1,12 @@
 <?php
 
-//////////////////////////////////////////////////////////////
-//===========================================================
-// enduser_lang.php
-//===========================================================
-// SOFTACULOUS VIRTUALIZOR
-// Version : 1.0
-// Inspired by the DESIRE to be the BEST OF ALL
-// ----------------------------------------------------------
-// Started by: Alons
-// Date:       8th Mar 2010
-// Time:       23:00 hrs
-// Site:       https://www.virtualizor.com/ (SOFTACULOUS VIRTUALIZOR)
-// ----------------------------------------------------------
-// Please Read the Terms of use at https://www.virtualizor.com
-// ----------------------------------------------------------
-//===========================================================
-// (c)Softaculous Ltd.
-//===========================================================
-//////////////////////////////////////////////////////////////
-
 // Header
 $l['add'] = 'Add';
 $l['remove'] = 'Remove';
 $l['update'] = 'Update';
 $l['new'] = 'New';
 $l['servers'] = 'Servers';
-$l['go'] = 'Go';
+$l['go'] = 'GO';
 $l['wiki_help'] = 'Click here to go to Wiki';
 $l['actions'] = 'Actions';
 $l['loading'] = 'Соединение...';
@@ -50,6 +30,7 @@ $l['close'] = 'Закрыть';
 $l['disk'] = 'Диск';
 $l['time'] = 'Время';
 $l['cpu'] = 'CPU';
+$l['misc'] = 'Miscellaneous Settings';
 $l['strength_indicator'] = 'Индикатор сложности';
 $l['bad'] = 'простой';
 $l['good'] = 'средний';
@@ -130,6 +111,15 @@ $l['days'] = 'Day(s)';
 $l['hours'] = 'Hour(s)';
 $l['minutes'] = 'Minute(s)';
 $l['no_uid_in_vm'] = 'User ID not found, please report to the Administrator to verify if your '.VM_SHORT.' has a valid User assigned to it or not';
+$l['gb'] = 'GB';
+$l['mb'] = 'MB';
+$l['core'] = 'Core';
+$l['storage'] = 'Storage';
+$l['alert'] = 'Alert';
+$l['confirm'] = 'Confirm';
+$l['prompt'] = 'Prompt';
+$l['vm_actions'] = VM_SHORT.' Actions';
+$l['networking'] = 'Networking';
 
 // Datatable related langs
 $l['to'] = 'с';
@@ -148,7 +138,7 @@ $l['total_entries'] = 'Всего записей';
 $l['no_match_record'] = 'Совпадений не найдено';
 
 $l['is_managed'] = 'Этот '.VM_SHORT.' может управляться только администратором.';
-$l['pass_strength_error'] = 'Password strength must be greater than ';
+$l['pass_strength_error'] = 'Password strength should not be less than ';
 
 // '.VM_SHORT.' Manage lang string - prefix : vm_
 $l['vm_no_new'] = 'Вы не указали новый пароль.';
@@ -158,6 +148,8 @@ $l['vm_err_changing'] = 'При изменении пароля произошл
 $l['vm_no_nonalphanumeric'] = 'Нет символов, отличных от буквенно-цифровых символов';
 
 // Theme strings
+$l['vm_region'] = 'Server / Region';
+$l['vm_config'] = VM_SHORT.' Configuration';
 $l['vm_vpsmanagement'] = 'Управление '.VM_SHORT;
 $l['vm_advoptions'] = 'Расширенные опции';
 $l['vm_lm_ssh'] = 'SSH';
@@ -189,6 +181,7 @@ $l['vm_lm_console'] = 'Serial Console';
 $l['vm_tip_startstop'] = 'Запуск/Остановка '.VM_SHORT;
 $l['vm_tip_restart'] = 'Перезапустить '.VM_SHORT;
 $l['vm_tip_poweroff'] = 'Выключение '.VM_SHORT;
+$l['vm_tip_stop'] = 'Stop the '.VM_SHORT;
 $l['vm_tip_hname'] = 'Измените имя хоста '.VM_SHORT;
 $l['vm_tip_rootpassword'] = 'Изменение пароля root для '.VM_SHORT;
 $l['vm_tip_ips'] = 'Задайте первичный IP-адрес';
@@ -235,7 +228,11 @@ $l['rebuildvs_task_running'] = 'The '.VM_SHORT.' rebuild task is running in the 
 $l['vm_tip_installapps'] = 'Install Apps';
 $l['vm_no_location'] = 'Location not found';
 $l['vm_sys_stats'] = 'System Statistics';
-$l['unsupend_time_msg'] = 'Your VM_SHORT was suspended on {{sus_date}} and it will be unsuspended on {{unsus_date}}';
+$l['unsupend_time_msg'] = 'Your '.VM_SHORT.' was suspended on {{sus_date}} and it will be unsuspended on {{unsus_date}}';
+$l['copy_vm_pass'] = 'Copy '.VM_SHORT.' Password';
+$l['copied'] = VM_SHORT.' password copied';
+
+$l['profile_warn'] = 'Please fill all the details';
 
 // listvs lang string - prefix : lst_
 $l['lst_virtual_servers'] = 'Виртуальные сервера';
@@ -354,6 +351,8 @@ $l['po_vps_poweroff'] = 'Выключено';
 // users lang string - prefix : usr_
 $l['usr_page_head'] = 'Пользователи';
 $l['usr_add_user'] = 'Добавить пользователя';
+$l['usr_add_user_email'] = 'New User Email';
+$l['usr_adu_pass'] = 'Password';
 $l['usr_del_not_allowed'] = 'Вы не можете удалить этого пользователя';
 $l['usr_del_conf'] = 'Вы действительно хотите удалить пользователя?';
 $l['usr_no_users'] = 'Нет пользователей';
@@ -361,6 +360,18 @@ $l['usr_user_del'] = 'Пользователь удален';
 $l['usr_del_not_allowed_has_vps'] = 'У пользователя есть vps, пожалуйста, удалите их, а затем удалите пользователя';
 
 // apikey lang string - prefix : apik_
+$l['eapi_page_head'] = 'Edit API Credential';
+$l['eapi_page'] = 'Edit';
+$l['list_api_logs'] = 'API logs';
+$l['invalid_ip'] = 'Invalid IP';
+$l['api_page_head'] = 'List API';
+$l['pair_add_api'] = 'Create API';
+$l['apik_key_notice'] = 'Enter IP address (comma seperated for multiple IPs). If no IPs are given then the api pair rule will be applied to all IP addresses. <br> <b>Example:</b> 192.168.1.1, 192.168.1.2';
+$l['ip_addresses'] = 'IP addresses to whitelist';
+$l['enable_logging'] = 'Enable logging';
+$l['enable_logging_exp'] = 'When enabled, logs will be generated for this API Pair';
+$l['apik_h_apiip'] = 'IP addresses';
+$l['all_ip'] = 'All IP addresses';
 $l['apik_heading'] = 'Учетные данные API';
 $l['apik_api_credentials'] = 'Учетные данные API';
 $l['apik_no_key'] = 'У вас нет учетных данных API. Добавьте их.';
@@ -370,6 +381,10 @@ $l['apik_h_del'] = 'Удалить';
 $l['apik_create_api_key'] = 'Создание пары ключей API';
 $l['apik_key_added'] = 'Добавлена пара ключей API';
 $l['apik_key_deleted'] = 'Пара ключей API удалена';
+$l['apik_key_reseted'] = 'The API key pair has been successfully reset';
+$l['reset_apikey'] = 'Do you want to reset this API credentails?';
+$l['apik_h_reset'] = 'Reset';
+$l['reset_api_key'] = 'Reset API Key';
 
 // Two factor authentication lang string - prefix : twofactauth_
 $l['twofactauth_head'] = 'Двухуровневая аутентификация';
@@ -449,6 +464,7 @@ $l['cpas_short'] = 'Сложный';
 $l['cpas_weak_pass'] = 'Пароль должен содержать как минимум 3 из следующих слов: прописная буква, строчная буква, номер или специальный символ';
 $l['cpas_pass_match'] = 'Пароли не совпадают';
 $l['cpas_disabled'] = 'Изменнение пароля отключено администратором';
+$l['pass_update'] = 'Password Update';
 
 // cloudres lang string - prefix : cr_
 $l['cr_header'] = 'Облачные ресурсы';
@@ -464,6 +480,7 @@ $l['cr_num_ram'] = 'Ram';
 $l['cr_num_bandwidth'] = 'Пропускная способность';
 $l['cr_num_cores'] = 'Всего ядер';
 $l['cr_max_cores'] = 'Max Cores / '.VM_SHORT;
+$l['cr_space_per_vm'] = 'Max disk space / '.VM_SHORT;
 $l['cr_num_ipv4'] = 'IPv4';
 $l['cr_num_ipv6_subnet'] = 'Подсегменты IPv6';
 $l['cr_num_ipv6'] = 'IPv6';
@@ -599,6 +616,7 @@ $l['os_select_os'] = 'Select OS:';
 $l['os_other'] = 'Other';
 $l['os_format_primary'] = 'Format Primary Disk Only';
 $l['os_format_primary_exp'] = 'If checked, only the primary disk data will be deleted';
+$l['os_set_new_pass'] = 'Password for OS after reinstallation';
 
 // vnc lang string - prefix : vnc_
 $l['vnc_vnc_info'] = 'Информация о VNC';
@@ -622,6 +640,7 @@ $l['vncpas_retype_pass'] = 'Введите повторно новый паро�
 $l['vncpas_change_note'] = 'Изменить пароль VNC';
 $l['vncpas_change_final'] = 'Ваш пароль VNC был успешно изменен.';
 $l['vncpas_change_notify'] = 'Изменение пароля VNC ...';
+$l['vncpas_too_long'] = 'VNC password length too long than supported';
 
 // userpassword lang string - prefix : up_
 $l['up_no_new'] = 'Вы не указали новый пароль';
@@ -635,6 +654,9 @@ $l['up_page_head'] = 'Изменить пароль';
 $l['up_change_final'] = 'Ваш пароль был успешно изменен';
 
 // profile lang string - prefix : pr_
+$l['personal_info'] = 'Personal Information';
+$l['contact_info'] = 'Contact Information';
+$l['administrative_info'] = 'Administrative Contact';
 $l['pr_change_profile'] = 'Изменить профиль';
 $l['pr_no_fname'] = 'Вы не указали Имя';
 $l['pr_no_lname'] = 'Вы не указали фамилию';
@@ -744,6 +766,7 @@ $l['mz_inv_name'] = 'Указано неверное имя хоста';
 $l['mz_inv_ip'] = 'Указан неверный IP-адрес';
 $l['mz_inv_tld'] = 'Недопустимый домен верхнего уровня';
 $l['mz_inv_ipv6'] = 'Указан неверный IPv6';
+$l['mz_inv_srv'] = 'Invalid SRV format, Please used below format <br>"weight port target"<br>Example:<br>"80 443 hostname.example.com"';
 $l['mz_inv_int'] = 'Недопустимое целое число';
 $l['mz_err_add'] = 'При добавлении записи произошла ошибка';
 $l['mz_err_del'] = 'При удалении записи произошла ошибка';
@@ -780,8 +803,10 @@ $l['pdns_no_dns'] = 'Управление DNS недоступно';
 $l['pdns_invalid_zone'] = 'Недопустимая зона DNS, которую вы пытаетесь удалить.';
 $l['pdns_primary_nameserver'] = 'Сервер первичного имени';
 $l['pdns_hostmaster_email'] = 'Адрес электронной почты домена';
+$l['pdns_select_dns_server'] = 'Select DNS Server';
 $l['pdns_inv_email'] = 'Недопустимый адрес электронной почты домена.';
 $l['pdns_inv_ns'] = 'Указан недопустимый сервер первичного имени';
+$l['pdns_server_select_exp'] = 'Select the DNS Server on which Zone entry will be stored';
 
 // rdns lang string - prefix : rdns_
 $l['rdns_page_head'] = 'Добавить обратный DNS';
@@ -855,6 +880,11 @@ $l['resc_disable_rescue_err'] = 'Безопасный режим отключе�
 $l['resc_passwords_do_not_match'] = 'Указанный пароли подтверждения не совпадают';
 
 // usersettings lang string - prefix : us_
+$l['lang_app_settings'] = 'Language and Appearance Settings';
+$l['site_iden_settings'] = 'Site Identity Settings';
+$l['usr_pref_limits'] = 'User Preferences and Limits';
+$l['leg_pol_settings'] = 'Legal and Policy Settings';
+$l['auth_methods'] = 'Authentication  Methods';
 $l['us_no_lang'] = 'Язык не выбран';
 $l['us_wrong_lang'] = 'Выбранный язык не существует.';
 $l['us_no_timezone'] = 'Вы не выбрали часовой пояс';
@@ -883,11 +913,22 @@ $l['us_dom_name'] = 'User domain name';
 $l['us_dom_exp'] = 'Enter your domain name(eg: www.demo.com)';
 $l['us_favicon_url'] = 'User Favicon URL';
 $l['us_favicon_url_exp'] = 'If empty default Favicon will be displayed';
+
+$l['us_copyright_text'] = 'Авторские права';
+$l['us_copyright_text_exp'] = 'Если пусто, будет отображаться авторское право по умолчанию.';
+$l['us_policy_url'] = 'URL политики конфиденциальности';
+$l['us_policy_url_exp'] = 'Если пусто, политика конфиденциальности отображаться не будет.';
+
 $l['us_dom_invalid'] = 'Please enter a valid User domain name';
 $l['us_no_url'] = 'You did not enter a User URL';
 $l['us_logo_url_err'] = 'Please enter a valid Logo URL';
+$l['login_logo_err'] = 'Please enter a valid Login Logo URL';
+$l['mob_logo_url_err'] = 'Please enter a valid Mobile Logo URL';
+$l['cuser_policy_url_err'] = 'Please enter a valid Privacy Policy URL';
 $l['us_favicon_url_err'] = 'Please enter a valid Favicon URL';
 $l['us_dom_no_blank'] = 'Domain name cannot be empty once set. It can only be changed';
+$l['us_title'] = 'Site title';
+$l['us_title_exp'] = 'If empty default site title will be displayed';
 
 //--------------START OF HAProxy Lang------------
 // ManageVDF (haproxy) lang string - prefix : vdf_
@@ -907,14 +948,14 @@ $l['vdf_sel_proto'] = 'Select Protocol';
 $l['vdf_select_ip'] = 'Select IP';
 
 $l['vdf_no_act_sel'] = 'No action selected, select one and try again';
-$l['vdf_success_add'] = 'Added successfuly';
-$l['vdf_success_update'] = 'Updated data successfuly';
+$l['vdf_success_add'] = 'Added successfully';
+$l['vdf_success_update'] = 'Updated data successfully';
 $l['vdf_success_save'] = 'Saved changes';
 $l['vdf_no_server_found'] = 'No server found';
 $l['vdf_conf_del_entries'] = 'Delete selected entries ?';
-$l['vdf_success_del_entries'] = 'Deleted entries successfuly';
+$l['vdf_success_del_entries'] = 'Deleted entries successfully';
 $l['vdf_ser_not_found'] = 'Requested server not found';
-$l['vps_not_found_on_server'] = 'Requested VM_SHORT ({{vpsid}}) not found on selected server ({{server}})';
+$l['vps_not_found_on_server'] = 'Requested '.VM_SHORT.' ({{vpsid}}) not found on selected server ({{server}})';
 $l['vdf_proto_no_support'] = 'Protocol ID ({{protocolid}}) not supported';
 $l['vdf_no_id_found'] = 'VDF ID ({{id}}) not found';
 $l['vdf_no_vps_id_found'] = VM_SHORT.' ID ({{vpsid}}) not found';
@@ -985,7 +1026,8 @@ $l['li_no_vncpass'] = 'Укажите пароль VNC';
 $l['li_no_bandwidth'] = 'Укажите скорость канала';
 $l['li_no_cpu_units'] = 'Укажите частоту процессора';
 $l['li_no_cpu_cores'] = 'Укажите количество ядер';
-$l['li_cores_max'] = 'Cores Max';
+$l['li_cores_max'] = 'Cores Max / '.VM_SHORT.'';
+$l['li_space_max'] = 'GB Max / '.VM_SHORT.'';
 $l['li_invalid_sg'] = 'Выбранный регион недействителен';
 $l['li_invalid_virt'] = 'Выбранный регион не поддерживает выбранную виртуализацию';
 $l['li_no_percent_cpu'] = 'Укажите использование процентного использования CPU';
@@ -1014,6 +1056,8 @@ $l['li_less_ip_int'] = 'You don\'t have enough Internal IP Address(s) to create 
 $l['li_less_ipv6'] = 'У вас недостаточно IPv6-адресов для создания этого '.VM_SHORT;
 $l['li_less_ipv6_subnet'] = 'У вас недостаточно IPv6-подсетей для создания этого '.VM_SHORT;
 $l['li_max_cores_exceeded'] = 'Вам не разрешено создавать виртуальную машину с таким количеством ядер';
+$l['li_max_space_exceeded'] = 'You have crossed the assigned disk space limit';
+$l['ei_max_space_exceeded'] = $l['li_max_space_exceeded'];
 $l['li_less_cores'] = 'У вас недостаточно процессорных ядер для создания этого '.VM_SHORT;
 $l['li_invalid_cores'] = 'Invalid Core value';
 $l['li_no_user_resource'] = 'Вы достигли максимального количества Пользователей, которым разрешено создавать';
@@ -1065,6 +1109,7 @@ $l['li_rootpass_exp'] = 'Пароль пользователя / админис�
 $l['li_randpass'] = 'Сгенерировать случайный пароль';
 $l['li_hostname'] = 'Имя хоста';
 $l['li_hostname_exp'] = 'Введите имя хоста для '.VM_SHORT.'. например www.domain.com';
+$l['li_vpscount_exp'] = 'If your '.VM_SHORT.' count is more than 10, then you will have to give a common hostname';
 $l['li_ip'] = 'IP адрес';
 $l['li_ips'] = 'IP адрес';
 $l['li_ips_exp'] = 'Вы можете указать количество IP-адресов для назначения';
@@ -1199,12 +1244,13 @@ $l['li_err_topology_calc'] = 'CPU cores specified should be equal to the topolog
 $l['li_sockets'] = 'CPU Sockets';
 $l['li_threads'] = 'CPU Threads';
 $l['li_month'] = 'Month';
-$l['li_hour'] = 'Hour';
+$l['li_hour'] = 'Hr';
 $l['li_invalid_plid'] = 'The Plan you submitted is invalid';
 $l['li_no_plid'] = 'No plan is selected. Please select a valid plan';
 $l['li_install_app'] = 'Install Application';
 $l['li_install_app_exp'] = 'NOTE: Webuzo will be installed as a control panel';
 $l['li_insufficient_balance'] = 'You have insufficient balance, <a href="#act=billing&tab=make_payment">please add funds now</a>.';
+$l['li_lb_done'] = 'The Load Balancer has been created';
 
 $l['li_cpu_mode'] = 'CPU Mode';
 $l['li_cpu_mode_exp'] = 'CPU mode';
@@ -1212,6 +1258,7 @@ $l['li_disable_ebtables'] = 'Disable ebtables';
 $l['li_disable_ebtables_exp'] = 'Disable ebtables rules (this rules bind '.VM_SHORT.' IP to MAC address of '.VM_SHORT.' NIC)';
 $l['li_rdp'] = 'Enable RDP';
 $l['li_rdp_exp'] = 'Enable Remote Desktop Connection (For Windows '.VM_SHORT.' only)';
+$l['li_invalid_setup_pending_request'] = 'Invalid request to complete the pending setup. Please contact your Administrator or support.';
 
 // editvm lang string - prefix : ei_
 $l['ei_page_head'] = 'Edit '.VM_SHORT;
@@ -1263,6 +1310,14 @@ $l['ei_vncpass_exp'] = 'Пароль VNC для '.VM_SHORT.'. Нажмите н�
 $l['ei_submit'] = 'Редактировать Server';
 $l['ei_done'] = 'Виртуальный сервер был успешно отредактирован';
 $l['ei_addvoption'] = 'Расширенные опции';
+$l['ei_system_info'] = 'System Information';
+$l['ei_access_details'] = 'Access Details';
+$l['ei_network_config'] = 'Network Configuration';
+$l['ei_resource_allocation'] = 'Resource Allocation';
+$l['ei_firwall_options'] = 'Firewall Options';
+$l['ei_user_options'] = 'User Options';
+$l['ei_system_resources'] = 'System Resources';
+$l['ei_adv_system_config'] = 'Enhanced System Configuration';
 $l['ei_no_uid'] = 'Пользователь не выбран';
 $l['ei_no_nonalphanumeric'] = 'Для пароля VNC не допускаются символы, отличающиеся от буквенно-цифровых символов';
 $l['ei_less_space'] = 'У вас недостаточно дискового пространства для создания этого '.VM_SHORT;
@@ -1308,6 +1363,8 @@ $l['cpan_no_file'] = 'JSON file of supported OS for control panel is missing, so
 // backup2 lang string - prefix : bkup2_
 $l['bkup2_page_head'] = 'Backups';
 $l['bkup2_list_head'] = 'Backups list of '.VM_SHORT.' ID: ';
+$l['backuply_list_head'] = 'Incremental Backups list of '.VM_SHORT.' ID: ';
+$l['backuply_list'] = 'Incremental Backups';
 $l['bkup2_list_exp'] = 'The dates for which backups of this '.VM_SHORT.' are available are listed below. You can restore or delete them accordingly.';
 $l['bkup2_date'] = 'Backup Date';
 $l['bkup2_size'] = 'Size';
@@ -1347,6 +1404,9 @@ $l['bkup2_current_cycle'] = 'Current Cycle:';
 $l['bkup2_unlimited'] = 'Unlimited';
 
 // hvmsettings lang string - prefix : hvm_
+$l['virtualization_settings'] = 'Virtualization Settings';
+$l['system_config'] = 'System Configuration';
+$l['container_settings'] = 'Container Settings';
 $l['hvm_virt_error'] = 'Эта виртуализация не имеет настроек HVM';
 $l['hvm_rescue_enabled'] = VM_SHORT.' находится в безопасном режиме и не может быть изменен';
 $l['hvm_invalid_iso'] = 'Выбранный ISO недействителен';
@@ -1361,7 +1421,8 @@ $l['hvm_boot_order'] = 'Порядок загрузки';
 $l['hvm_isos'] = 'Выберите ISO';
 $l['hvm_none'] = 'Нет';
 $l['hvm_tuntap_enable'] = 'Включить Tun/Tap';
-$l['hvm_ppp_enable'] = 'Включить PPP( Point to Point Protocol)';
+$l['hvm_ppp_enable'] = 'Enable PPP';
+$l['hvm_ppp__info_enable'] = 'Point to Point Protocol';
 $l['hvm_disabled'] = 'Настройки HVM отключены администратором';
 $l['hvm_hdd'] = 'Жесткий диск';
 $l['hvm_cdrom'] = 'CD-привод';
@@ -1418,8 +1479,8 @@ $l['ram_header'] = ' RAM';
 $l['ram_raminfo'] = 'RAM информация';
 $l['ram_totalram'] = 'RAM : ';
 $l['ram_gaurateed'] = 'Гарантировано RAM : ';
-$l['ram_burstable'] = 'Burstable :';
-$l['ram_swap'] = 'SWAP :';
+$l['ram_burstable'] = 'Burstable ';
+$l['ram_swap'] = 'SWAP ';
 $l['ram_utilised'] = 'Использовано :';
 $l['ram_percentram'] = 'использование % :';
 $l['ram_graphheader'] = 'использование RAM';
@@ -1447,6 +1508,7 @@ $l['band_bandwidth_utilized'] = 'Использовано : ';
 $l['band_percent_utilized'] = '% используется : ';
 $l['band_graphheader'] = 'Использование канала';
 $l['band_unlimited'] = 'Без ограничений';
+$l['band_range'] = 'Выберите свой собственный диапазон здесь';
 $l['band_network_speed'] = 'Скорость сети (MB/s)';
 $l['band_prev'] = 'Пред.Месяц';
 $l['band_next'] = 'След.Месяц';
@@ -1548,6 +1610,12 @@ $l['tasks_remotedesktop'] = 'Remote Desktop Task';
 $l['tasks_change_vncpass'] = 'Change VNC Password';
 $l['tasks_installxentools'] = 'Installing Xenserver Tools';
 $l['tasks_install_script'] = 'Installing Apps';
+$l['tasks_addvolume'] = 'Add Volume';
+$l['tasks_delete_volume'] = 'Delete Volume';
+$l['tasks_resize_volume'] = 'Resize Volume';
+$l['tasks_detach_volume'] = 'Detach Volume';
+$l['tasks_hotplug_disk'] = 'Hotplug Volume';
+$l['tasks_install_ga'] = 'Installing Guest Agent';
 
 // Register Land Strings - prefix : reg_
 $l['reg_sec_inv'] = 'Security code is invalid';
@@ -1558,6 +1626,8 @@ $l['pr_no_address'] = 'Please specify the Address';
 $l['pr_no_city'] = 'Please specify the city';
 $l['pr_no_state'] = 'Please specify the state';
 $l['pr_no_zip'] = 'Please specify the zip code';
+$l['pr_zip_exp'] = 'Zip code should contain only alphanumeric code, special charaters are not allowed';
+$l['pr_wrong_zip'] = 'Kindly check the zip code';
 $l['pr_no_country'] = 'Please specify the country';
 $l['pr_no_city'] = 'Please specify the city';
 $l['pr_no_phone'] = 'Please specify the phone number';
@@ -1576,6 +1646,9 @@ $l['reg_email'] = 'Email';
 $l['reg_pass'] = 'Password';
 $l['reg_resendact'] = 'Resend Activation Code';
 $l['reg_mail_sub'] = 'Activate Account';
+$l['terms_conditions_msg'] = 'I have read and agree to the ';
+$l['terms_service'] = 'Terms of Service';
+$l['terms_err'] = 'Please read and agree the Terms & Conditions';
 $l['reg_mail_body'] = 'Hi {{email}},
 
 Thank you for registering an account at {{sn}}.
@@ -1680,13 +1753,11 @@ $l['reg_mobile_no'] = 'Enter mobile number for OTP';
 $l['reg_err_key_url'] = 'URL key can not be empty for resending OTP';
 $l['reg_no_url_key'] = 'Could not find the provided URL key';
 $l['reg_contact_err'] = 'Please Enter your 10 digit phone number';
+$l['reg_resend_otp_in'] = 'Resend OTP in :';
 
 // login lang string - prefix : login_
-$l['login_no_username'] = 'The Username field was empty';
-$l['login_no_password'] = 'The Password field was empty';
 $l['login_act_status'] = 'Your account has not been validated. Please validate the email address or contact support for assistance.';
 $l['login_act_inactive'] = 'Your account is deactivated. Please contact support for assistance.';
-$l['login_too_many_attempts'] = 'You have used up your failed login quota of '.$globals['login_attempts'].' failed attempts! <b>Please wait '.$globals['login_ban_time'].' minutes before trying again.</b> Don\'t forget that the password is case sensitive. Forgotten your password? Please try the <a href="'.$globals['index'].'act=login&sa=fpass">Forgot Password</a> utility.';
 
 $l['login_sign_in'] = 'Sign in';
 $l['login_log_user'] = 'Email';
@@ -1699,6 +1770,7 @@ $l['login_register'] = 'Create Account';
 $l['login_no_username'] = 'Поле имя пользователя было пустым';
 $l['login_no_password'] = 'Поле «Пароль» было пустым';
 $l['login_too_many_attempts'] = 'Вы использовали максимальное количество входов в систему '.$globals['login_attempts'].' Неудачные попытки! <b>пожалуйста, подождите '.$globals['login_ban_time'].' Минут, прежде чем повторить попытку.</b>Не забывайте, что пароль чувствителен к регистру. Забыли пароль? Попробуйте<a href="'.$globals['index'].'act=login&sa=fpass">восстановитьпароль</a> utility.';
+$l['login_fpass_too_many_attempts'] = 'It appears you have attempted to use the <b>Forgot Password</b> link '.$globals['login_attempts'].' times. Kindly wait for '.$globals['login_ban_time'].' minutes before making another request for the <b>Forgot Password</b> link. If the issue persists, feel free to reach out to the administrator for assistance.';
 
 $l['login_sign_in'] = 'Вход в панель управления '.VM_SHORT.'/VDS';
 $l['login_log_user'] = 'Email адрес пользователя';
@@ -1710,7 +1782,7 @@ $l['login_pass_nomatch'] = 'Неверное имя пользователя и�
 $l['login_forgotpass'] = 'Забыли пароль';
 $l['login_emailuser'] = 'Email адрес';
 $l['login_enteremail'] = 'Введите ваш email адрес';
-$l['login_sub_email'] = 'Отправить';
+$l['login_sub_email'] = 'Send Link';
 $l['login_no_email'] = 'Вы не отправили свой адрес электронной почты';
 $l['login_invalidemail'] = 'Указанный адрес электронной почты недействителен.';
 $l['login_mail_sub'] = 'Сброс пароля';
@@ -1744,6 +1816,7 @@ $l['login_forgot_pass'] = 'Забыли пароль';
 $l['login_goto_login'] = 'Перейти на страницу входа';
 $l['login_no_2fa_key'] = 'Недопустимый ключ аутентификации';
 $l['login_inv_user'] = 'Недействительный пользователь';
+$l['login_signup'] = 'Do not have an account yet?';
 
 // OTP on login
 $l['login_twofactit'] = 'Двухуровневая аутентификация';
@@ -1770,6 +1843,7 @@ $l['recipe_duplicate_err'] = 'Duplicate recipe ID(s) entered. Please enter a uni
 $l['no_desc'] = 'без описания';
 $l['ingredients'] = 'Ingredients';
 $l['recipe'] = 'Задача';
+$l['invalid_recipe_id'] = 'The Recipe you selected is invalid';
 $l['conf_execute'] = 'Вы уверены, что хотите создать эту задачу?';
 $l['rec_short_desc'] = 'Задачи представляют собой предопределенные коды bash';
 $l['no_recipes'] = 'There are no recipes';
@@ -1942,6 +2016,14 @@ $l['bill_pay_method'] = 'Payment Method';
 $l['bill_desc'] = 'Description';
 $l['bill_disc'] = 'Discount';
 $l['bill_subtotal'] = 'Sub Total';
+$l['res_space'] = 'Disk Space';
+$l['res_cores'] = 'CPU Core';
+$l['res_ram'] = 'RAM';
+$l['res_ips'] = 'IPv4';
+$l['res_ipv6'] = 'IPv6';
+$l['res_ipsint'] = 'Internal IP';
+$l['res_ipv6subnet'] = 'IPv6 Subnet';
+$l['res_bandwidth'] = 'Bandwidth';
 $l['bill_netamt'] = 'Net Amount';
 $l['bill_print'] = 'Print';
 $l['bill_download'] = 'Download';
@@ -1977,6 +2059,9 @@ $l['bill_gateway'] = 'Payment Gateway';
 $l['bill_no_payment_gateway'] = 'No Payment Gateways found. Please contact '.$globals['sn'].' at '.$globals['support_email'];
 $l['bill_summary'] = 'Summary';
 $l['bill_taxable_val'] = 'Taxable Value';
+$l['bill_payment_method'] = 'Payment Method';
+$l['gateway_disabled'] = 'Gateway Disabled';
+$l['invoice_terms_conditions'] = 'Terms and Conditions';
 
 // Payment related
 $l['pay_login'] = 'You need to be logged in to make a payment';
@@ -2091,6 +2176,7 @@ $l['modal_ok'] = 'Ok';
 $l['modal_cancel'] = 'Cancel';
 $l['modal_success'] = 'Success';
 $l['modal_error'] = 'Error';
+$l['modal_warning'] = 'Warning';
 
 // Network and upload speed related errors.
 $l['err_nw_speed'] = 'Network speed you have entered is greater than allowed Network speed';
@@ -2099,6 +2185,17 @@ $l['err_upload_speed'] = 'Upload speed you have entered is greater than allowed 
 $l['del_apikey'] = 'Do you want to delete this API credentails?';
 $l['del_rdns'] = 'Do you want to delete this rDNS record?';
 $l['err_cuser_dom_name'] = 'This domain name is already used by some other user';
+
+$l['ver_scale_settings'] = 'Vertical Scaling Settings';
+$l['ver_ram_settings'] = 'RAM Settings';
+$l['ver_ram_inc_by'] = 'Increase/Decrease RAM By (in GB)';
+$l['ver_ram_inc_by_exp'] = 'If the threshold exceeds/subceeds, the provided RAM (in GB) will be increased or decreased accordingly';
+$l['ver_cpu_settings'] = 'CPU Settings';
+$l['ver_cpu_inc_by'] = 'Increase/Decrease CPU Cores By';
+$l['ver_cpu_inc_by_exp'] = 'If the threshold exceeds/subceeds, the provided cores will be increased or decreased accordingly';
+$l['scaling'] = 'Scaling';
+$l['default'] = 'Default';
+
 $l['os_reins_limit'] = 'You can reinstall Operating System {{counter}} more times.';
 $l['acc_password_err'] = 'You are not allowed to change account password. Please contact administrator.';
 $l['disk_caching'] = 'Disk Caching';
@@ -2124,3 +2221,248 @@ $l['change_rootpswd_not_allwd'] = 'You are not allowed to change password';
 $l['total_iops_sec'] = 'Total I/O per sec';
 $l['read_bytes_sec'] = 'Read Mega Bytes per sec';
 $l['write_bytes_sec'] = 'Write Mega Bytes per sec';
+
+$l['vm_admin_name'] = VM_SHORT.' Admin Name';
+$l['vm_admin_name_exp'] = 'Specify the username. If you want to change other users password. Default is Administrator (for Windows) and root (for Linux) if not specified any.';
+$l['advance_payment'] = 'Advance Payment';
+$l['reverted_advance_payment'] = 'Returned Advance Payment';
+$l['exp_bios'] = 'Choose bios to boot '.VM_SHORT.' , default will be seabios';
+$l['bios'] = 'Choose bois to boot '.VM_SHORT.' from';
+$l['ssh_keys_delete_warn'] = 'Deleting SSH keys will also remove them from any VPS on which they were added, during the next stop/start';
+$l['err_invalid_bios'] = 'Invalid bios';
+$l['uefi_err_iso'] = 'UEFI bios is only valid for ISO boot';
+
+//volumes
+$l['vol_vps_select'] = 'Select '.VM_SHORT.' to attach';
+$l['vol_volume_name'] = 'Enter Volume Name';
+$l['vol_pricing'] = 'Volume Pricing';
+$l['vol_pricing_exp'] = 'The Volume size should be given in GB not less then 1GB, pricing will change as per '.VM_SHORT.' selection';
+$l['vol_rate_hour'] = 'Hr';
+$l['vol_rate_month'] = 'Mo';
+$l['vol_Gb'] = 'GB';
+$l['vol_None'] = 'None';
+$l['vol_vps_select_vps'] = 'Choose '.VM_SHORT.' for which you want to create volume';
+$l['vol_volume_name'] = 'Specify the name for the volume';
+$l['vol_foramt'] = 'Volume Format';
+$l['vol_format_exp'] = 'Specify the format with which volume is to be foramtted';
+$l['vol_select_attach'] = 'Attach Volume';
+$l['vol_select_attach_exp'] = 'If checked, volume will be attached to '.VM_SHORT.' once it will be created. Otherwise it will be create for later use.';
+$l['vol_mntpoint'] = 'Mount point';
+$l['vol_mntpoint_exp'] = 'If mount point is specified, then the volume will be mounted on specified directory (Note: Mounting is not supported for filebased storage)';
+$l['vol_region_exp'] = 'Choose region to create volume';
+$l['vol_ext4'] = 'EXT4';
+$l['vol_xfs'] = 'XFS';
+$l['vol_yes'] = 'YES';
+$l['vol_no'] = 'NO';
+$l['vol_did'] = 'ID';
+$l['vol_disk_name'] = 'Volume Name';
+$l['vol_region'] = 'Region';
+$l['Vol_vpsid'] = 'Vpsid';
+$l['vol_disk_user'] = 'User';
+$l['vol_disk_size'] = 'Size';
+$l['vol_none'] = 'None';
+$l['vol_delete'] = 'Delete Volume';
+$l['vol_attach'] = 'Attach';
+$l['vol_detach'] = 'Detach';
+$l['vol_resize'] = 'Resize';
+$l['vol_delete_disk'] = 'Delete Volume ?';
+$l['vol_conf_mul_delete_disk'] = 'Delete Volumes ?';
+$l['vol_action_not_found'] = 'Volume Action Not Found';
+$l['vol_did_not_found'] = 'Volume not found';
+$l['vol_attached_done'] = 'Volume Attached to '.VM_SHORT;
+$l['vol_detached_done'] = 'Volume detached from '.VM_SHORT;
+$l['vol_resize_done'] = 'Volume Resized';
+$l['vol_delete_done'] = 'Volume Deleted';
+$l['vol_no_volumes'] = 'Volumes Not Found';
+$l['vol_size_empty'] = 'Disk Size cannot be empty';
+$l['vol_no_vps'] = VM_SHORT.' not found';
+$l['vol_size_less'] = 'Volume size cannot be less the 1 GB';
+$l['vol_add_done'] = 'Volume creation task is started in background';
+$l['vol_edit_modal'] = 'Volume Edit';
+$l['vol_create_modal'] = 'Volume Create';
+$l['vol_disk_name'] = 'Volume Name';
+$l['vol_select_vps'] = 'Select '.VM_SHORT;
+$l['vol_disk_size_exp'] = 'Specify the size of volume to resize';
+$l['vol_insufficient_balance'] = 'You have insufficient balance';
+$l['vol_low_disk'] = 'You do not have enough disk space';
+$l['require_pro_lic'] = 'Please upgrade to Pro version to use this feature';
+$l['vol_attach_err'] = 'Error occured while attaching the volume';
+$l['vol_resize_err'] = 'Error while resizing the volume';
+$l['vol_oper_err'] = 'Error occured while performing action on the volume';
+$l['vol_resize_note'] = 'Volume cannot be resized if it is attached to '.VM_SHORT.', you need to detach it first and then resize it';
+$l['vol_mntpoint_placeholder'] = 'Enter Mount Point';
+$l['vol_name_placeholder'] = 'Enter Name Of Volume';
+$l['vol_listvol_head'] = 'List Volumes';
+$l['vol_addvol_head'] = 'Add Volumes';
+$l['vol_backup_note'] = 'Note : Backup of the volume disk(s) will not be taken';
+$l['no_vol_sel'] = 'Please select at least one Volume';
+$l['take_full_backup'] = 'Take full backup';
+$l['filter_plans'] = 'Filter Plans';
+$l['normal_plan'] = 'Normal Plan';
+$l['lb_plan'] = 'Load Balancer Plan';
+$l['no_lb'] = 'No Load Balancer Added';
+$l['lb_vps_host'] = 'Load Balancer';
+$l['lb_ip'] = 'Load Balancer IP';
+$l['lb_num_vps'] = 'Number of VPS';
+$l['lb_user'] = 'User';
+$l['lb_server_group'] = 'Server Group';
+$l['lb_manage'] = 'Manage';
+$l['invalid_lb'] = 'Invalid Load Balncer';
+$l['manage_load_balancer_title'] = 'Manage Load Balancer';
+$l['lb_vps_list'] = VM_SHORT.' List';
+$l['lb_rules_list'] = 'Rules List';
+$l['lb_settings'] = 'Settings';
+$l['lb_stats'] = 'Statistics';
+$l['lb_method'] = 'Load Balancer Method';
+$l['lb_choose_method'] = 'Choose Method';
+$l['lb_default'] = 'Default';
+$l['lb_rules'] = 'Load Balancer Rules';
+$l['load_balancer'] = 'Load Balancer';
+$l['add_load_balancer'] = 'Add Load Balancer';
+$l['no_lb_plans'] = 'No Load Balancer plans available';
+$l['lb_protocol'] = 'Protocol';
+$l['lb_port'] = 'Port';
+$l['lb_vps'] = VM_SHORT;
+$l['lb_ssl_certificate'] = 'Certificate';
+$l['lb_ssl_create'] = 'Self-signed';
+$l['lb_ssl_use'] = 'Use Your Own';
+$l['lb_cert_details'] = 'Certificate Details';
+$l['lb_ssl_name'] = 'SSL Name';
+$l['lb_cert'] = 'Certificate';
+$l['lb_key'] = 'Private Key';
+$l['lb_chain'] = 'Certificate Chain';
+$l['lb_source_protocol'] = 'Source Protocol';
+$l['lb_source_port'] = 'Source Port';
+$l['lb_dest_protocol'] = 'Destination Protocol';
+$l['lb_dest_port'] = 'Destination Port';
+$l['lb_lb_method'] = 'Load Balancer Method';
+$l['lb_dir'] = 'Directory';
+$l['lb_reinstall_ssl'] = 'Reinstall SSL';
+$l['lb_reinstall_ssl_exp'] = 'If checked then SSL will be reinstalled depending on SSL option selected';
+$l['lb_confirm_rule_delete'] = 'Are you sure that you want to <b class=\'text-danger\'>delete</b> the rule?';
+$l['lb_confirm_vps_remove'] = 'Are you sure that you want to <b class=\'text-danger\'>remove</b> the '.VM_SHORT.'?';
+$l['lb_remove_rule_done'] = 'The rule was removed successfully';
+$l['lb_remove_vps_done'] = 'The '.VM_SHORT.' was removed successfully';
+$l['lb_save_settings_done'] = 'Settings were saved successfully';
+$l['lb_save_settings'] = 'Save Settings';
+$l['lb_delete_vm'] = 'Delete '.VM_SHORT.' from panel as well?';
+$l['select_lb'] = 'Select Load Balancer';
+$l['lb_assign_vm'] = 'Assign '.VM_SHORT;
+$l['lb_edit_rule'] = 'Edit Rule';
+$l['lb_delete_lb_confirm'] = 'Are you sure you that you want to <b class=\'text-danger\'>delete</b> the load balancer';
+$l['lb_delete_added_vm'] = 'Delete added '.VM_SHORT.' from panel as well?';
+$l['no_access'] = 'You dont have access to this page';
+$l['delete_lb_done'] = 'The load balancer was removed successfully';
+$l['lb_vm_not_deleted'] = '<br>These '.VM_SHORT.' are locked and will not be deleted VPSID - ';
+$l['select_lb_exp'] = 'Load Balancer is not supported for windows '.VM_SHORT;
+$l['vps_timezone_changed'] = '<br /> '.VM_SHORT.' Timezone Changed.';
+$l['vps_timezone_changed_with_recipe'] = '<br /> '.VM_SHORT.' Timezone will be changed after you SHUTDOWN and START the '.VM_SHORT.' from the panel.';
+$l['vps_timezone_change_err'] = 'Unable to change the '.VM_SHORT.' Timezone.';
+$l['user_suspended_3'] = 'Your current usage is {{total_usage}} while your balance is {{cur_bal}}. Please add funds to your account to unsuspend your account.';
+
+
+// recipe lang string - prefix : rcp_
+$l['rcp_page_head'] = 'Recipes';
+$l['rcp_add_recipes'] = 'Add Recipes';
+$l['rcp_del_conf'] = 'Are you sure you want to delete the Recipe ?';
+$l['rcp_no_recipes'] = 'There are no Recipes';
+$l['rcp_recipe_del'] = 'The Recipe has been deleted';
+$l['rcp_duplicate_recipe'] = 'Recipe name already exist';
+$l['rcp_no_recipescript'] = 'Recipe bash script was not entered';
+$l['rcp_invalid_shell'] = 'Invalid shell type chosen';
+
+// addrecipe lang string - prefix : adr_
+$l['adr_page_head'] = 'Add Recipe';
+$l['adr_done'] = 'Recipe has been added';
+$l['adr_recipe_name'] = 'Recipe Name';
+$l['adr_recipe_name_exp'] = 'Name of your recipe. This will be displayed.';
+$l['adr_recipe_shell'] = 'Shell Type';
+$l['adr_recipe_shell_exp'] = 'Choose the shell type using which the recipe should be executed, default will be Bash shell (for windows leave default)';
+$l['adr_recipe_logo'] = 'Recipe Logo';
+$l['adr_recipe_logo_exp'] = 'URL of the logo for your recipe. This field is optional.';
+$l['adr_recipe_code'] = 'Enter your Recipe';
+$l['adr_recipe_code_exp'] = 'Enter the actual bash code here.<br /> NOTE : #!/bin/sh will be added automatically, you do not have to add it.<br /></br />You can use the following variables in the recipe:<br /><strong>{{vpsid}}</strong> : '.VM_SHORT.' ID<br /><strong>{{vps_name}}</strong> : VID<br /><strong>{{vps_hostname}}</strong> : '.VM_SHORT.' Hostname<br /><strong>{{username}}</strong> : User Email<br /><strong>{{root_pass}}</strong> : Root Password<br /><strong>{{ips}}</strong> : IPv4 IPs<br /><strong>{{ips6}}</strong> : IPv6 IPs<br /><strong>{{ips6_subnet}}</strong> : IPv6 subnets<br />';
+$l['adr_recipe_desc'] = 'Description';
+$l['adr_recipe_desc_exp'] = 'Enter your recipe description here';
+$l['adr_recipe_exist'] = 'The user already exists. Please enter a different email';
+
+// editrecipe lang string - prefix : edr_
+$l['edr_rid_not_found'] = 'Recipe ID not found';
+$l['edr_page_head'] = 'Edit Recipe';
+$l['edr_done'] = 'Recipe has been edited';
+$l['edr_not_owned'] = 'Recipe not owned by you';
+
+//Developer License
+$l['dev_license'] = 'Dev License';
+$l['dev_license_info'] = 'This installation of RAD_CLOUD is running under a Development License and is not authorized to be used for production use. Please report any cases of abuse to support@rad_cloud.com';
+
+$l['account'] = 'Account';
+$l['last_login'] = 'Last Login';
+$l['cpu_freq'] = 'CPU Hz';
+$l['utilized'] = 'Utilized';
+$l['per_utilized'] = 'Utilization %';
+$l['seabios_option'] = 'SeaBios (Default)';
+$l['uefi_option'] = 'UEFI (OVMF)';
+$l['lamp'] = 'LAMP';
+$l['lemp'] = 'LEMP';
+$l['llmp'] = 'LLMP';
+
+$l['remove_old_ssh_keys'] = 'Remove old SSH Keys';
+$l['remove_old_ssh_keys'] = 'Remove old SSH Keys';
+$l['remove_old_ssh_keys_exp'] = 'If checked then old ssh-keys will be removed from the '.VM_SHORT;
+
+$l['enduser_firewall_is_disabled'] = 'Firewall Manegement is disabled by Admin';
+$l['enduser_vps_poweroff_is_disabled'] = VM_SHORT.' Power Off is disabled by Admin';
+
+// Pending Setup ps_
+$l['setup_completion_started'] = VM_SHORT.' setup completion started';
+$l['ps_setup_pending'] = 'Awaiting Setup for '.VM_SHORT;
+$l['ps_invalid_setup_pending_request'] = 'Setup request is invalid! Please check with Admin';
+$l['ps_click_to_complete_setup'] = 'Click here to complete the setup';
+$l['ps_setup_pending_notice'] = 'Your '.VM_SHORT.' is still pending setup';
+
+//Firewall
+$l['fw_plan_name'] = 'Plan name';
+$l['fw_name_exp'] = 'Please provide plan name';
+$l['fw_default_policy'] = 'Default Policy';
+$l['fw_default_policy_exp'] = 'Set the default policy for traffic. You can set the default as ACCEPT / DROP and as per this policy default traffic will be Allowed / Denied respectively.';
+$l['drop'] = 'DROP';
+$l['accept'] = 'ACCEPT';
+$l['fw_port_placeholder'] = 'NONE or PORT';
+$l['fw_rules'] = 'Rules';
+$l['fw_plan_exists'] = 'Firewall Plan already exists';
+$l['fw_invalid_ipv4'] = 'Invalid IPv4 address';
+$l['fw_err_empty_rules'] = 'Please add rules then save them';
+$l['fw_heading'] = 'Firewall';
+$l['fw_edit'] = 'Edit Firewall';
+$l['fw_no_plan_change'] = 'No firewall plan selected';
+$l['fw_add_plan'] = 'Add Firewall Plan';
+$l['fw_list_plans'] = 'Firewall Plans';
+$l['fw_list_plans_exp'] = 'Select a firewall Plan';
+$l['fw_plan_added'] = 'Firewall Plan added successfully';
+$l['fw_plan_edited'] = 'Firewall Plan edited successfully';
+$l['fw_no_plans'] = 'No Firewall Plans';	
+$l['fw_delete'] = 'Firewall Plan deleted successfully';
+$l['unable_remove_firewall'] = 'Unable to remove firewall rules from '.VM_SHORT;
+$l['unable_apply_firewall'] = 'Unable to apply firewall rules for '.VM_SHORT;
+$l['fw_del_confirm']  = 'Are you sure you want to delete this Plan ?';
+$l['fw_no_plan_name'] = 'Plan name not specified';
+$l['fw_no_plan_selected'] = 'No plan selected';
+$l['fw_change_plan'] = 'Change Firewall Plan';
+$l['fw_direction_exp'] = 'Traffic direction';
+$l['fw_iptype_exp'] = 'IP version';
+$l['fw_no_rules_added'] = 'No rules added';
+$l['fw_invalid'] = 'Invalid Firewall Plan';
+$l['fw_change_plan_warn'] = 'Are you sure you want to change Firewall Plan?';
+$l['fw_remove_plan'] = 'Are you sure you want to remove Firewall rules?';
+$l['fw_rules_removed'] = 'Firewall rules removed successfully';
+$l['fw_plan_changed'] = 'Firewall Plan changed successfully';
+$l['fw_no_protocol'] = 'Please select the Protocol';
+$l['fw_need_direction'] = 'Please select the Direction (i.e. IN/OUT)';
+$l['fw_empty_sport'] = 'Source Port can not be empty';
+$l['fw_empty_dport'] = 'Destination Port can not be empty';
+$l['fw_empty_source_addr'] = 'Source/IP Address can not be empty';
+$l['user_suspended_3'] = 'Your current usage is {{total_usage}} while your balance is {{cur_bal}}. Please add funds to your account to unsuspend your account.';
+$l['not_allowed_ips_by_admin'] = 'Admin has restricted following IP(s) to be added in firewall rule: {{ips}}';
+$l['not_allowed_sports_by_admin'] = 'Admin has restricted following Source Port(s) to be added in firewall rule: {{sports}}';
+$l['not_allowed_dports_by_admin'] = 'Admin has restricted following Destination Port(s) to be added in firewall rule: {{dports}}';

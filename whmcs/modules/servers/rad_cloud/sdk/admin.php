@@ -4,23 +4,23 @@
 //===========================================================
 // api.php
 //===========================================================
-// SOFTACULOUS VIRTUALIZOR
+// SOFTACULOUS RAD_CLOUD
 // Version : 1.0
 // Inspired by the DESIRE to be the BEST OF ALL
 // ----------------------------------------------------------
 // Started by: Alons
 // Date:       8th Mar 2010
 // Time:       23:00 hrs
-// Site:       https://www.virtualizor.com/ (SOFTACULOUS VIRTUALIZOR)
+// Site:       https://www.rad_cloud.com/ (SOFTACULOUS RAD_CLOUD)
 // ----------------------------------------------------------
-// Please Read the Terms of use at https://www.virtualizor.com
+// Please Read the Terms of use at https://www.rad_cloud.com
 // ----------------------------------------------------------
 //===========================================================
 // (c)Softaculous Ltd.
 //===========================================================
 //////////////////////////////////////////////////////////////
 
-class rad_Admin_API {
+class Rad_cloud_Admin_API {
 	
 	var $key = '';
 	var $pass = '';

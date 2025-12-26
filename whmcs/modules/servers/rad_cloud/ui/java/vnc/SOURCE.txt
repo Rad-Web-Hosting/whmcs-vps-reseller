@@ -1,0 +1,10 @@
+TightVNC Java Viewer is available under the terms of the GNU GPL license.
+You can browse the source code here:
+
+  http://vnc-tight.svn.sourceforge.net/viewvc/vnc-tight/trunk/java/src/com/tightvnc/
+
+TightVNC Java Viewer uses JSch for SSH connectivity:
+
+  http://www.jcraft.com/jsch/
+
+For JSch licensing terms, see the LICENSE-jsch.txt file.
