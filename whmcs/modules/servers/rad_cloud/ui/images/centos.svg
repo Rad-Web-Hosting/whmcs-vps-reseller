@@ -1,53 +1,26 @@
-<svg
-   viewBox="0 0 42.333329 42.333329"
-   version="1.1"
-   id="svg5"
-   sodipodi:docname="centos-logo.svg"
-   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:cc="http://creativecommons.org/ns#">
-  <g
-     id="g902"
-     transform="matrix(1.0529091,0,0,1.0528868,-387.4921,265.98495)">
-    <ellipse
-       style="fill:#a14f8c;fill-opacity:1;stroke:none;stroke-width:1.32292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000"
-       id="ellipse894"
-       cx="435.07938"
-       cy="-124.14428"
-       inkscape:export-xdpi="13.06"
-       inkscape:export-ydpi="13.06"
-       rx="20.103001"
-       ry="20.103493"
-       transform="rotate(-15)" />
-    <g
-       id="g907"
-       transform="matrix(1.1500001,0,0,1.1500001,-53.772279,39.324566)">
-      <path
-         id="path896"
-         style="fill:#ffffff;fill-opacity:1;stroke-width:7.93746;stroke-linecap:round;paint-order:fill markers stroke;stop-color:#000000"
-         d="m 384.25717,-249.61659 -3.87493,3.87494 -5.47925,-4.5e-4 -4.5e-4,5.47974 -3.87454,3.87494 3.87454,3.87454 2e-4,5.47989 5.4795,-2e-4 3.87493,3.87493 3.87454,-3.87493 5.47994,-2.5e-4 -2.5e-4,-5.47944 3.87494,-3.87454 -3.87532,-3.87456 -5.47949,-5.47949 z m 1.17607,3.87454 v 4.18045 l -1.17607,1.17608 -1.17607,-1.17608 v -4.18005 z m -6.95928,1.90827 2.95599,2.95639 4.4e-4,1.66269 -1.66359,4.5e-4 -2.95599,-2.95639 z m -3.57142,6.27028 h 4.18045 l 1.17608,1.17608 -1.17608,1.17607 h -4.18045 z m 14.43444,0 h 4.18045 v 2.35215 h -4.18045 l -1.17608,-1.17607 z m -9.50341,3.93651 1.66316,1e-5 v 1.66314 l -2.95599,2.956 -1.66315,-1.66316 z m 7.18429,-2.3e-4 1.6629,2.4e-4 2.95599,2.95599 -1.66314,1.66314 -2.95599,-2.95599 z m -2.76069,1.14353 1.17607,1.17607 v 4.18046 h -2.35214 v -4.18046 z"
-         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
-      <path
-         id="path898"
-         style="fill:#efa724;fill-opacity:1;stroke-width:8.59212;stroke-linecap:round;paint-order:fill markers stroke;stop-color:#000000"
-         d="m 385.43324,-239.08983 -1.17607,1.03926 -1.17607,-1.03961 v 1.52668 h -1.52649 l 1.03941,1.17607 -1.03964,1.17608 h 1.52672 v 1.5264 l 1.17607,-1.03934 1.17607,1.03947 v -1.52653 h 1.52628 l -1.03921,-1.17604 1.0396,-1.17611 h -1.52667 z"
-         inkscape:export-xdpi="14.35"
-         inkscape:export-ydpi="14.35"
-         sodipodi:nodetypes="ccccccccccccccccc" />
-      <path
-         id="path900"
-         style="fill:#efa724;fill-opacity:1;stroke-width:6.14231;stroke-linecap:round;paint-order:fill markers stroke;stop-color:#000000"
-         d="m 388.13486,-245.73814 1.90493,1.90493 -2.95599,2.95599 7e-5,1.6631 1.66309,5e-5 2.95598,-2.95598 1.91153,1.91153 -0.003,-5.48309 z"
-         inkscape:export-xdpi="13.06"
-         inkscape:export-ydpi="13.06"
-         sodipodi:nodetypes="ccccccccc" />
-    </g>
-  </g>
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="40.000000pt" height="40.000000pt" viewBox="0 0 40.000000 40.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,40.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M220 293 l0 -47 30 29 c28 27 29 30 13 47 -29 32 -43 22 -43 -29z"/>
+<path d="M282 320 c11 -17 8 -25 -27 -62 l-40 -43 43 40 c37 35 45 38 62 27
+19 -11 20 -10 20 23 0 33 -2 35 -35 35 -33 0 -34 -1 -23 -20z"/>
+<path d="M275 250 l-29 -30 47 0 c51 0 61 14 29 43 -17 16 -20 15 -47 -13z"/>
+<path d="M30 216 c-11 -15 -11 -19 3 -34 11 -10 17 -12 17 -4 0 8 20 12 60 12
+33 0 60 4 60 10 0 6 -26 10 -59 10 -35 0 -61 5 -63 11 -2 7 -9 5 -18 -5z"/>
+<path d="M350 222 c0 -8 -20 -12 -60 -12 -33 0 -60 -4 -60 -10 0 -6 27 -10 60
+-10 40 0 60 -4 60 -12 0 -8 6 -6 17 5 16 16 16 18 0 34 -11 11 -17 13 -17 5z"/>
+<path d="M60 167 c0 -8 8 -21 18 -30 17 -16 20 -15 47 13 l29 30 -47 0 c-33 0
+-47 -4 -47 -13z"/>
+<path d="M137 143 c-33 -34 -39 -36 -58 -25 -19 12 -20 11 -17 -20 3 -29 7
+-33 36 -36 31 -3 32 -2 20 17 -11 18 -8 25 27 61 21 22 37 40 34 40 -2 0 -21
+-17 -42 -37z"/>
+<path d="M147 122 c-27 -28 -27 -29 -9 -45 31 -28 42 -21 42 28 0 25 -1 45 -3
+45 -2 0 -15 -13 -30 -28z"/>
+</g>
 </svg>
