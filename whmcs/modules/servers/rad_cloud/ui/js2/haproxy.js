@@ -1,6 +1,6 @@
-/*! Virtualizor (c) (Softaculous Ltd.) virtualizor.com/license */
+/*! Rad_cloud (c) (Softaculous Ltd.) rad_cloud.com/license */
 /*! HAProxy JS*/
-/*! Used in haproxy_theme.php, managevps_theme.php and virtualizor.js */
+/*! Used in haproxy_theme.php, managevps_theme.php and rad_cloud.js */
 /*! Created On: 11 May 2017 */
 
 var $vpses, $supported_protocols, $haproxydata, $arr_haproxy_src_ips, $servers;
@@ -19,7 +19,7 @@ function add_select2(id){
 	$('#'+id+' .chosen').select2({width:"100%"});
 }
 
-function listvpsforwardertbl(){//-
+function listvpsforwardertbl(){
 	var $tmp_ha = {};
 	var alert_entries = {};
 
@@ -59,11 +59,11 @@ function listvpsforwardertbl(){//-
 	cols["src_port"] = {"l" : "{{vdf_src_port}}"};
 	cols["dest_ip"] = {"l" : "{{vdf_dest_ip}}"};
 	cols["dest_port"] = {"l" : "{{vdf_dest_port}}"};
-	cols["actions"] = {"l" : "{{actions}}", "class" : "tbl_actions"};
+	cols["actions"] = {"l" : "{{actions}}"};
 	cols["select_all"] = {"l" : '<div class="custom-control custom-checkbox"><input type="checkbox" class="select_all custom-control-input" name="select_all" id="vdf_select_all" onclick=\"checkbox_select_all(this);\" /><label class="custom-control-label" for="vdf_select_all"></label></div>', "class" : "select-all-checkbox"};
 
 	// Form the TABLE
-	table({'id' : 'vdf_tbl_div', 'tid' : 'vps_forwarders_tbl', "width" : '100%'}, cols, $tmp_ha);
+	drawTable({'id' : 'vdf_tbl_div', 'tid' : 'vps_forwarders_tbl', "width" : '100%'}, cols, $tmp_ha);
 	apply_data_table('vps_forwarders_tbl');
 	
 	$(".scrollbar-virt").scrollbar();
@@ -595,7 +595,6 @@ function apply_data_table(fp_tid){
 };
 
 function processing_symb(show){
-	return true;
 	if(show == 1){
 		$("#processing_symb").css('display','block');
 	}else{

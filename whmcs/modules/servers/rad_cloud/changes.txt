@@ -1,3 +1,23 @@
+[2.3.5][09-10-2025]
+- Backups were not listed since 3.2.6+
+
+[2.3.3][25-03-2025]
+- Firewall related changes.
+- If all option of floating sidebar were disabled from admin side, at that time blank floating menu was shown to managevps. This is fixed.
+
+[2.3.2][23-09-2024]
+- Disable firewall setting was not hiding firewall option from enduser.
+
+[2.3.0][09-09-2024]
+- Updated module with new UI.
+
+[2.2.8][12-12-2023]
+ - Region selection was not working properly. This is fixed.
+[2.2.7][07-12-2023]
+ - RDNS entries were not getting deleted. This is fixed.
+[2.2.6][21-09-2023]
+ - Region issue fixed for non-billing user
+ - Added Fix for control panel
 [2.2.5][01-06-2023]
 Region issue Fixed
 [2.2.4][17-05-2023]
@@ -10,13 +30,13 @@ Region issue Fixed
  - PHP 8 support added
 [2.2.1][22-08-2022]
  - VNC was not working.
- - Added 'default_language' parameter in virtualizor_conf file which is used to set default language for enduser panel.
+ - Added 'default_language' parameter in rad_cloud_conf file which is used to set default language for enduser panel.
  - Some configurable options were not setting set.
 [2.2.0][31-03-2022]
  - If no ssh keys were present add ssh key button was not shown.
  - Maintenance mode page was not added.
- - Cloud module update latest version of virtualizor.
+ - Cloud module update latest version of rad_cloud.
  - Added plid support cloud user with billing enabled.
 [2.1.1][06-12-2021]
-- Updated module to latest version of virtualizor
+- Updated module to latest version of rad_cloud
 - Updated vnc and added paste option in novnc

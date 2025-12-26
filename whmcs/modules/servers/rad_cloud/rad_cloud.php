@@ -1,26 +1,26 @@
 <?php
-// Last updated : 01/06/2023
-// Version : 2.2.5
+// Last updated : 20/11/2025
+// Version : 2.3.6
 use WHMCS\Database\Capsule;
 use WHMCS\Auth;
 
-include_once('rad_conf.php');
+include_once('rad_cloud_conf.php');
 include_once('php/VPHP_class.php');
 include_once('php/ARRAYS_triat.php');
-include_once('functions.php');
-include_once('autoinstall.php');
+include_once(dirname(__FILE__).'/functions.php');
+// include_once('functions.php');
 include_once('sdk/enduser.php');
 
 
 function rad_cloud_ConfigOptions() {
 	
-	global $rad_conf, $whmcsmysql;	
+	global $rad_cloud_conf, $whmcsmysql;	
 	
 	// Get the Servers
 	$res = Capsule::table('tblservers')->where('type','rad_cloud')->get();
 	
 	if(empty($res)){
-		echo '<font color="#FF0000">The rad Cloud servers could not be found. Please add the rad Server and Server group to proceed</font>';
+		echo '<font color="#FF0000">The rad_cloud Cloud servers could not be found. Please add the Rad_cloud Server and Server group to proceed</font>';
 		return;
 	}
 	$server_list = array();
@@ -32,20 +32,20 @@ function rad_cloud_ConfigOptions() {
 	
 	# Should return an array of the module options for each product - Minimum of 24
 	$config_array = array(
-	 "Type" => array( "Type" => "dropdown", "Options" => "KVM"),
+	 "Type" => array( "Type" => "dropdown", "Options" => "OpenVZ,Xen PV,Xen HVM,KVM,XCP HVM,XCP PV,LXC,Virtuozzo OpenVZ,Virtuozzo KVM,Proxmox KVM,Proxmox OpenVZ,Proxmox LXC"),
 	 "Disk Space" => array( "Type" => "text", "Size" => "25", "Description" => "GB"),
 	 "Guaranteed RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB"),
-	 "Burstable RAM" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "MB (OpenVZ)"), 
-	 "SWAP RAM" => array( "Type" => "dropdown", 'Options' => '1024', 'Value' => '1024', 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "MB (Xen, XCP and KVM)"),
+	 "Burstable RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (OpenVZ)"), 
+	 "SWAP RAM" => array( "Type" => "text", "Size" => "25", "Description" => "MB (Xen, XCP and KVM)"), 
 	 "Bandwidth" => array( "Type" => "text", "Size" => "25", "Description" => "GB (Zero or empty for unlimited)"),
 	 "CPU Cores" => array( "Type" => "text", "Size" => "25", "Description" => ""),
 	 "VNC" => array( "Type" => "yesno", "Description" => "Enable VNC (Xen, XCP and KVM)"),
 	 "IPs" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPs"),
 	 "IPv6" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Address"),
-	 "Region" => array( "Type" => "dropdown", 'Options' => 'USA', 'Value' => 'USA', 'ReadOnly' => 'ReadOnly', "Size" => "25", "Description" => "The region to create the VPS in"),
+	 "Region" => array( "Type" => "text", "Size" => "25", "Description" => "The region to create the VPS in"),
 	 "IPv6 Subnets" => array( "Type" => "text", "Size" => "25", "Description" => "Number of IPv6 Subnets"),
-	 "Network Speed (KB)" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25"),
-	 "Upload Speed (KB)" => array( "Type" => "text", 'ReadOnly' => 'ReadOnly', "Size" => "25"),
+	 "Network Speed (KB)" => array( "Type" => "text", "Size" => "25"),
+	 "Upload Speed (KB)" => array( "Type" => "text", "Size" => "25"),
 	);
 	
 	// Get the product ID
@@ -58,11 +58,11 @@ function rad_cloud_ConfigOptions() {
 	//rprint($row);
 	
 	$configarray = array(
-		'rad Servers' => array("Type" => "dropdown", "Options" => implode(',', array_values($server_list)))
+		'Rad_cloud Servers' => array("Type" => "dropdown", "Options" => implode(',', array_values($server_list)))
 	);
 	
 	// If this is filled up then user is using the OLD method
-	if((!empty($row['configoption1']) && in_array($row['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))) || !empty($rad_conf['no_virt_plans'])){
+	if((!empty($row['configoption1']) && in_array($row['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))) || !empty($rad_cloud_conf['no_virt_plans'])){
 		
 		//array_values($server_list)
 		$tmp_type = array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC', 'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC');
@@ -71,7 +71,7 @@ function rad_cloud_ConfigOptions() {
 		$config_array['Type']['Options'] = implode(',', $tmp_type);
 		$configarray = $config_array;
 	
-	// If we get the rad server in configoption1, we will make an API call and load other fields
+	// If we get the Rad_cloud server in configoption1, we will make an API call and load other fields
 	}elseif(!empty($row['configoption1']) && in_array($row['configoption1'], array_values($server_list))){
 		
 		// Get the server ID
@@ -83,7 +83,7 @@ function rad_cloud_ConfigOptions() {
 			$tmp_hostname = $ser_data['ipaddress'];
 		}
 		
-		// Get the data from rad
+		// Get the data from rad_cloud
 		$data = VirtCloud_Curl::e_make_api_call($tmp_hostname, $ser_data['username'], get_server_pass_from_whmcs($ser_data['password']), 0, 'index.php?act=create');
 		//logActivity('data--: '.var_export($data, 1));
 		if(empty($data)){
@@ -142,14 +142,14 @@ function rad_cloud_ConfigOptions() {
 
 function rad_cloud_CreateAccount($params) {
 
-	global $rad_conf, $whmcsmysql;
+	global $rad_cloud_conf, $whmcsmysql;
 
 	# ** The variables listed below are passed into all module functions **
 	
 	$loglevel = (int) @$_REQUEST['loglevel'];
 	
-	if(!empty($rad_conf['loglevel'])){
-		$loglevel = $rad_conf['loglevel'];
+	if(!empty($rad_cloud_conf['loglevel'])){
+		$loglevel = $rad_cloud_conf['loglevel'];
 	}
 	
 	$serviceid = $params["serviceid"]; # Unique ID of the product/service in the WHMCS Database
@@ -204,7 +204,7 @@ function rad_cloud_CreateAccount($params) {
 	//$hvm = (preg_match('/hvm/is', $params['configoption1']) ? 1 : 0);
 	//$Nvirt = $virttype.(empty($hvm) ? '' : 'hvm');
 	
-	$ctrlpanel = (empty($params['configoptions'][v_fn('ctrlpanel')]) ? -1 : strtolower(trim($params['configoptions'][v_fn('ctrlpanel')])));
+	$ctrlpanel = (empty($params['configoptions'][v_fn('ctrlpanel')]) ? 'none' : strtolower(trim($params['configoptions'][v_fn('ctrlpanel')])));
 	if($loglevel > 0) logActivity('VIRT : '.$virttype.' - '.$hvm.' | '.$Nvirt);
 	if($loglevel > 0) logActivity(var_export($params, 1));
 	
@@ -219,44 +219,7 @@ function rad_cloud_CreateAccount($params) {
 	
 	$sgid = -1;
 	
-	// Server group selection
-	//$region = $params['configoption11'];
-	$region = $params['configoption2'];
-	$tmp_region = explode("-",$region);
-	$region = trim($tmp_region[1]);
-	if(!empty($params['configoptions']['Region'])){
-		$region = $params['configoptions']['Region'];
-	}
-	
-
-	// Is there a Region ?
-	if(!empty($region) && $region != 'auto'){
-		
-		foreach($data['servergroups'] as $k => $v){
-			
-			// Match the Server Group
-			if(trim(strtolower($v['sg_reseller_name'])) == trim(strtolower($region)) || trim(strtolower($v['sg_name'])) == trim(strtolower($region))){
-				$sgid = $k;
-			}
-			
-		}
-	
-		// OH SHIT ! We didnt find anything 
-		if(!isset($sgid)){
-			return 'Could not find the Region - '.$region.'. Please correct the <b>Product / Service</b> with the right slave server name.';
-		}
-		
-		if($loglevel > 1) logActivity('Region Chosen : '.$sgid);
-	
-	}
-	
 	$post = array();
-	
-	// Set the server group
-	$post['sgid'] = $sgid;
-	
-	$post['node_select'] = 1;
-	$post['server_group'] = $sgid;
 	
 	// Is there a control panel installation
 	if(!empty($ctrlpanel)){
@@ -285,6 +248,12 @@ function rad_cloud_CreateAccount($params) {
 	// Are you using NEW Method
 	if(!in_array($params['configoption1'], array('OpenVZ', 'Xen PV', 'Xen HVM', 'KVM', 'XCP HVM', 'XCP PV', 'LXC',  'Virtuozzo OpenVZ' , 'Virtuozzo KVM', 'Proxmox KVM', 'Proxmox OpenVZ', 'Proxmox LXC'))){
 
+		$region = $params['configoption2'];
+		$tmp_region = explode("-",$region);
+		$region = trim($tmp_region[1]);
+		if(!empty($params['configoptions']['Region'])){
+			$region = $params['configoptions']['Region'];
+		}
 		$new_module = true;
 		//Post values : Array ( [sgid] => -1 [node_select] => 1 [server_group] => -1 [control_panel] => -1 [user_email] => chirag@chirag.com [user_pass] => 7ZOg5.aHz(Wi72 )
 		$OS = strtolower(trim($params['configoptions'][v_fn('OS')]));
@@ -352,7 +321,7 @@ function rad_cloud_CreateAccount($params) {
 		$Nvirt = $data['ostemplates'][$post_osid]['Nvirt'];
 		$post['virt'] = $Nvirt;
 		
-		if(empty($rad_conf['vps_control']['custom_hname'])){
+		if(empty($rad_cloud_conf['vps_control']['custom_hname'])){
 			$post['hostname'] = $params['domain'];
 		}else{
 			// Select the Order ID
@@ -360,7 +329,7 @@ function rad_cloud_CreateAccount($params) {
 			
 			$hosting_details = (array) $res[0];
 			
-			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $rad_conf['vps_control']['custom_hname']);
+			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $rad_cloud_conf['vps_control']['custom_hname']);
 			if(preg_match('/(\{RAND(\d{1,3})\})/is', $post['hostname'], $matches)){
 				$post['hostname'] = str_replace($matches[1], generateRandStr($matches[2]), $post['hostname']);
 			}
@@ -404,12 +373,12 @@ function rad_cloud_CreateAccount($params) {
 		// Setup cPanel licenses if cPanel configurable option is set
 		if($ctrlpanel != -1 && $ctrlpanel != 'none'){
 		
-			if($ctrlpanel == 'cpanel' && !empty($rad_conf['cp']['buy_cpanel_login']) && !empty($rad_conf['cp']['buy_cpanel_apikey'])){
+			if($ctrlpanel == 'cpanel' && !empty($rad_cloud_conf['cp']['buy_cpanel_login']) && !empty($rad_cloud_conf['cp']['buy_cpanel_apikey'])){
 				logActivity("CPANEL : cPanel issued for ip $_ips[0] of ordertype $cpanel");
 				
 				$url = 'https://www.buycpanel.com/api/order.php?';
-				$login = 'login='.$rad_conf['cp']['buy_cpanel_login'].'&';
-				$key = 'key='.$rad_conf['cp']['buy_cpanel_apikey'].'&';
+				$login = 'login='.$rad_cloud_conf['cp']['buy_cpanel_login'].'&';
+				$key = 'key='.$rad_cloud_conf['cp']['buy_cpanel_apikey'].'&';
 				$domain = 'domain='.$params['domain'].'&';
 				$serverip = 'serverip='.$_ips[0].'&';
 				$ordertype = 'ordertype=10';
@@ -431,6 +400,13 @@ function rad_cloud_CreateAccount($params) {
 
 	// OLD METHOD
 	}else{
+
+		$region = $params['configoption11'];
+		$region = trim($region);
+		if(!empty($params['configoptions']['Region'])){
+			$region = $params['configoptions']['Region'];
+		}
+
 		$hvm = (preg_match('/hvm/is', $params['configoption1']) ? 1 : 0);
 		$Nvirt = $virttype.(empty($hvm) ? '' : 'hvm');
 		// Get the OS from the fields set
@@ -480,7 +456,7 @@ function rad_cloud_CreateAccount($params) {
 		}
 		
 		$post['virt'] = $Nvirt;
-		if(empty($rad_conf['vps_control']['custom_hname'])){
+		if(empty($rad_cloud_conf['vps_control']['custom_hname'])){
 			$post['hostname'] = $params['domain'];
 		}else{
 			// Select the Order ID
@@ -488,7 +464,7 @@ function rad_cloud_CreateAccount($params) {
 			
 			$hosting_details = (array) $res[0];
 			
-			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $rad_conf['vps_control']['custom_hname']);
+			$post['hostname'] = str_replace('{ID}', $hosting_details['orderid'], $rad_cloud_conf['vps_control']['custom_hname']);
 			if(preg_match('/(\{RAND(\d{1,3})\})/is', $post['hostname'], $matches)){
 				$post['hostname'] = str_replace($matches[1], generateRandStr($matches[2]), $post['hostname']);
 			}
@@ -534,12 +510,12 @@ function rad_cloud_CreateAccount($params) {
 		// Setup cPanel licenses if cPanel configurable option is set
 		if($ctrlpanel != -1 && $ctrlpanel != 'none'){
 		
-			if($ctrlpanel == 'cpanel' && !empty($rad_conf['cp']['buy_cpanel_login']) && !empty($rad_conf['cp']['buy_cpanel_apikey'])){
+			if($ctrlpanel == 'cpanel' && !empty($rad_cloud_conf['cp']['buy_cpanel_login']) && !empty($rad_cloud_conf['cp']['buy_cpanel_apikey'])){
 				//logActivity("CPANEL : cPanel issued for ip $_ips[0] of ordertype $cpanel");
 				
 				$url = 'https://www.buycpanel.com/api/order.php?';
-				$login = 'login='.$rad_conf['cp']['buy_cpanel_login'].'&';
-				$key = 'key='.$rad_conf['cp']['buy_cpanel_apikey'].'&';
+				$login = 'login='.$rad_cloud_conf['cp']['buy_cpanel_login'].'&';
+				$key = 'key='.$rad_cloud_conf['cp']['buy_cpanel_apikey'].'&';
 				$domain = 'domain='.$params['domain'].'&';
 				$serverip = 'serverip='.$_ips[0].'&';
 				$ordertype = 'ordertype=10';
@@ -556,6 +532,34 @@ function rad_cloud_CreateAccount($params) {
 			}
 		}
 	}
+
+	// Is there a Region ?
+	if(!empty($region) && $region != 'auto'){
+		
+		foreach($data['servergroups'] as $k => $v){
+			
+			// Match the Server Group
+			if(trim(strtolower($v['sg_reseller_name'])) == trim(strtolower($region)) || trim(strtolower($v['sg_name'])) == trim(strtolower($region))){
+				$sgid = $k;
+			}
+			
+		}
+	
+		// OH SHIT ! We didnt find anything 
+		if(!isset($sgid)){
+			return 'Could not find the Region - '.$region.'. Please correct the <b>Product / Service</b> with the right slave server name.';
+		}
+		
+		if($loglevel > 1) logActivity('Region Chosen : '.$sgid);
+	
+	}
+
+	// Server group selection
+	// Set the server group
+	$post['sgid'] = $sgid;
+	
+	$post['node_select'] = 1;
+	$post['server_group'] = $sgid;
 
 	$numips = (empty($params['configoptions'][v_fn('ips')]) || $params['configoptions'][v_fn('ips')] == 0 ? ( empty($new_module) ? $params['configoption9'] : 0 )  : $params['configoptions'][v_fn('ips')]);
 	$numips6 = (empty($params['configoptions'][v_fn('ips6')]) || $params['configoptions'][v_fn('ips6')] == 0 ? ( empty($new_module) ? $params['configoption10'] : 0 ) : $params['configoptions'][v_fn('ips6')]);
@@ -620,6 +624,12 @@ function rad_cloud_CreateAccount($params) {
 		$post['upload_speed'] = $params['configoptions'][v_fn('upload_speed')];
 	}
 
+	// Add user custom ssh key
+	if(!empty($params['customfields']['sshkey'])){
+		$post['sshkey'] = $params['customfields']['sshkey'];
+		$post['ssh_options'] = 'add_ssh_keys';
+	}
+
 	//logActivity('post : '.var_export($post, 1));
 	
 	$ret = VirtCloud_Curl::call($params["serverip"], $params["serverusername"], $params["serverpassword"], 'index.php?act=create', $post);
@@ -631,7 +641,7 @@ function rad_cloud_CreateAccount($params) {
 	// Was the VPS Inserted
 	if(!empty($ret['newvs']['vpsid'])){
 		
-		// vpsid of rad
+		// vpsid of rad_cloud
 		$query = Capsule::table('tblcustomfields')
 			->where('relid',$pid)
 			->where('fieldname','vpsid')
@@ -727,18 +737,18 @@ function rad_cloud_CreateAccount($params) {
 
 function rad_cloud_TerminateAccount($params) {
 
-	global $rad_conf, $whmcsmysql;
+	global $rad_cloud_conf, $whmcsmysql;
 	
-	$ctrlpanel = (empty($params['configoptions'][v_fn('ctrlpanel')]) ? -1 : $params['configoptions'][v_fn('ctrlpanel')]);
+	$ctrlpanel = (empty($params['configoptions'][v_fn('ctrlpanel')]) ? 'none' : $params['configoptions'][v_fn('ctrlpanel')]);
 	
-	if(!empty($rad_conf['admin_ui']['disable_terminate'])){
+	if(!empty($rad_cloud_conf['admin_ui']['disable_terminate'])){
 		return 'Termination has been disabled by the Global Administrator';
 	}
 
 	// Setup cPanel licenses if cPanel configurable option is set
 	if($ctrlpanel != -1 && $ctrlpanel != 'none'){
 		
-		if($ctrlpanel == 'cpanel' && !empty($rad_conf['cp']['buy_cpanel_login']) && !empty($rad_conf['cp']['buy_cpanel_apikey'])){
+		if($ctrlpanel == 'cpanel' && !empty($rad_cloud_conf['cp']['buy_cpanel_login']) && !empty($rad_cloud_conf['cp']['buy_cpanel_apikey'])){
 		
 			$data = VirtCloud_Curl::call($params["serverip"], $params["serverusername"], $params["serverpassword"], 'index.php?act=listvs');
 
@@ -749,8 +759,8 @@ function rad_cloud_TerminateAccount($params) {
 			//logActivity("CPANEL : cPanel delete for ip $_ips[0]");
 			
 			$url = 'https://www.buycpanel.com/api/cancel.php?';
-			$login = 'login='.$rad_conf['cp']['buy_cpanel_login'].'&';
-			$key = 'key='.$rad_conf['cp']['buy_cpanel_apikey'].'&';
+			$login = 'login='.$rad_cloud_conf['cp']['buy_cpanel_login'].'&';
+			$key = 'key='.$rad_cloud_conf['cp']['buy_cpanel_apikey'].'&';
 			$currentip = 'currentip='.$cpanel_ip.'&';
 			$url .= $login.$key.$currentip;
 			
@@ -773,7 +783,7 @@ function rad_cloud_TerminateAccount($params) {
 	// If the VPS has been deleted
 	if (!empty($data['delvs']['done'])) {
 	
-		// vpsid of rad
+		// vpsid of rad_cloud
 		$query = Capsule::table('tblcustomfields')
 			->select('id')
 			->where('relid',$params["pid"])
@@ -963,14 +973,14 @@ function rad_cloud_ChangePassword($params) {
 
 function rad_cloud_ChangePackage($params) {
 
-	global $rad_conf;
+	global $rad_cloud_conf;
 	
 	$loglevel = (int) @$_REQUEST['loglevel'];
 	
 	$serviceid = $params["serviceid"]; # Unique ID of the product/service in the WHMCS Database
 	
-	if(!empty($rad_conf['loglevel'])){
-		$loglevel = $rad_conf['loglevel'];
+	if(!empty($rad_cloud_conf['loglevel'])){
+		$loglevel = $rad_cloud_conf['loglevel'];
 	}
 
 	// Get the Data
@@ -1198,12 +1208,12 @@ function rad_cloud_ChangePackage($params) {
 }
 
 function rad_cloud_AdminLink($params) {
-	$code = '<a href="https://'.$params["serverip"].':4083/index.php?act=login" target="_blank">Rad Panel</a>';
+	$code = '<a href="https://'.$params["serverip"].':4083/index.php?act=login" target="_blank">Rad_cloud Panel</a>';
 	return $code;
 }
 
 function rad_cloud_LoginLink($params) {
-	$code =  "<a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\" style=\"color:#cc0000\">Login to Rad</a>";
+	$code =  "<a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\" style=\"color:#cc0000\">Login to Rad_cloud</a>";
 	
 	return $code;
 }
@@ -1252,7 +1262,7 @@ class VirtCloud_Curl {
 	
 	public static function call($ip, $userkey, $pass, $path, $post = array(), $cookies = array()){
 
-		$v = new rad_Enduser_Cloud_API($ip, $userkey, $pass);
+		$v = new Rad_cloud_Enduser_Cloud_API($ip, $userkey, $pass);
 		
 		return $v->call($path, $post, $cookies);
 		
@@ -1260,7 +1270,7 @@ class VirtCloud_Curl {
 	
 	static function make_api_call($ip, $pass, $path, $data = array(), $post = array(), $cookies = array()){
 		
-		global $rad_conf, $whmcsmysql;
+		global $rad_cloud_conf, $whmcsmysql;
 		
 		$key = generateRandStr(8);
 		$apikey = make_apikey($key, $pass);
@@ -1274,7 +1284,7 @@ class VirtCloud_Curl {
 			$url .= '&apidata='.rawurlencode(base64_encode(serialize($data)));
 		}
 	
-		if($rad_conf['loglevel'] > 0){
+		if($rad_cloud_conf['loglevel'] > 0){
 			logActivity('URL : '. $url);
 		}
 		
@@ -1335,7 +1345,7 @@ class VirtCloud_Curl {
 
 	public static function e_make_api_call($ip, $userkey, $pass, $vid, $path, $post = array()){
 		
-		$v = new rad_Enduser_Cloud_API($ip, $userkey, $pass);
+		$v = new Rad_cloud_Enduser_Cloud_API($ip, $userkey, $pass);
 		$path = $path.'&skip_callback=whmcs';
 		if(!empty($vid)){
 			$path = $path.'&svs='.$vid;
@@ -1373,7 +1383,7 @@ class VirtCloud_Curl {
 
 function rad_cloud_ClientArea($params) {
 	
-	global $virt_action_display, $virt_errors, $virt_resp, $rad_conf, $whmcsmysql;
+	global $virt_action_display, $virt_errors, $virt_resp, $rad_cloud_conf, $whmcsmysql;
 	
 	return rad_cloudUI($params);
 
@@ -1381,40 +1391,41 @@ function rad_cloud_ClientArea($params) {
 
 function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetails', $modules_url = 'modules/servers'){
 	
-	global $virt_action_display, $virt_errors, $virt_resp, $rad_conf, $whmcsmysql;
+	global $virt_action_display, $virt_errors, $virt_resp, $rad_cloud_conf, $whmcsmysql, $l;
 	
 	//Is the VPS there?
 	if(empty($params['customfields']['vpsid'])){
 		return 'VPS not Provisioned';
 	}
 	
-	// New method of rad Module
+	// New method of Rad_cloud Module
 	if(isset($_GET['give'])){
 		
-		$var['APP'] = 'rad';
+		$var['APP'] = 'Rad_cloud';
 		$var['site_name'] = 'WHMCS';
 		$var['API'] = $url_prefix.'&id='.$params['serviceid'].'&api=json&';		
 		$var['giver'] = $url_prefix.'&id='.$params['serviceid'].'&';
 		$var['url'] = $url_prefix.'&id='.$params['serviceid'].'&';
-		$var['copyright'] = 'rad';
-		$var['version'] = '2.2.5';
+		$var['copyright'] = 'Rad_cloud';
+		$var['version'] = '2.3.6';
 		$var['logo'] = '';
 		$var['theme'] = $modules_url.'/rad_cloud/ui/';
 		$var['theme_path'] = dirname(__FILE__).'/ui/';
 		$var['images'] = $var['theme'].'images/';
+		$var['svg'] = $var['theme'].'images/svgset/';
 		$var['virt_dev_license'] = ' ';
 		$var['virt_pirated_license'] = ' ';
 
 		// For short name of VPS
-		if(!empty($rad_conf['vm_short'])){
-			define('VM_SHORT', $rad_conf['vm_short']);
+		if(!empty($rad_cloud_conf['vm_short'])){
+			define('VM_SHORT', $rad_cloud_conf['vm_short']);
 		}else{
 			define('VM_SHORT', 'VPS');
 		}
 
 		// For long name of VPS
-		if(!empty($rad_conf['vm_long'])){
-			define('VM_LONG', $rad_conf['vm_long']);
+		if(!empty($rad_cloud_conf['vm_long'])){
+			define('VM_LONG', $rad_cloud_conf['vm_long']);
 		}else{
 			define('VM_LONG', 'Virtual Server');
 		}
@@ -1439,22 +1450,15 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 			$jspath = $var['theme_path'].'js2/';
 			$files = array('jquery.min.js',
 							'jquery.dataTables.min.js',
-							'jquery.tablesorter.min.js',
-							'jquery.flot.min.js',
-							'jquery.flot.pie.min.js',
-							'jquery.flot.stack.min.js',
-							'jquery.flot.time.min.js',
-							'jquery.flot.tooltip.min.js',
-							'jquery.flot.symbol.min.js',
-							'jquery.flot.axislabels.js',
-							'jquery.flot.selection.min.js',
-							'jquery.flot.resize.min.js',
+							'dataTables.tailwindcss.js',
 							'jquery.scrollbar.min.js',
-							'popper.min.js',
+							'apexcharts.min.js',
 							'select2.js',
-							'bootstrap.min.js',
-							'jquery.responsivetabs.js',
-							'rad.js',
+							'countries.js',	
+							'jquery-simple-tree-table.js',
+							'flowbite.min.js',
+							'datepicker-full.min.js',
+							'rad_cloud.js',
 							'haproxy.js',
 						);
 						
@@ -1471,7 +1475,7 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 			header("Content-type: text/javascript; charset: UTF-8");
 			
 			// Set a zero Mtime
-			$filetime = filemtime($var['theme_path'].'/js2/rad.js');
+			$filetime = filemtime($var['theme_path'].'/js2/rad_cloud.js');
 			
 		}
 		
@@ -1481,11 +1485,16 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 			$data = '';
 			$jspath = $var['theme_path'].'css2/';
 			$files = array('bootstrap.min.css',
+							'./fonts/inter/inter.css',
+							'flowbite.min.css',
+							'tailwind.css',
+							'apexcharts.css',
 							'all.min.css',
 							'jquery.dataTables.min.css',
 							'select2.css',
 							'jquery.scrollbar.css',
 							'style.css',
+							'billing.css',
 						);
 			foreach($files as $k => $v){
 				$data .= file_get_contents($jspath.'/'.$v)."\n\n";
@@ -1507,8 +1516,8 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 		$lang = $params['clientsdetails']['language'];
 		
 		// Sets the language preferred by the clients 
-		if(!empty($rad_conf['default_language'])){
-			$lang = $rad_conf['default_language'];
+		if(!empty($rad_cloud_conf['default_language'])){
+			$lang = $rad_cloud_conf['default_language'];
 		}
 		
 		// Parse the languages
@@ -1527,7 +1536,7 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 		$_GET['SET_REMOTE_IP'] = $_SERVER['REMOTE_ADDR'];
 		
 		// The list of the VPS Action allowed for VPS USER ONLY !!!
-		$vps_actions = array('vpsmanage', 'usersettings', 'managezone', 'tasks', 'self_shutdown', 'logs', 'system_alerts', 'statuslogs', 'stop', 'restart', 'start', 'poweroff', 'backup', 'rescue', 'ostemplate', 'monitor', 'cpu', 'ram', 'processes', 'disk', 'services', 'performance', 'ssh', 'console', 'statuslogs', 'system_alerts', 'logs', 'bandwidth', 'changepassword', 'controlpanel', 'hostname', 'rdns', 'vnc', 'vncpass', 'ips', 'hvmsettings', 'listrecipes', 'managezone', 'managesubnets', 'tasks', 'backup2', 'addiso', 'euiso', 'managevdf', 'sshkeys', 'webuzo', 'editsshkey');		
+		$vps_actions = array('vpsmanage', 'usersettings', 'managezone', 'tasks', 'self_shutdown', 'logs', 'system_alerts', 'statuslogs', 'stop', 'restart', 'start', 'poweroff', 'backup', 'rescue', 'ostemplate', 'monitor', 'cpu', 'ram', 'processes', 'disk', 'services', 'performance', 'ssh', 'console', 'statuslogs', 'system_alerts', 'logs', 'bandwidth', 'changepassword', 'controlpanel', 'hostname', 'rdns', 'vnc', 'vncpass', 'ips', 'hvmsettings', 'listrecipes', 'managezone', 'managesubnets', 'tasks', 'backup2', 'addiso', 'euiso', 'managevdf', 'sshkeys', 'webuzo', 'editsshkey', 'firewallplan','addfirewallplan','editfirewallplan');		
 
 		if(!in_array($_GET['act'], $vps_actions)){
 			$_GET['act'] = 'vpsmanage';
@@ -1612,7 +1621,7 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 			if($virttype != 'xcp'){
 				
 				if(!empty($response['info']['port']) && !empty($response['info']['ip']) && !empty($response['info']['password'])){	
-					$applet = '<APPLET ARCHIVE="https://s2.softaculous.com/a/virtualizor/files/VncViewer.jar" CODE="com.tigervnc.vncviewer.VncViewer" WIDTH="1" HEIGHT="1">
+					$applet = '<APPLET ARCHIVE="https://s2.softaculous.com/a/rad_cloud/files/VncViewer.jar" CODE="com.tigervnc.vncviewer.VncViewer" WIDTH="1" HEIGHT="1">
 						<PARAM NAME="HOST" VALUE="'.$response['info']['ip'].'">
 						<PARAM NAME="PORT" VALUE="'.$response['info']['port'].'">
 						<PARAM NAME="PASSWORD" VALUE="'.$response['info']['password'].'">
@@ -1623,7 +1632,7 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 				}else{
 				
 				if(!empty($response['info']['port']) && !empty($response['info']['ip'])){
-					$applet = '<APPLET ARCHIVE="https://s2.softaculous.com/a/virtualizor/files/TightVncViewer.jar" CODE="com.tightvnc.vncviewer.VncViewer" WIDTH="1" HEIGHT="1">
+					$applet = '<APPLET ARCHIVE="https://s2.softaculous.com/a/rad_cloud/files/TightVncViewer.jar" CODE="com.tightvnc.vncviewer.VncViewer" WIDTH="1" HEIGHT="1">
 						<PARAM NAME="SOCKETFACTORY" value="com.tightvnc.vncviewer.SshTunneledSocketFactory">
 						<PARAM NAME="SSHHOST" value="'.$response['info']['ip'].'">
 						<PARAM NAME="HOST" value="localhost">
@@ -1640,16 +1649,16 @@ function rad_cloudUI($params, $url_prefix = 'clientarea.php?action=productdetail
 		
 	}
 	
-	if(!empty($rad_conf['client_ui']['direct_login'])){
-		return "<center><a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\">Login to rad</a></center>";
+	if(!empty($rad_cloud_conf['client_ui']['direct_login'])){
+		return "<center><a href=\"https://".$params["serverip"].":4083/\" target=\"_blank\">Login to Rad_cloud</a></center>";
 	}
 
 	$code .= '<script data-cfasync="false" type="text/javascript">
 		
 function iResize(){
 	try{
-		document.getElementById("rad_manager").style.height = 
-		document.getElementById("rad_manager").contentWindow.document.body.offsetHeight + "px";
+		document.getElementById("rad_cloud_manager").style.height = 
+		document.getElementById("rad_cloud_manager").contentWindow.document.body.offsetHeight + "px";
 	}catch(e){ };
 }
 
@@ -1663,21 +1672,58 @@ $(document).ready(function(){
 	}
 	
 	var myDiv = document.createElement("div");
-	myDiv.id = "rad_load_div";
-	myDiv.innerHTML = \'<center style="padding:10px; background-color: #FAFBD9;">Loading Panel options ...</center><br /><br /><br />\';
+	myDiv.id = "rad_cloud_load_div";
+	myDiv.innerHTML = \'<div class="progress-bar-value"></div><br /><br /><br />\';
 	document.getElementById(divID).appendChild(myDiv);
+	var loadingContainer = myDiv.querySelector(".progress-bar-value");
+	
+	// Apply styles to the progress-bar-value element
+	loadingContainer.style.width = "100%";
+	loadingContainer.style.height = "4px"; // Adjust height as needed
+	loadingContainer.style.backgroundColor = "#0075ff";
+	loadingContainer.style.animation = "indeterminateAnimation 2s infinite linear";
+	loadingContainer.style.transformOrigin = "0% 50%";
+
+    	// Add the keyframes for the animation
+    	var styleSheet = document.createElement("style");
+    	styleSheet.type = "text/css";
+    	styleSheet.innerText = `
+        @keyframes indeterminateAnimation {
+            0% {
+                transform: translateX(0) scaleX(0);
+            }
+            40% {
+                transform: translateX(0) scaleX(0.4);
+            }
+            100% {
+                transform: translateX(100%) scaleX(0);
+            }
+        }
+        .progress-bar-value {
+            padding: 2px;
+            transform-origin: 0% 50%;
+        }
+    `;
+    	document.head.appendChild(styleSheet);
 	
 	var iframe = document.createElement("iframe");
-	iframe.id = "rad_manager";
+	// If we get the div with rad_cloud_manager then do not create new element
+	if(document.getElementById("rad_cloud_manager")){
+		iframe = document.getElementById("rad_cloud_manager");
+	}else{
+		var iframe = document.createElement("iframe");
+		iframe.id = "rad_cloud_manager";
+	}
 	iframe.width = "100%";
 	iframe.style.display = "none";
 	iframe.style.border = "none";
+	iframe.style.background = "#ffffff";
 	iframe.scrolling = "no";
 	iframe.src = "'.$url_prefix.'&id='.$params['serviceid'].'&give=index.html#act=vpsmanage";
 	document.getElementById(divID).appendChild(iframe);
 	
-	$("#rad_manager").load(function(){
-		$("#rad_load_div").hide();
+	$("#rad_cloud_manager").load(function(){
+		$("#rad_cloud_load_div").hide();
 		$(this).show();
 		iResize();
 	});
@@ -3009,7 +3055,7 @@ function rad_cloud_TestConnection($params){
 	$data = VirtCloud_Curl::call($host, $params['serverusername'], $params['serverpassword'], 'index.php?act=listvs');
 			
 	if(empty($data) || $data['act'] == 'login'){
-		return array('error' => 'FAILED: Could not connect to rad. Please make sure that all Ports from 4081 to 4085 are open on your WHMCS Server or please check the server details entered are as displayed on Cloud Panel >> API Credentials');
+		return array('error' => 'FAILED: Could not connect to Rad_cloud. Please make sure that all Ports from 4081 to 4085 are open on your WHMCS Server or please check the server details entered are as displayed on Cloud Panel >> API Credentials');
 	}else{
 		return array('success' => true);
 	}    

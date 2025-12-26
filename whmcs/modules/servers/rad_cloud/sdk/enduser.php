@@ -1,27 +1,6 @@
 <?php
 
-//////////////////////////////////////////////////////////////
-//===========================================================
-// enduser.php (API)
-//===========================================================
-// SOFTACULOUS rad
-// Version : 1.0
-// Inspired by the DESIRE to be the BEST OF ALL
-// ----------------------------------------------------------
-// Started by: Alons
-// Date:       8th Mar 2010
-// Time:       23:00 hrs
-// Site:       https://www.virtualizor.com/ (SOFTACULOUS rad)
-// ----------------------------------------------------------
-// Please Read the Terms of use at https://www.virtualizor.com
-// ----------------------------------------------------------
-//===========================================================
-// (c)Softaculous Ltd.
-//===========================================================
-//////////////////////////////////////////////////////////////
-
-
-class rad_Enduser_Cloud_API {
+class Rad_cloud_Enduser_Cloud_API {
 	
 	var $key = '';
 	var $pass = '';
@@ -134,7 +113,7 @@ class rad_Enduser_Cloud_API {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 			
 		// UserAgent
-		curl_setopt($ch, CURLOPT_USERAGENT, 'rad');
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Rad_cloud');
 		
 		// Cookies
 		if(!empty($cookies)){
@@ -1217,7 +1196,7 @@ class rad_Enduser_Cloud_API {
 	/** 
 	 * VPS Domain Forwarding 
 	 * 
-	 * @author Ali <ali@virtualizor.com>
+	 * @author Ali <ali@rad_cloud.com>
 	 * @param int $vid: The VPS ID 
 	 * @param array $post : Array of VDF record id to be deleted
 	 * @return array of domain forwarding records
@@ -1232,7 +1211,7 @@ class rad_Enduser_Cloud_API {
 	/** 
 	 * Create SSH Key
 	 * 
-	 * @author Ali <ali@virtualizor.com>
+	 * @author Ali <ali@rad_cloud.com>
 	 * @param array $post : Array of name(SSH_KEY) and value(SSH KEY VALUE) 
 	 * @return array containing the message  "The SSH key has been added successfully"
 	*/
@@ -1247,7 +1226,7 @@ class rad_Enduser_Cloud_API {
 	/** 
 	 * Edit SSH Key
 	 * 
-	 * @author Ali <ali@virtualizor.com>
+	 * @author Ali <ali@rad_cloud.com>
 	 * @param int $keyid
 	 * @param array $post : Array of name(SSH_KEY) and value(SSH KEY VALUE) 
 	 * @return array containing the message "The SSH key has been saved successfully"
@@ -1263,7 +1242,7 @@ class rad_Enduser_Cloud_API {
 	/** 
 	 * SSH Key
 	 * 
-	 * @author Ali <ali@virtualizor.com>
+	 * @author Ali <ali@rad_cloud.com>
 	 * @param array $post : Array of ssh key id to be deleted (Optional)
 	 * @return array 
 	*/
@@ -1282,7 +1261,7 @@ class rad_Enduser_Cloud_API {
 	/** 
 	 * Apply SSH Key
 	 * 
-	 * @author Ali <ali@virtualizor.com>
+	 * @author Ali <ali@rad_cloud.com>
 	 * @param int $vid	The VPS id
 	 * @param array $post : Array of ssh key id to be Applied
 	 * @return array 
@@ -1304,7 +1283,7 @@ class rad_Enduser_Cloud_API {
 	/** 
 	 * Install Webuzo Script
 	 * 
-	 * @author Ali <ali@virtualizor.com>
+	 * @author Ali <ali@rad_cloud.com>
 	 * @param int $vid	The VPS id
 	 * @param array $post 
 	 * @return array 
@@ -1325,7 +1304,7 @@ class rad_Enduser_Cloud_API {
 // Examples
 //////////////
 
-//$v = new rad_Enduser_Cloud_API('127.0.0.1', '16_BIT_API_KEY', '32_BIT_API_PASS');
+//$v = new Rad_cloud_Enduser_Cloud_API('127.0.0.1', '16_BIT_API_KEY', '32_BIT_API_PASS');
 
 // Get the list of the VPS
 //$v->r($v->listvs());

@@ -1,0 +1,92 @@
+
+/* Regional Plans Div Header */
+
+/* Regional Plans Div Header Title */
+
+.ihb_plan_title{
+color: #0404FC;
+font-size: 20px;
+font-family: poppins;
+font-weight: 500;
+}
+
+/* Individual Regional Plan */
+.ihb_regpl{
+background-color: #FFF;
+margin: 5px auto;
+cursor: pointer;
+padding: 0px;
+border: 1px solid #dee2e6;
+transition: all .5s;
+box-shadow: none;
+}
+
+/* Individual Regional Plan Name */
+.ihb_regpl_name{
+padding: 10px;
+font-size: 20px;
+font-weight: 500;
+border-bottom: 1px solid #dee2e6;
+}
+
+/* Individual Regional Plan Data */
+.ihb_regpl_dat{
+font-size:12px;
+}
+
+/* Individual Regional Plan Pricing Div */
+
+
+/* Individual Regional Plan Monthly Pricing */
+.ihb_pl_mprice{
+font-size: 18px;
+color:#0068fd;
+}
+
+/* Individual Regional Plan Hourly Pricing */
+.ihb_pl_hprice{
+font-size: 15px;
+}
+
+/* Individual Regional Plan Data Single Row */
+.ihb_rpd_val{
+font-size:14px;
+}
+
+/* The selected plan */
+
+.ihb_plans_container{
+padding: 0px;
+}
+
+/* --------------------------------------------------  */
+
+.ihb_pl_mprice,
+.ihb_pl_hprice,
+.ihb_regpl,
+.ihb_regpl_pricing,
+.ihb_regpl_name,
+.ihb_plan_title,
+.ihb_slctd_pl{
+font-family: poppins;
+text-align: center;
+}
+
+.plan-title{
+font-size: 16px;
+}
+
+.ihb_regpl_selected{
+background-color: #FFF;
+height: 3px;
+border-radius: 2px;
+}
+
+.ihb_slctd_pl .ihb_regpl_selected{
+background-color: #0068fd;
+}
+
+.ihb_slctd_pl{
+box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+

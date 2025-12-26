@@ -24,7 +24,8 @@ const UI = {
 
     connected: false,
     desktopName: "",
-
+    manual_disconnect: false,
+    
     statusTimeout: null,
     hideKeyboardTimeout: null,
     idleControlbarTimeout: null,
@@ -988,10 +989,25 @@ const UI = {
             UI.rfb.sendString(document.getElementById('noVNC_clipboard_text').value);           
         }
          
-        /*window.addEventListener('paste', evt => {
-            var clip = evt.clipboardData.getData("Text");
-            UI.rfb.sendString(clip);
-        });*/
+        
+
+    },
+
+    reconnect_register(){
+
+        if(UI.manual_disconnect){
+            clearInterval(reconnect_interval);
+            return true;
+        }else{
+            var reconnect_interval = setInterval(try_reconnect, 1000);
+            function try_reconnect(){
+                if(document.getElementById('noVNC_connect_button')){
+                    UI.connect();
+                }else{
+                    clearInterval(reconnect_interval);
+                }
+            }
+        }
 
     },
 
@@ -1058,10 +1074,12 @@ const UI = {
         UI.rfb.compressionLevel = parseInt(UI.getSetting('compression'));
         UI.rfb.showDotCursor = UI.getSetting('show_dot');
         UI.register_paste_event();
+        UI.reconnect_register();
         UI.updateViewOnly(); // requires UI.rfb
     },
 
     disconnect() {
+        UI.manual_disconnect = true;
         UI.rfb.disconnect();
 
         UI.connected = false;
@@ -1070,7 +1088,7 @@ const UI = {
         UI.inhibitReconnect = true;
 
         UI.updateVisualState('disconnecting');
-
+        UI.reconnect_register();
         // Don't display the connection settings until we're actually disconnected
     },
 
