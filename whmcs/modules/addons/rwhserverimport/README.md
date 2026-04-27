@@ -27,26 +27,26 @@ To enable Rad Cloud Server Import addon module for WHMCS, follow the steps:
 
 1.  Navigate to the Addon Modules settings interface (Access from '/whmcs/your_admin/configaddonmods.php', where "your_admin" is the WHMCS admin directory).
 2.  Click the "Activate" button corresponding with the "Rad Cloud Server Import" module:  
-    ![Activate Rad Cloud Server Import addon module](https://imgur.com/lZHPekv)
+    ![Activate Rad Cloud Server Import addon module](https://i.imgur.com/lZHPekv.png)
 3.  Click "Configure" to configure the module access group.
 4.  Choose "Full Administrator" and click "Save Changes" to enable the settings:  
-    ![Configure access for the ](https://imgur.com/fyhcQi3)
+    ![Configure access for the ](https://i.imgur.com/fyhcQi3.png)
 5.  Navigate to 'Rad Cloud Server Import' from the Addons dropdown menu:  
-    ![Navigate to Rad Cloud Server Importer from addons menu](https://imgur.com/MWtQUID)
+    ![Navigate to Rad Cloud Server Importer from addons menu](https://i.imgur.com/MWtQUID.png)
 6.  (STEP 1) From the Rad Cloud Server Import Manager, click "Continue" to initiate Rad Cloud Server Import process:  
-    ![initiate Rad Cloud Server Import addon module](https://imgur.com/q4KVZGi)
+    ![initiate Rad Cloud Server Import addon module](https://i.imgur.com/q4KVZGi.png)
 7.  (STEP 2) Configure the Import Settings according to your preferences:  
-    ![Step 2: Configure import settings](https://imgur.com/655LoiL)
+    ![Step 2: Configure import settings](https://i.imgur.com/655LoiL.png)
 8.  (STEP 2) Configure the Product Group imported products should be assigned to:  
-    ![configure product group for imported products](https://imgur.com/4dKr7in)
+    ![configure product group for imported products](https://i.imgur.com/4dKr7in.png)
 9.  (STEP 2) Configure the Welcome Email template imported products should use:  
-    ![configure the Welcome Email template to assign to imported products](https://imgur.com/ssjGKdx)
+    ![configure the Welcome Email template to assign to imported products](https://i.imgur.com/ssjGKdx.png)
 10.  (STEP 2) Select "Import Level" value ('Lite Import' recommended for new installs)
 11.  (STEP 2) Once all options set, click "Start Importing Process" button to initiate import
 12.  (STEP 3) Receive confirmation of successfully imported products and list of products:  
-    ![Step 3: Successful product creation confirmation](https://imgur.com/MTxDZtZ)
+    ![Step 3: Successful product creation confirmation](https://i.imgur.com/MTxDZtZ.png)
 13.  Navigate to Products/Services settings page in WHMCS Admin for overview:  
-    ![Overview of imported products from WHMCS admin Products/Services settings page](https://imgur.com/4X1BOV1)
+    ![Overview of imported products from WHMCS admin Products/Services settings page](https://i.imgur.com/4X1BOV1.png)
 
 ### Conclusion
 
