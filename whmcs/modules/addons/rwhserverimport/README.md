@@ -4,7 +4,7 @@ This article provides a guide for how to enable and run the Rad Cloud Server Imp
 
 As of [v2.0.0](https://github.com/Rad-Web-Hosting/whmcs-vps-reseller/releases/tag/2.0.0), or later, of WHMCS VPS Reseller module, an addon module, 'Rad Cloud Server Import' is bundled with the 'Rad_cloud' server module. The 'Rad Cloud Server Import' addon enables possibility to import pre-configured Cloud VPS products with 'Rad_cloud' server integrations.
 
-![Rad Cloud Server Import addon module](//new.radwebhosting.com/client_area/images/knowledgebase/new-rwh-server-import-addon.webp)
+![Rad Cloud Server Import addon module](https://new.radwebhosting.com/client_area/images/knowledgebase/new-rwh-server-import-addon.webp)
 
 #### Features of Rad Cloud Server Import Addon:
 
