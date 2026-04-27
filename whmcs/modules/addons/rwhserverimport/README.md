@@ -27,14 +27,14 @@ To enable Rad Cloud Server Import addon module for WHMCS, follow the steps:
 
 1.  Navigate to the Addon Modules settings interface (Access from '/whmcs/your_admin/configaddonmods.php', where "your_admin" is the WHMCS admin directory).
 2.  Click the "Activate" button corresponding with the "Rad Cloud Server Import" module:  
-    ![Activate Rad Cloud Server Import addon module](https://i.imgur.com/lZHPekv.png)
+    ![Activate Rad Cloud Server Import addon module](https://i.imgur.com/q4KVZGi.png)
 3.  Click "Configure" to configure the module access group.
 4.  Choose "Full Administrator" and click "Save Changes" to enable the settings:  
-    ![Configure access for the ](https://i.imgur.com/fyhcQi3.png)
+    ![Configure access for the ](https://i.imgur.com/MWtQUID.png)
 5.  Navigate to 'Rad Cloud Server Import' from the Addons dropdown menu:  
-    ![Navigate to Rad Cloud Server Importer from addons menu](https://i.imgur.com/MWtQUID.png)
+    ![Navigate to Rad Cloud Server Importer from addons menu](https://i.imgur.com/fyhcQi3.png)
 6.  (STEP 1) From the Rad Cloud Server Import Manager, click "Continue" to initiate Rad Cloud Server Import process:  
-    ![initiate Rad Cloud Server Import addon module](https://i.imgur.com/q4KVZGi.png)
+    ![initiate Rad Cloud Server Import addon module](https://i.imgur.com/lZHPekv.png)
 7.  (STEP 2) Configure the Import Settings according to your preferences:  
     ![Step 2: Configure import settings](https://i.imgur.com/655LoiL.png)
 8.  (STEP 2) Configure the Product Group imported products should be assigned to:  
